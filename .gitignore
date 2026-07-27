@@ -1,0 +1,11 @@
+node_modules/
+.bun/
+dist-npm/
+dist/
+.anymous/
+.mimocode/
+*.tsbuildinfo
+.env
+.env.local
+*.log
+.vercel/
