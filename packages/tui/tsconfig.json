@@ -5,12 +5,6 @@
     "jsx": "react-jsx",
     "jsxImportSource": "@opentui/solid",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "types": [],
-    "noUncheckedIndexedAccess": false,
-    "customConditions": ["browser"],
-    "paths": {
-      "@/*": ["./src/*"],
-      "@test/*": ["./test/*"]
-    }
+    "noUncheckedIndexedAccess": false
   }
 }
