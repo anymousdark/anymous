@@ -5,7 +5,7 @@ import { Installation } from "@/installation"
 import { InstallationVersion } from "@anymous-ai/core/installation/version"
 import { GlobalBus } from "@/bus/global"
 
-const ANYMOUS_RELEASES = "https://api.github.com/repos/anymousdark/anymous/releases/latest"
+const ANYMOUS_RELEASES = "https://api.github.com/repos/anymousdark/anymous-ai/releases/latest"
 
 async function checkanymousUpdate(): Promise<string | null> {
   try {

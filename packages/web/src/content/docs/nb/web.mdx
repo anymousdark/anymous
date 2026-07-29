@@ -1,0 +1,105 @@
+---
+title: Web
+description: Bruke anymous i nettleseren din.
+---
+
+anymous kan kjøres som en nettapplikasjon i nettleseren din, og gir den samme kraftige AI-kodingsopplevelsen uten at du trenger en terminal.
+
+![anymous Web - Ny økt](../../../assets/web/web-homepage-new-session.png)
+
+## Komme i gang
+
+Start web-grensesnittet ved å kjøre:
+
+```bash
+anymous web
+```
+
+Dette starter en lokal server på `127.0.0.1` med en tilfeldig tilgjengelig port og åpner automatisk anymous i standard nettleser.
+
+---
+
+## Konfigurasjon
+
+Du kan konfigurere webserveren ved å bruke kommandolinjeflagg eller i [konfigurasjonsfilen](/docs/config).
+
+### Port
+
+Som standard velger anymous en tilgjengelig port. Du kan spesifisere en port:
+
+```bash
+anymous web --port 4096
+```
+
+### Vertsnavn
+
+Som standard binder serveren seg til `127.0.0.1` (kun localhost). Slik gjør du anymous tilgjengelig på nettverket ditt:
+
+```bash
+anymous web --hostname 0.0.0.0
+```
+
+---
+
+### Autentisering
+
+For å beskytte tilgang, angi et passord ved hjelp av miljøvariabelen `ANYMOUS_SERVER_PASSWORD`:
+
+```bash
+ANYMOUS_SERVER_PASSWORD=secret anymous web
+```
+
+Brukernavnet er satt til `anymous` som standard, men kan endres med `ANYMOUS_SERVER_USERNAME`.
+
+---
+
+## Bruke webgrensesnittet
+
+Når den er startet, gir nettgrensesnittet tilgang til dine anymous-økter.
+
+### Sesjoner
+
+Se og administrer øktene dine fra hjemmesiden. Du kan se aktive økter og starte nye.
+
+![anymous Web - Active Session](../../../assets/web/web-homepage-active-session.png)
+
+### Serverstatus
+
+Klikk på "Se servere" for å se tilkoblede servere og deres status.
+
+![anymous Web - Se servere](../../../assets/web/web-homepage-see-servers.png)
+
+---
+
+## Koble til en terminal
+
+Du kan koble en terminal TUI til en kjørende webserver:
+
+```bash
+# Start the web server
+anymous web --port 4096
+
+# In another terminal, attach the TUI
+anymous attach http://localhost:4096
+```
+
+Dette lar deg bruke både nettgrensesnittet og terminalen samtidig, og deler samme økter og tilstand.
+
+---
+
+## Konfigurasjonsfil
+
+Du kan også konfigurere serverinnstillinger i `anymous.json` konfigurasjonsfilen:
+
+```json
+{
+  "server": {
+    "port": 4096,
+    "hostname": "0.0.0.0",
+    "mdns": true,
+    "cors": ["https://example.com"]
+  }
+}
+```
+
+Kommandolinjeflagg har forrang over konfigurasjonsfilinnstillinger.

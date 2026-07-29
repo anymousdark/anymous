@@ -1,0 +1,195 @@
+---
+title: GitLab
+description: Используйте anymous в задачах GitLab и мерж-реквестах.
+---
+
+anymous интегрируется с вашим рабочим процессом GitLab через конвейер GitLab CI/CD или с GitLab Duo.
+
+В обоих случаях anymous будет работать на ваших программах GitLab.
+
+---
+
+## GitLab
+
+anymous работает в обычном конвейере GitLab. Вы можете встроить его в конвейер как [CI-компонент](https://docs.gitlab.com/ee/ci/components/)
+
+Здесь мы используем созданный сообществом компонент CI/CD для anymous — [nagyv/gitlab-anymous](https://gitlab.com/nagyv/gitlab-anymous).
+
+---
+
+### Функции
+
+- **Использовать пользовательскую конфигурацию для каждого задания**. Настройте anymous с помощью пользовательского каталога конфигурации, например `./config/#custom-directory`, чтобы включать или отключать функциональность для каждого вызова anymous.
+- **Минимальная настройка**: компонент CI настраивает anymous в фоновом режиме, вам нужно только создать конфигурацию anymous и начальное приглашение.
+- **Гибкость**: компонент CI поддерживает несколько входных данных для настройки его поведения.
+
+---
+
+### Настройка
+
+1. Сохраните JSON аутентификации anymous как переменные среды CI типа файла в разделе **Настройки** > **CI/CD** > **Переменные**. Обязательно пометьте их как «Замаскированные и скрытые».
+2. Добавьте следующее в файл `.gitlab-ci.yml`.
+
+   ```yaml title=".gitlab-ci.yml"
+   include:
+     - component: $CI_SERVER_FQDN/nagyv/gitlab-anymous/anymous@2
+       inputs:
+         config_dir: ${CI_PROJECT_DIR}/anymous-config
+         auth_json: $ANYMOUS_AUTH_JSON # The variable name for your anymous authentication JSON
+         command: optional-custom-command
+         message: "Your prompt here"
+   ```
+
+Дополнительные сведения и варианты использования см. в документации ](https://gitlab.com/explore/catalog/nagyv/gitlab-anymous) для этого компонента.
+
+---
+
+## GitLab Duo
+
+anymous интегрируется с вашим рабочим процессом GitLab.
+Упомяните `@anymous` в комментарии, и anymous выполнит задачи в вашем конвейере GitLab CI.
+
+---
+
+### Функции
+
+- **Триаж задач (Issue Triage)**. Попросите anymous разобраться в проблеме и объяснить ее вам.
+- **Исправление и реализация**. Попросите anymous исправить проблему или реализовать функцию.
+  Он создаст новую ветку и создаст мерж-реквест с изменениями.
+- **Безопасность**: anymous работает на ваших программах GitLab.
+
+---
+
+### Настройка
+
+anymous работает в вашем конвейере GitLab CI/CD. Вот что вам понадобится для его настройки:
+
+:::tip
+Ознакомьтесь с [**документацией GitLab**](https://docs.gitlab.com/user/duo_agent_platform/agent_assistant/) для получения актуальных инструкций.
+:::
+
+1.  Настройте свою среду GitLab
+2.  Настройка CI/CD
+3.  Получите ключ API поставщика моделей ИИ
+4.  Создать учетную запись службы
+5.  Настройка переменных CI/CD
+6.  Создайте файл конфигурации потока, вот пример:
+
+        <details>
+
+    <summary>Конфигурация потока</summary>
+
+    ```yaml
+    image: node:22-slim
+    commands:
+      - echo "Installing anymous"
+      - npm install --global anymous-ai
+      - echo "Installing glab"
+      - export GITLAB_TOKEN=$GITLAB_TOKEN_anymous
+      - apt-get update --quiet && apt-get install --yes curl wget gpg git && rm --recursive --force /var/lib/apt/lists/*
+      - curl --silent --show-error --location "https://raw.githubusercontent.com/upciti/wakemeops/main/assets/install_repository" | bash
+      - apt-get install --yes glab
+      - echo "Configuring glab"
+      - echo $GITLAB_HOST
+      - echo "Creating anymous auth configuration"
+      - mkdir --parents ~/.local/share/anymous
+      - |
+        cat > ~/.local/share/anymous/auth.json << EOF
+        {
+          "anthropic": {
+            "type": "api",
+            "key": "$ANTHROPIC_API_KEY"
+          }
+        }
+        EOF
+      - echo "Configuring git"
+      - git config --global user.email "anymous@gitlab.com"
+      - git config --global user.name "anymous"
+      - echo "Testing glab"
+      - glab issue list
+      - echo "Running anymous"
+      - |
+        anymous run "
+        You are an AI assistant helping with GitLab operations.
+
+        Context: $AI_FLOW_CONTEXT
+        Task: $AI_FLOW_INPUT
+        Event: $AI_FLOW_EVENT
+
+        Please execute the requested task using the available GitLab tools.
+        Be thorough in your analysis and provide clear explanations.
+
+        <important>
+        Please use the glab CLI to access data from GitLab. The glab CLI has already been authenticated. You can run the corresponding commands.
+
+        If you are asked to summarize an MR or issue or asked to provide more information then please post back a note to the MR/Issue so that the user can see it.
+        You don't need to commit or push up changes, those will be done automatically based on the file changes you make.
+        </important>
+        "
+      - git checkout --branch $CI_WORKLOAD_REF origin/$CI_WORKLOAD_REF
+      - echo "Checking for git changes and pushing if any exist"
+      - |
+        if ! git diff --quiet || ! git diff --cached --quiet || [ --not --zero "$(git ls-files --others --exclude-standard)" ]; then
+          echo "Git changes detected, adding and pushing..."
+          git add .
+          if git diff --cached --quiet; then
+            echo "No staged changes to commit"
+          else
+            echo "Committing changes to branch: $CI_WORKLOAD_REF"
+            git commit --message "Codex changes"
+            echo "Pushing changes up to $CI_WORKLOAD_REF"
+            git push https://gitlab-ci-token:$GITLAB_TOKEN@$GITLAB_HOST/gl-demo-ultimate-dev-ai-epic-17570/test-java-project.git $CI_WORKLOAD_REF
+            echo "Changes successfully pushed"
+          fi
+        else
+          echo "No git changes detected, skipping push"
+        fi
+    variables:
+      - ANTHROPIC_API_KEY
+      - GITLAB_TOKEN_anymous
+      - GITLAB_HOST
+    ```
+
+        </details>
+
+Подробные инструкции можно найти в [GitLab CLI agents docs](https://docs.gitlab.com/user/duo_agent_platform/agent_assistant/).
+
+---
+
+### Примеры
+
+Вот несколько примеров того, как вы можете использовать anymous в GitLab.
+
+:::tip
+Вы можете настроить использование триггерной фразы, отличной от `@anymous`.
+:::
+
+- **Объяснение проблемы**
+
+  Добавьте этот комментарий в issue GitLab.
+
+  ```
+  @anymous explain this issue
+  ```
+
+  anymous прочитает проблему и ответит с четким объяснением.
+
+- **Исправление проблемы**
+
+  В issue GitLab напишите:
+
+  ```
+  @anymous fix this
+  ```
+
+  anymous создаст новую ветку, внедрит изменения и откроет мерж-реквест с изменениями.
+
+- **Проверка Merge Request**
+
+  Оставьте следующий комментарий к мерж-реквесту GitLab.
+
+  ```
+  @anymous review this merge request
+  ```
+
+  anymous рассмотрит мерж-реквест и предоставит отзыв.

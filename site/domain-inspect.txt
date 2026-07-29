@@ -1,0 +1,4 @@
+Vercel CLI 57.0.0 (Node.js 24.18.0)
+Fetching Domain site-blue-eta-19.vercel.app under anymousdarks-projects
+Error: You don't have access to the domain site-blue-eta-19.vercel.app under anymousdarks-projects.
+> Run `vercel domains ls` to see your domains.

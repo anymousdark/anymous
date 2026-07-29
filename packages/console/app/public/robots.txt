@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Disallow shared content pages
+Disallow: /s/
+Disallow: /share/
+
+Sitemap: https://anymous-cli.vercel.app/sitemap.xml
+Sitemap: https://anymous-cli.vercel.app/data/sitemap.xml

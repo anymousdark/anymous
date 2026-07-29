@@ -1,0 +1,113 @@
+---
+title: Windows (WSL)
+description: Kjør anymous på Windows med WSL for best opplevelse.
+---
+
+import { Steps } from "@astrojs/starlight/components"
+
+Selv om anymous kan kjøre direkte på Windows, anbefaler vi å bruke [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install) for best mulig opplevelse. WSL gir et Linux-miljø som fungerer godt med funksjonene i anymous.
+
+:::tip[Hvorfor WSL?]
+WSL gir bedre filsystemytelse, full terminalstøtte og kompatibilitet med utviklingsverktøyene anymous er avhengig av.
+:::
+
+---
+
+## Oppsett
+
+<Steps>
+
+1. **Installer WSL**
+
+   Hvis du ikke har gjort det ennå, [installer WSL](https://learn.microsoft.com/en-us/windows/wsl/install) med den offisielle guiden fra Microsoft.
+
+2. **Installer anymous i WSL**
+
+   Når WSL er satt opp, åpner du WSL-terminalen og installerer anymous med en av [installasjonsmetodene](/docs/).
+
+   ```bash
+   curl -fsSL https://anymous-cli.vercel.app/install | bash
+   ```
+
+3. **Bruk anymous fra WSL**
+
+   Gå til prosjektmappen din (Windows-filer er tilgjengelige via `/mnt/c/`, `/mnt/d/` osv.) og kjør anymous.
+
+   ```bash
+   cd /mnt/c/Users/YourName/project
+   anymous
+   ```
+
+</Steps>
+
+---
+
+## Skrivebordsapp + WSL-server
+
+Hvis du foretrekker anymous-skrivebordsappen, men vil kjøre serveren i WSL:
+
+1. **Start serveren i WSL** med `--hostname 0.0.0.0` for å tillate eksterne tilkoblinger:
+
+   ```bash
+   anymous serve --hostname 0.0.0.0 --port 4096
+   ```
+
+2. **Koble skrivebordsappen** til `http://localhost:4096`
+
+:::note
+Hvis `localhost` ikke fungerer i oppsettet ditt, bruk WSL-IP-adressen i stedet (fra WSL: `hostname -I`) og koble til `http://<wsl-ip>:4096`.
+:::
+
+:::caution
+Når du bruker `--hostname 0.0.0.0`, sett `ANYMOUS_SERVER_PASSWORD` for å sikre serveren.
+
+```bash
+ANYMOUS_SERVER_PASSWORD=your-password anymous serve --hostname 0.0.0.0
+```
+
+:::
+
+---
+
+## Web-klient + WSL
+
+For best web-opplevelse på Windows:
+
+1. **Kjør `anymous web` i WSL-terminalen** i stedet for PowerShell:
+
+   ```bash
+   anymous web --hostname 0.0.0.0
+   ```
+
+2. **Åpne i Windows-nettleseren** på `http://localhost:<port>` (anymous skriver ut URL-en)
+
+Når du kjører `anymous web` fra WSL, får du riktig filsystemtilgang og terminalintegrasjon, samtidig som det er tilgjengelig fra Windows-nettleseren din.
+
+---
+
+## Tilgang til Windows-filer
+
+WSL kan få tilgang til alle Windows-filer via `/mnt/`-katalogen:
+
+- `C:`-stasjon → `/mnt/c/`
+- `D:`-stasjon → `/mnt/d/`
+- Og så videre...
+
+Eksempel:
+
+```bash
+cd /mnt/c/Users/YourName/Documents/project
+anymous
+```
+
+:::tip
+For en jevnere opplevelse kan du klone/kopiere repoet ditt inn i WSL-filsystemet (for eksempel under `~/code/`) og kjøre anymous der.
+:::
+
+---
+
+## Tips
+
+- Kjør anymous i WSL for prosjekter lagret på Windows-stasjoner: filtilgang fungerer smidig
+- Bruk [WSL-utvidelsen i VS Code](https://code.visualstudio.com/docs/remote/wsl) sammen med anymous for en integrert utviklingsflyt
+- anymous-konfigurasjon og sesjoner lagres i WSL-miljøet på `~/.local/share/anymous/`
