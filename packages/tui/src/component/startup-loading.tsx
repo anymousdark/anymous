@@ -19,7 +19,7 @@ export function StartupLoading(props: { ready: () => boolean }) {
       if (!show()) return
       if (hold) return
 
-      const left = 3000 - (Date.now() - stamp)
+      const left = 1000 - (Date.now() - stamp)
       if (left <= 0) {
         setShow(false)
         return
@@ -43,7 +43,7 @@ export function StartupLoading(props: { ready: () => boolean }) {
       wait = undefined
       stamp = Date.now()
       setShow(true)
-    }, 500).unref()
+    }, 200).unref()
   })
 
   onCleanup(() => {

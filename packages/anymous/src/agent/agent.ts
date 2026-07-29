@@ -10,10 +10,26 @@ import { Auth } from "../auth"
 import { ProviderTransform } from "@/provider/transform"
 
 import PROMPT_GENERATE from "./generate.txt"
+import PROMPT_BUILD from "./prompt/build.txt"
+import PROMPT_PLAN from "./prompt/plan.txt"
+import PROMPT_GENERAL from "./prompt/general.txt"
 import PROMPT_COMPACTION from "./prompt/compaction.txt"
 import PROMPT_EXPLORE from "./prompt/explore.txt"
 import PROMPT_SUMMARY from "./prompt/summary.txt"
 import PROMPT_TITLE from "./prompt/title.txt"
+import PROMPT_CODE_REVIEWER from "./prompt/code-reviewer.txt"
+import PROMPT_DEBUG from "./prompt/debug.txt"
+import PROMPT_TEST_WRITER from "./prompt/test-writer.txt"
+import PROMPT_SECURITY from "./prompt/security.txt"
+import PROMPT_FRONTEND from "./prompt/frontend.txt"
+import PROMPT_BACKEND from "./prompt/backend.txt"
+import PROMPT_DATABASE from "./prompt/database.txt"
+import PROMPT_DEVOPS from "./prompt/devops.txt"
+import PROMPT_DOCS from "./prompt/docs.txt"
+import PROMPT_REFACTOR from "./prompt/refactor.txt"
+import PROMPT_ARCHITECT from "./prompt/architect.txt"
+import PROMPT_PERFORMANCE from "./prompt/performance.txt"
+import PROMPT_WEB_DESIGNER from "./prompt/web-designer.txt"
 import PROMPT_REVERSER_STATIC from "./prompt/reverser-static.txt"
 import PROMPT_REVERSER_DYNAMIC from "./prompt/reverser-dynamic.txt"
 import PROMPT_REVERSER_BINARY from "./prompt/reverser-binary.txt"
@@ -159,6 +175,7 @@ const layer = Layer.effect(
           build: {
             name: "build",
             description: "The default agent. Executes tools based on configured permissions.",
+            prompt: PROMPT_BUILD,
             options: {},
             permission: Permission.merge(
               defaults,
@@ -174,6 +191,7 @@ const layer = Layer.effect(
           plan: {
             name: "plan",
             description: "Plan mode. Disallows all edit tools.",
+            prompt: PROMPT_PLAN,
             options: {},
             permission: Permission.merge(
               defaults,
@@ -200,6 +218,7 @@ const layer = Layer.effect(
           general: {
             name: "general",
             description: `General-purpose agent for researching complex questions and executing multi-step tasks. Use this agent to execute multiple units of work in parallel.`,
+            prompt: PROMPT_GENERAL,
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -549,6 +568,207 @@ const layer = Layer.effect(
             mode: "subagent",
             native: true,
             prompt: PROMPT_PENTEST_REPORTER,
+          },
+          "code-reviewer": {
+            name: "code-reviewer",
+            description: "Code review specialist. Analyzes code for security vulnerabilities, correctness bugs, performance issues, and maintainability concerns with line-level feedback.",
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                todowrite: "deny",
+                edit: "deny",
+              }),
+              user,
+            ),
+            options: {},
+            mode: "subagent",
+            native: true,
+            prompt: PROMPT_CODE_REVIEWER,
+          },
+          debug: {
+            name: "debug",
+            description: "Debugging specialist. Systematically diagnoses and fixes software defects by reproducing, isolating, and resolving root causes.",
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                todowrite: "deny",
+              }),
+              user,
+            ),
+            options: {},
+            mode: "subagent",
+            native: true,
+            prompt: PROMPT_DEBUG,
+          },
+          "test-writer": {
+            name: "test-writer",
+            description: "Test engineering specialist. Writes thorough, maintainable tests covering happy path, error cases, edge cases, and boundary conditions.",
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                todowrite: "deny",
+              }),
+              user,
+            ),
+            options: {},
+            mode: "subagent",
+            native: true,
+            prompt: PROMPT_TEST_WRITER,
+          },
+          security: {
+            name: "security",
+            description: "Application security specialist. Assesses code for OWASP Top 10 vulnerabilities, dependency CVEs, secrets exposure, and auth bypasses with CVSS-scored findings.",
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                todowrite: "deny",
+                edit: "deny",
+              }),
+              user,
+            ),
+            options: {},
+            mode: "subagent",
+            native: true,
+            prompt: PROMPT_SECURITY,
+          },
+          frontend: {
+            name: "frontend",
+            description: "Senior frontend engineer specializing in React, SolidJS, TypeScript, CSS, accessibility, and web performance. Builds composable UIs with modern best practices.",
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                todowrite: "deny",
+              }),
+              user,
+            ),
+            options: {},
+            mode: "subagent",
+            native: true,
+            prompt: PROMPT_FRONTEND,
+          },
+          backend: {
+            name: "backend",
+            description: "Senior backend engineer specializing in API design, databases, auth, message queues, caching, and observability. Builds scalable server-side systems.",
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                todowrite: "deny",
+              }),
+              user,
+            ),
+            options: {},
+            mode: "subagent",
+            native: true,
+            prompt: PROMPT_BACKEND,
+          },
+          database: {
+            name: "database",
+            description: "Database specialist. Designs schemas, optimizes queries, plans migrations, and advises on data modeling for SQL and NoSQL systems.",
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                todowrite: "deny",
+                edit: "deny", // advisory only — schema changes via backend agent
+              }),
+              user,
+            ),
+            options: {},
+            mode: "subagent",
+            native: true,
+            prompt: PROMPT_DATABASE,
+          },
+          devops: {
+            name: "devops",
+            description: "DevOps/platform engineer specializing in CI/CD, Docker, Kubernetes, cloud infrastructure (AWS/GCP/Azure), IaC, and observability.",
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                todowrite: "deny",
+              }),
+              user,
+            ),
+            options: {},
+            mode: "subagent",
+            native: true,
+            prompt: PROMPT_DEVOPS,
+          },
+          docs: {
+            name: "docs",
+            description: "Technical documentation specialist. Writes clear READMEs, API references, guides, ADRs, and troubleshooting docs with code examples.",
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                todowrite: "deny",
+                edit: "deny",
+              }),
+              user,
+            ),
+            options: {},
+            mode: "subagent",
+            native: true,
+            prompt: PROMPT_DOCS,
+          },
+          refactor: {
+            name: "refactor",
+            description: "Code refactoring specialist. Improves code structure — extracts duplication, simplifies complexity, renames for clarity — without changing behavior.",
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                todowrite: "deny",
+              }),
+              user,
+            ),
+            options: {},
+            mode: "subagent",
+            native: true,
+            prompt: PROMPT_REFACTOR,
+          },
+          architect: {
+            name: "architect",
+            description: "Software architect. Designs system-level solutions, evaluates technology trade-offs, produces ADRs, and creates implementation roadmaps.",
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                todowrite: "deny",
+                edit: "deny",
+              }),
+              user,
+            ),
+            options: {},
+            mode: "subagent",
+            native: true,
+            prompt: PROMPT_ARCHITECT,
+          },
+          performance: {
+            name: "performance",
+            description: "Performance optimization specialist. Profiles and optimizes CPU, memory, I/O, network, rendering, and build bottlenecks with measured improvements.",
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                todowrite: "deny",
+                edit: "deny", // advisory — changes via refactor/build agent
+              }),
+              user,
+            ),
+            options: {},
+            mode: "subagent",
+            native: true,
+            prompt: PROMPT_PERFORMANCE,
+          },
+          "web-designer": {
+            name: "web-designer",
+            description: "Web design specialist. Creates polished UI with HTML, CSS, Tailwind, Three.js, glassmorphism, animations, and responsive layouts.",
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                todowrite: "deny",
+              }),
+              user,
+            ),
+            options: {},
+            mode: "subagent",
+            native: true,
+            prompt: PROMPT_WEB_DESIGNER,
           },
         }
 
