@@ -1,3 +1,6 @@
+desktop.ini
+Thumbs.db
+*.log
 node_modules/
 dist/
 dist-npm/
