@@ -12,5 +12,7 @@ dist-npm/
 site/
 packages/console/app/.stripe/
 packages/console/app/public/sitemap.xml
+packages/console/app/src/routes/s/
+packages/web/src/pages/s/
 */.turbo/
 *.tsbuildinfo

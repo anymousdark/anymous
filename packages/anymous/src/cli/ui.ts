@@ -54,7 +54,7 @@ export function logo(pad?: string) {
       result.push(row)
       result.push(EOL)
     }
-    result.push("AI-Powered Reverse Engineering & Pentest Platform v1.1.4")
+    result.push("AI-Powered Reverse Engineering & Pentest Platform v1.1.5")
     return result.join("")
   }
 
@@ -103,7 +103,7 @@ export function logo(pad?: string) {
     result.push(EOL)
   })
   result.push(Style.TEXT_NORMAL, "─".repeat(45), EOL)
-  result.push(Style.TEXT_INFO, "▸", Style.TEXT_NORMAL, " AI-Powered Reverse Engineering & Pentest Platform  ", Style.TEXT_DIM, "v1.1.4", EOL)
+  result.push(Style.TEXT_INFO, "▸", Style.TEXT_NORMAL, " AI-Powered Reverse Engineering & Pentest Platform  ", Style.TEXT_DIM, "v1.1.5", EOL)
   result.push(Style.TEXT_NORMAL, "─".repeat(45))
   return result.join("").trimEnd()
 }
