@@ -255,9 +255,17 @@ const layer = Layer.effect(
             .pipe(Effect.catch(() => Effect.void))
         }
       }
-      result = mergeConfig(result, yield* loadFile(path.join(Global.Path.config, "config.json"), env))
-      result = mergeConfig(result, yield* loadFile(path.join(Global.Path.config, "anymous.json"), env))
-      result = mergeConfig(result, yield* loadFile(path.join(Global.Path.config, "anymous.jsonc"), env))
+      const [configJson, anymousJson, anymousJsonc] = yield* Effect.all(
+        [
+          loadFile(path.join(Global.Path.config, "config.json"), env),
+          loadFile(path.join(Global.Path.config, "anymous.json"), env),
+          loadFile(path.join(Global.Path.config, "anymous.jsonc"), env),
+        ],
+        { concurrency: 3 },
+      )
+      result = mergeConfig(result, configJson)
+      result = mergeConfig(result, anymousJson)
+      result = mergeConfig(result, anymousJsonc)
 
       const legacy = path.join(Global.Path.config, "config")
       if (existsSync(legacy)) {

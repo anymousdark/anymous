@@ -163,14 +163,19 @@ const layer = Layer.effect(
           $: typeof Bun === "undefined" ? undefined : Bun.$,
         }
 
-        for (const plugin of flags.disableDefaultPlugins ? [] : internalPlugins(flags)) {
-          const init = yield* Effect.tryPromise({
-            try: () => plugin(input),
-            catch: errorMessage,
-          }).pipe(
-            Effect.tapError((error) => Effect.logError("failed to load internal plugin", { name: plugin.name, error })),
-            Effect.option,
-          )
+        const internalInits = yield* Effect.all(
+          (flags.disableDefaultPlugins ? [] : internalPlugins(flags)).map((plugin) =>
+            Effect.tryPromise({
+              try: () => plugin(input),
+              catch: errorMessage,
+            }).pipe(
+              Effect.tapError((error) => Effect.logError("failed to load internal plugin", { name: plugin.name, error })),
+              Effect.option,
+            ),
+          ),
+          { concurrency: 10 },
+        )
+        for (const init of internalInits) {
           if (init._tag === "Some") hooks.push(init.value)
         }
 
