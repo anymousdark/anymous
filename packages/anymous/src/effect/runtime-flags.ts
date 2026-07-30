@@ -17,6 +17,7 @@ export class Service extends ConfigService.Service<Service>()("@anymous/RuntimeF
   autoShare: bool("ANYMOUS_AUTO_SHARE"),
   pure: bool("ANYMOUS_PURE"),
   disableDefaultPlugins: bool("ANYMOUS_DISABLE_DEFAULT_PLUGINS"),
+  fastBoot: bool("ANYMOUS_FAST_BOOT"),
   disableEmbeddedWebUi: bool("ANYMOUS_DISABLE_EMBEDDED_WEB_UI"),
   disableExternalSkills: bool("ANYMOUS_DISABLE_EXTERNAL_SKILLS"),
   disableLspDownload: bool("ANYMOUS_DISABLE_LSP_DOWNLOAD"),

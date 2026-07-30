@@ -43,6 +43,7 @@ type CreateSession = (sdk: RunInput["sdk"], input: CreateSessionInput) => Promis
 
 type RunRuntimeInput = {
   boot: () => Promise<BootContext>
+  savedVariantTask?: Promise<string | undefined>
   afterPaint?: (ctx: BootContext) => Promise<void> | void
   resolveSession?: (
     ctx: BootContext,
@@ -192,7 +193,7 @@ async function runInteractiveRuntime(input: RunRuntimeInput, deps: RunRuntimeDep
           history: [],
           variant: undefined,
         })
-  const savedTask = resolveSavedVariant(ctx.model)
+  const savedTask = input.savedVariantTask ?? resolveSavedVariant(ctx.model)
   const [tuiConfig, session, savedVariant] = await Promise.all([tuiConfigTask, sessionTask, savedTask])
   const state: RuntimeState = {
     shown: !session.first,
@@ -740,6 +741,8 @@ export async function runInteractiveLocalMode(input: RunLocalInput): Promise<voi
   })
   let session: Promise<ResolvedSession> | undefined
 
+  const savedVariantTask = resolveSavedVariant(input.model)
+
   return runInteractiveRuntime({
     files: input.files,
     initialInput: input.initialInput,
@@ -748,6 +751,7 @@ export async function runInteractiveLocalMode(input: RunLocalInput): Promise<voi
     replay: input.replay,
     replayLimit: input.replayLimit,
     demo: input.demo,
+    savedVariantTask,
     resolveSession: () => {
       if (session) {
         return session
@@ -788,6 +792,8 @@ export async function runInteractiveMode(
   input: RunInput & { createSession?: CreateSession },
   deps?: RunRuntimeDeps,
 ): Promise<void> {
+  const savedVariantTask = resolveSavedVariant(input.model)
+
   return runInteractiveRuntime(
     {
       files: input.files,
@@ -797,6 +803,7 @@ export async function runInteractiveMode(
       replay: input.replay,
       replayLimit: input.replayLimit,
       demo: input.demo,
+      savedVariantTask,
       boot: async () => ({
         sdk: input.sdk,
         directory: input.directory,

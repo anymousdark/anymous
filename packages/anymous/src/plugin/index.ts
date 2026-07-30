@@ -163,83 +163,75 @@ const layer = Layer.effect(
           $: typeof Bun === "undefined" ? undefined : Bun.$,
         }
 
-        const internalInits = yield* Effect.all(
-          (flags.disableDefaultPlugins ? [] : internalPlugins(flags)).map((plugin) =>
-            Effect.tryPromise({
-              try: () => plugin(input),
-              catch: errorMessage,
-            }).pipe(
-              Effect.tapError((error) => Effect.logError("failed to load internal plugin", { name: plugin.name, error })),
-              Effect.option,
+        if (!flags.fastBoot) {
+          const internalInits = yield* Effect.all(
+            (flags.disableDefaultPlugins ? [] : internalPlugins(flags)).map((plugin) =>
+              Effect.tryPromise({
+                try: () => plugin(input),
+                catch: errorMessage,
+              }).pipe(
+                Effect.tapError((error) => Effect.logError("failed to load internal plugin", { name: plugin.name, error })),
+                Effect.option,
+              ),
             ),
-          ),
-          { concurrency: 10 },
-        )
-        for (const init of internalInits) {
-          if (init._tag === "Some") hooks.push(init.value)
-        }
+            { concurrency: 10 },
+          )
+          for (const init of internalInits) {
+            if (init._tag === "Some") hooks.push(init.value)
+          }
 
-        const plugins = flags.pure ? [] : (cfg.plugin_origins ?? [])
-        if (flags.pure && cfg.plugin_origins?.length) {
-        }
-        if (plugins.length) yield* config.waitForDependencies()
+          const plugins = flags.pure ? [] : (cfg.plugin_origins ?? [])
+          if (plugins.length) yield* config.waitForDependencies()
 
-        const loaded = yield* Effect.promise(() =>
-          PluginLoader.loadExternal({
-            items: plugins,
-            kind: "server",
-            report: {
-              start(candidate) {},
-              missing(candidate, _retry, message) {},
-              error(candidate, _retry, stage, error, resolved) {
-                const spec = candidate.plan.spec
-                const cause = error instanceof Error ? (error.cause ?? error) : error
-                const message = stage === "load" ? errorMessage(error) : errorMessage(cause)
+          const loaded = yield* Effect.promise(() =>
+            PluginLoader.loadExternal({
+              items: plugins,
+              kind: "server",
+              report: {
+                start(candidate) {},
+                missing(candidate, _retry, message) {},
+                error(candidate, _retry, stage, error, resolved) {
+                  const spec = candidate.plan.spec
+                  const cause = error instanceof Error ? (error.cause ?? error) : error
+                  const message = stage === "load" ? errorMessage(error) : errorMessage(cause)
 
-                if (stage === "install") {
-                  const parsed = parsePluginSpecifier(spec)
-                  publishPluginError(`Failed to install plugin ${parsed.pkg}@${parsed.version}: ${message}`)
-                  return
-                }
+                  if (stage === "install") {
+                    const parsed = parsePluginSpecifier(spec)
+                    publishPluginError(`Failed to install plugin ${parsed.pkg}@${parsed.version}: ${message}`)
+                    return
+                  }
 
-                if (stage === "compatibility") {
-                  publishPluginError(`Plugin ${spec} skipped: ${message}`)
-                  return
-                }
+                  if (stage === "compatibility") {
+                    publishPluginError(`Plugin ${spec} skipped: ${message}`)
+                    return
+                  }
 
-                if (stage === "entry") {
+                  if (stage === "entry") {
+                    publishPluginError(`Failed to load plugin ${spec}: ${message}`)
+                    return
+                  }
+
                   publishPluginError(`Failed to load plugin ${spec}: ${message}`)
-                  return
-                }
-
-                publishPluginError(`Failed to load plugin ${spec}: ${message}`)
+                },
               },
-            },
-          }),
-        )
-        for (const load of loaded) {
-          if (!load) continue
-
-          // Keep plugin execution sequential so hook registration and execution
-          // order remains deterministic across plugin runs.
-          yield* Effect.tryPromise({
-            try: () => applyPlugin(load, input, hooks),
-            catch: (err) => {
-              const message = errorMessage(err)
-              return message
-            },
-          }).pipe(
-            Effect.tapError((error) => Effect.logError("failed to load plugin", { path: load.spec, error })),
-            Effect.catch(() => {
-              // TODO: make proper events for this
-              // events.publish(Session.Event.Error, {
-              //   error: new NamedError.Unknown({
-              //     message: `Failed to load plugin ${load.spec}: ${message}`,
-              //   }).toObject(),
-              // })
-              return Effect.void
             }),
           )
+          for (const load of loaded) {
+            if (!load) continue
+
+            yield* Effect.tryPromise({
+              try: () => applyPlugin(load, input, hooks),
+              catch: (err) => {
+                const message = errorMessage(err)
+                return message
+              },
+            }).pipe(
+              Effect.tapError((error) => Effect.logError("failed to load plugin", { path: load.spec, error })),
+              Effect.catch(() => {
+                return Effect.void
+              }),
+            )
+          }
         }
 
         // Notify plugins of current config
