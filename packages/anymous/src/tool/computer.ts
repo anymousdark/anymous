@@ -1,19 +1,20 @@
 import { Effect, Schema, pipe } from "effect"
 import * as Tool from "./tool"
-import { spawn, execSync } from "child_process"
+import { spawn } from "child_process"
 import DESCRIPTION from "./computer.txt"
 
 const platform = process.platform
 
-const poweshellScript = (script: string) =>
+const powershellScript = (script: string) =>
   Effect.promise<string>(
     () =>
       new Promise((resolve, reject) => {
+        const enc = Buffer.from(script, "utf16le").toString("base64")
         const proc = spawn("powershell", [
           "-NoProfile",
           "-NonInteractive",
-          "-Command",
-          script,
+          "-EncodedCommand",
+          enc,
         ])
         let stdout = ""
         let stderr = ""
@@ -23,13 +24,13 @@ const poweshellScript = (script: string) =>
           if (code === 0) resolve(stdout.trim())
           else reject(new Error(stderr.trim() || `exit code ${code}`))
         })
-        proc.on("error", reject)
+        proc.on("error", (e) => reject(e))
       }),
   )
 
 const captureScreenshot = Effect.fn("Computer.screenshot")(function* () {
   if (platform === "win32") {
-    const base64 = yield* poweshellScript(`
+    const base64 = yield* powershellScript(`
 Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName System.Windows.Forms
 $bounds = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
@@ -83,7 +84,7 @@ $ms.Dispose()
 
 const moveMouse = Effect.fn("Computer.moveMouse")(function* (x: number, y: number) {
   if (platform === "win32") {
-    yield* poweshellScript(`
+    yield* powershellScript(`
 Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.Cursor]::Position = New-Object System.Drawing.Point(${Math.round(x)}, ${Math.round(y)})
 `)
@@ -111,30 +112,38 @@ Add-Type -AssemblyName System.Windows.Forms
 
 const clickMouse = Effect.fn("Computer.clickMouse")(function* (button: "left" | "right" | "middle") {
   if (platform === "win32") {
-    const btn = button === "left" ? "[MouseButtons]::Left" : button === "right" ? "[MouseButtons]::Right" : "[MouseButtons]::Middle"
-    const down = button === "left" ? "0x2" : button === "right" ? "0x8" : "0x20"
-    const up = button === "left" ? "0x4" : button === "right" ? "0x10" : "0x40"
-    yield* poweshellScript(`
+    const down = button === "left" ? "LEFTDOWN" : button === "right" ? "RIGHTDOWN" : "MIDDLEDOWN"
+    const up = button === "left" ? "LEFTUP" : button === "right" ? "RIGHTUP" : "MIDDLEUP"
+    yield* powershellScript(`
 Add-Type -AssemblyName System.Windows.Forms
-[System.Windows.Forms.Cursor]::Click()
+$c = Add-Type -TypeDefinition @'
+using System;
+using System.Runtime.InteropServices;
+public class W32 {
+  [DllImport("user32.dll")] public static extern void mouse_event(uint f, uint x, uint y, uint d, int i);
+  public const uint L=0x02,R=0x08,M=0x20,LU=0x04,RU=0x10,MU=0x40;
+}
+'@
+[W32]::mouse_event([W32]::${down}, 0, 0, 0, 0); Start-Sleep -Milliseconds 50
+[W32]::mouse_event([W32]::${up}, 0, 0, 0, 0); Write-Output OK
 `)
   } else if (platform === "darwin") {
-    const btn = button === "left" ? "click" : button === "right" ? "click at (get position of mouse) using {button 2}" : "click at (get position of mouse) using {button 3}"
+    const action = button === "left" ? "click" : button === "right" ? "click at (get position of mouse) using {button 2}" : "click at (get position of mouse) using {button 3}"
     yield* Effect.promise(() =>
       new Promise<void>((resolve, reject) => {
         const proc = spawn("osascript", [
           "-e",
-          `tell application "System Events" to ${btn}`,
+          `tell application "System Events" to ${action}`,
         ])
         proc.on("close", (code) => (code === 0 ? resolve() : reject(new Error(`exit ${code}`))))
         proc.on("error", reject)
       }),
     )
   } else if (platform === "linux") {
-    const btn = button === "left" ? "1" : button === "right" ? "3" : "2"
+    const b = button === "left" ? "1" : button === "right" ? "3" : "2"
     yield* Effect.promise(() =>
       new Promise<void>((resolve, reject) => {
-        const proc = spawn("xdotool", ["click", btn])
+        const proc = spawn("xdotool", ["click", b])
         proc.on("close", (code) => (code === 0 ? resolve() : reject(new Error(`exit ${code}`))))
         proc.on("error", reject)
       }),
@@ -142,11 +151,29 @@ Add-Type -AssemblyName System.Windows.Forms
   }
 })
 
+const escapeSendKeys = (s: string) =>
+  s
+    .replace(/{/g, "{{}")
+    .replace(/}/g, "{}}")
+    .replace(/\+/g, "{+}")
+    .replace(/\^/g, "{^}")
+    .replace(/%/g, "{%}")
+    .replace(/~/g, "{~}")
+    .replace(/\(/g, "{(}")
+    .replace(/\)/g, "{)}")
+    .replace(/\[/g, "{[}")
+    .replace(/\]/g, "{]}")
+    .replace(/"/g, '`"')
+    .replace(/\$/g, "`$")
+    .replace(/\n/g, "`n")
+    .replace(/\r/g, "`r")
+    .replace(/\t/g, "`t")
+
 const typeText = Effect.fn("Computer.typeText")(function* (text: string, delayMs: number = 0) {
   const typeChar = (char: string) => {
     if (platform === "win32") {
-      const esc = char.replace(/"/g, '`"').replace(/\$/g, "`$")
-      return poweshellScript(`Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait("${esc}")`)
+      const esc = escapeSendKeys(char)
+      return powershellScript(`Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait("${esc}")`)
     } else if (platform === "darwin") {
       return Effect.promise<void>(() =>
         new Promise((resolve, reject) => {
@@ -167,8 +194,8 @@ const typeText = Effect.fn("Computer.typeText")(function* (text: string, delayMs
   }
   if (delayMs <= 0) {
     if (platform === "win32") {
-      const escaped = text.replace(/"/g, '`"').replace(/\$/g, "`$").replace(/\n/g, "`n").replace(/\r/g, "`r").replace(/\t/g, "`t")
-      yield* poweshellScript(`Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait("${escaped}")`)
+      const escaped = escapeSendKeys(text)
+      yield* powershellScript(`Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait("${escaped}")`)
     } else if (platform === "darwin") {
       yield* Effect.promise<void>(() =>
         new Promise((resolve, reject) => {
@@ -204,7 +231,7 @@ const keyPress = Effect.fn("Computer.keyPress")(function* (keys: string[]) {
       home: "{HOME}", end: "{END}", pageup: "{PGUP}", pagedown: "{PGDN}",
     }
     const translated = keys.map((k) => mapping[k.toLowerCase()] ?? k.toUpperCase())
-    yield* poweshellScript(`
+    yield* powershellScript(`
 Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.SendKeys]::SendWait("${translated.join("")}")
 `)
@@ -237,9 +264,17 @@ Add-Type -AssemblyName System.Windows.Forms
 
 const scrollMouse = Effect.fn("Computer.scrollMouse")(function* (clicks: number) {
   if (platform === "win32") {
-    yield* poweshellScript(`
+    yield* powershellScript(`
 Add-Type -AssemblyName System.Windows.Forms
-[System.Windows.Forms.SendKeys]::SendWait("{${clicks > 0 ? "UP" : "DOWN"} ${Math.abs(clicks)}}")
+Add-Type -TypeDefinition @'
+using System;
+using System.Runtime.InteropServices;
+public class W32 {
+  [DllImport("user32.dll")] public static extern void mouse_event(uint f, uint x, uint y, uint d, int i);
+  public const uint W=0x0800;
+}
+'@
+[W32]::mouse_event([W32]::W, 0, 0, ${Math.round(clicks) * 120}, 0); Write-Output OK
 `)
   } else if (platform === "darwin") {
     yield* Effect.promise(() =>
@@ -267,7 +302,7 @@ Add-Type -AssemblyName System.Windows.Forms
 
 const getScreenSize = Effect.fn("Computer.screenSize")(function* () {
   if (platform === "win32") {
-    const raw = yield* poweshellScript(`
+    const raw = yield* powershellScript(`
 Add-Type -AssemblyName System.Windows.Forms
 $s = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
 Write-Output "$($s.Width) $($s.Height)"

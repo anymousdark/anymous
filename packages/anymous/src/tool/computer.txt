@@ -2,17 +2,17 @@ Control the computer screen — capture screenshots, move mouse, click, type tex
 
 Available actions:
 - screenshot: Capture current screen (returns image, no side effects)
-- move (x, y): Move mouse to coordinates
-- click (x?, y?, button?): Click at position (default: left button)
-- doubleclick (x?, y?): Double-click at position
-- rightclick (x?, y?): Right-click at position
-- type (text, delayMs?): Type text at current cursor position. Use delayMs (ms) to add a pause between each keystroke — useful for visible/animating typing effects or to let UI elements load between chars.
-- keypress (keys): Press key combination (e.g. ["ctrl", "c"], ["alt", "tab"], ["enter"]). Common shortcuts: ^l = address bar focus (Ctrl+L), ^a = select all, ^c = copy, ^v = paste, ^s = save
-- scroll (clicks): Scroll up (positive) or down (negative)
+- move (x, y): Move mouse to absolute pixel coordinates
+- click (x?, y?, button?): Click at position (default: left button). Move first if x/y provided
+- doubleclick (x?, y?): Double-click at position (moves first if x/y provided)
+- rightclick (x?, y?): Right-click at position (moves first if x/y provided)
+- type (text, delayMs?): Type text at current cursor position. Use delayMs (ms) to add a pause between each keystroke — useful for visible/animating typing or to let UI elements load
+- keypress (keys): Press key combination, e.g. ["ctrl","l"] for address bar, ["ctrl","c"] copy, ["ctrl","v"] paste, ["enter"], ["tab"], ["alt","tab"] switch window, ["escape"], ["backspace"]
+- scroll (clicks): Scroll up (positive number) or down (negative number)
 - screensize: Get screen dimensions
 
-Tip: To open a URL, first use keypress with ["ctrl", "l"] to focus the address bar, then type the URL, then press enter.
+Tip: To open a URL: keypress ["ctrl","l"] → type the URL (use delayMs if page is slow) → keypress ["enter"].
 
-Coordinate system: (0,0) is top-left corner of primary screen. Get screen dimensions via screensize action.
+Coordinate system: (0,0) is top-left corner of primary screen. Always get screen dimensions via screensize action first to know the available area.
 
-Platform support: Windows (native), macOS (via screencapture + osascript), Linux (via ImageMagick + xdotool).
+Platform support: Windows (native PowerShell + user32), macOS (via screencapture + osascript), Linux (via ImageMagick + xdotool).
