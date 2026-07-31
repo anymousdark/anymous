@@ -6,10 +6,12 @@ Available actions:
 - click (x?, y?, button?): Click at position (default: left button)
 - doubleclick (x?, y?): Double-click at position
 - rightclick (x?, y?): Right-click at position
-- type (text): Type text at current cursor position
-- keypress (keys): Press key combination (e.g. ["ctrl", "c"], ["alt", "tab"], ["enter"])
+- type (text, delayMs?): Type text at current cursor position. Use delayMs (ms) to add a pause between each keystroke — useful for visible/animating typing effects or to let UI elements load between chars.
+- keypress (keys): Press key combination (e.g. ["ctrl", "c"], ["alt", "tab"], ["enter"]). Common shortcuts: ^l = address bar focus (Ctrl+L), ^a = select all, ^c = copy, ^v = paste, ^s = save
 - scroll (clicks): Scroll up (positive) or down (negative)
 - screensize: Get screen dimensions
+
+Tip: To open a URL, first use keypress with ["ctrl", "l"] to focus the address bar, then type the URL, then press enter.
 
 Coordinate system: (0,0) is top-left corner of primary screen. Get screen dimensions via screensize action.
 

@@ -171,7 +171,7 @@ function draw(
   }
 }
 
-const VERSION = "1.2.0"
+const VERSION = "1.2.1"
 
 function build(input: SplashWriterInput, kind: "entry" | "exit", ctx: ScrollbackRenderContext): ScrollbackSnapshot {
   const width = Math.max(1, ctx.width)

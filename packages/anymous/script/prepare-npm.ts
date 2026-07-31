@@ -104,7 +104,7 @@ for (const file of ["tsconfig.json", "LICENSE", "README.md"]) {
 // Create package.json for npm
 const npmPkg: Record<string, any> = {
   name: "anymous",
-  version: "1.2.0",
+  version: "1.2.1",
   description: "AI-powered reverse engineering platform",
   type: "module",
   license: "MIT",

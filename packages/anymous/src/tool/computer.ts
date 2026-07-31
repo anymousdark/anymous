@@ -1,6 +1,6 @@
 import { Effect, Schema, pipe } from "effect"
 import * as Tool from "./tool"
-import { spawn } from "child_process"
+import { spawn, execSync } from "child_process"
 import DESCRIPTION from "./computer.txt"
 
 const platform = process.platform
@@ -142,32 +142,55 @@ Add-Type -AssemblyName System.Windows.Forms
   }
 })
 
-const typeText = Effect.fn("Computer.typeText")(function* (text: string) {
-  if (platform === "win32") {
-    const escaped = text.replace(/"/g, '`"').replace(/\$/g, "`$").replace(/\n/g, "`n").replace(/\r/g, "`r").replace(/\t/g, "`t")
-    yield* poweshellScript(`
-Add-Type -AssemblyName System.Windows.Forms
-[System.Windows.Forms.SendKeys]::SendWait("${escaped}")
-`)
-  } else if (platform === "darwin") {
-    yield* Effect.promise(() =>
-      new Promise<void>((resolve, reject) => {
-        const proc = spawn("osascript", [
-          "-e",
-          `tell application "System Events" to keystroke "${text.replace(/"/g, '\\"')}"`,
-        ])
-        proc.on("close", (code) => (code === 0 ? resolve() : reject(new Error(`exit ${code}`))))
-        proc.on("error", reject)
-      }),
-    )
-  } else if (platform === "linux") {
-    yield* Effect.promise(() =>
-      new Promise<void>((resolve, reject) => {
-        const proc = spawn("xdotool", ["type", text])
-        proc.on("close", (code) => (code === 0 ? resolve() : reject(new Error(`exit ${code}`))))
-        proc.on("error", reject)
-      }),
-    )
+const typeText = Effect.fn("Computer.typeText")(function* (text: string, delayMs: number = 0) {
+  const typeChar = (char: string) => {
+    if (platform === "win32") {
+      const esc = char.replace(/"/g, '`"').replace(/\$/g, "`$")
+      return poweshellScript(`Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait("${esc}")`)
+    } else if (platform === "darwin") {
+      return Effect.promise<void>(() =>
+        new Promise((resolve, reject) => {
+          const proc = spawn("osascript", ["-e", `tell application "System Events" to keystroke "${char.replace(/"/g, '\\"')}"`])
+          proc.on("close", (code) => (code === 0 ? resolve() : reject(new Error(`exit ${code}`))))
+          proc.on("error", reject)
+        }),
+      )
+    } else {
+      return Effect.promise<void>(() =>
+        new Promise((resolve, reject) => {
+          const proc = spawn("xdotool", ["type", char])
+          proc.on("close", (code) => (code === 0 ? resolve() : reject(new Error(`exit ${code}`))))
+          proc.on("error", reject)
+        }),
+      )
+    }
+  }
+  if (delayMs <= 0) {
+    if (platform === "win32") {
+      const escaped = text.replace(/"/g, '`"').replace(/\$/g, "`$").replace(/\n/g, "`n").replace(/\r/g, "`r").replace(/\t/g, "`t")
+      yield* poweshellScript(`Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait("${escaped}")`)
+    } else if (platform === "darwin") {
+      yield* Effect.promise<void>(() =>
+        new Promise((resolve, reject) => {
+          const proc = spawn("osascript", ["-e", `tell application "System Events" to keystroke "${text.replace(/"/g, '\\"')}"`])
+          proc.on("close", (code) => (code === 0 ? resolve() : reject(new Error(`exit ${code}`))))
+          proc.on("error", reject)
+        }),
+      )
+    } else {
+      yield* Effect.promise<void>(() =>
+        new Promise((resolve, reject) => {
+          const proc = spawn("xdotool", ["type", text])
+          proc.on("close", (code) => (code === 0 ? resolve() : reject(new Error(`exit ${code}`))))
+          proc.on("error", reject)
+        }),
+      )
+    }
+  } else {
+    for (const char of text) {
+      yield* typeChar(char)
+      if (delayMs > 0) yield* Effect.promise<void>((resolve) => setTimeout(resolve, delayMs))
+    }
   }
 })
 
@@ -291,6 +314,7 @@ export const Action = Schema.Struct({
   x: Schema.optional(Schema.Number).annotate({ description: "X coordinate for click/move actions" }),
   y: Schema.optional(Schema.Number).annotate({ description: "Y coordinate for click/move actions" }),
   text: Schema.optional(Schema.String).annotate({ description: "Text to type (for type action)" }),
+  delayMs: Schema.optional(Schema.Number).annotate({ description: "Delay in ms between keystrokes (for type action, default: 0)" }),
   keys: Schema.optional(Schema.Array(Schema.String)).annotate({ description: "Keys to press (for keypress action), e.g. ['ctrl', 'c']" }),
   button: Schema.optional(Schema.Literal("left", "right", "middle")).annotate({ description: "Mouse button (default: left)" }),
   clicks: Schema.optional(Schema.Number).annotate({ description: "Scroll clicks (positive=up, negative=down)" }),
@@ -350,7 +374,7 @@ export const ComputerTool = Tool.define<typeof Action, {}, Question.Service>(
           }
 
           if (action === "type") {
-            yield* typeText(params.text!)
+            yield* typeText(params.text!, params.delayMs ?? 0)
             const dataUrl = yield* captureScreenshot
             return {
               title: `Typed text`,
