@@ -54,7 +54,7 @@ export function logo(pad?: string) {
       result.push(row)
       result.push(EOL)
     }
-    result.push("AI-Powered Reverse Engineering & Pentest Platform v1.2.2")
+    result.push("AI-Powered Reverse Engineering & Pentest Platform v1.2.3")
     return result.join("")
   }
 

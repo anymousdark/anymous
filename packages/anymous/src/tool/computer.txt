@@ -11,7 +11,14 @@ Available actions:
 - scroll (clicks): Scroll up (positive number) or down (negative number)
 - screensize: Get screen dimensions
 
-Tip: To open a URL: keypress ["ctrl","l"] → type the URL (use delayMs if page is slow) → keypress ["enter"].
+IMPORTANT — To navigate to a URL in a browser:
+  1. First screenshot to see current state
+  2. If browser is closed, open it first via shell (Start-Process or xdg-open)
+  3. Open a NEW TAB: keypress ["ctrl","t"]
+  4. Wait briefly (1-2s), then type the full URL (e.g. "https://google.com")
+  5. keypress ["enter"]
+
+  NEVER open the browser directly with a URL argument — always use a new tab (ctrl+t) instead. Do NOT use ctrl+l (address bar focus on current page) unless you specifically want to replace the current page's URL.
 
 Coordinate system: (0,0) is top-left corner of primary screen. Always get screen dimensions via screensize action first to know the available area.
 
