@@ -2,6 +2,8 @@ import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { httpClient } from "@anymous-ai/core/effect/app-node-platform"
 import { Ripgrep } from "@anymous-ai/core/ripgrep"
 import { PlanExitTool } from "./plan"
+import { ComputerTool } from "./computer"
+import { MemoryTool } from "./memory"
 import { Session } from "@/session/session"
 import { QuestionTool } from "./question"
 import { ShellTool } from "./shell"
@@ -100,6 +102,8 @@ const layer = Layer.effect(
     const todo = yield* TodoWriteTool
     const lsptool = yield* LspTool
     const plan = yield* PlanExitTool
+    const computer = yield* ComputerTool
+    const memorytool = yield* MemoryTool
     const webfetch = yield* WebFetchTool
     const websearch = yield* WebSearchTool
     const shell = yield* ShellTool
@@ -218,6 +222,8 @@ const layer = Layer.effect(
           question: Tool.init(question),
           lsp: Tool.init(lsptool),
           plan: Tool.init(plan),
+          computer: Tool.init(computer),
+          memory: Tool.init(memorytool),
           ...(codeModeTool ? { execute: Tool.init(codeModeTool) } : {}),
         })
 
@@ -240,6 +246,8 @@ const layer = Layer.effect(
             tool.patch,
             ...(tool.execute ? [tool.execute] : []),
             ...(flags.experimentalLspTool ? [tool.lsp] : []),
+            tool.computer,
+            tool.memory,
             ...(flags.experimentalPlanMode && flags.client === "cli" ? [tool.plan] : []),
           ],
           task: tool.task,

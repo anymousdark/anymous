@@ -1,0 +1,14 @@
+Persistent shared context memory that persists across sessions. Use this to remember important information about the project, user preferences, architecture decisions, credentials, or any context you want to carry between sessions.
+
+Actions:
+- read (key): Read a specific memory
+- write (key, value): Save or update a memory
+- delete (key): Remove a memory
+- list: List all memories
+
+Memories are automatically injected into the system prompt at the start of every session as shared context. Use this for:
+- Project architecture decisions
+- Coding conventions and preferences
+- Authentication tokens or API keys
+- Important findings or TODOs
+- User preferences for how you should behave
