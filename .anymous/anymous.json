@@ -1,0 +1,28 @@
+{
+  "permission": {
+    "*": "allow",
+    "external_directory": {
+      "*": "allow"
+    },
+    "read": {
+      "*": "allow"
+    },
+    "write": {
+      "*": "allow"
+    },
+    "edit": {
+      "*": "allow"
+    },
+    "bash": {
+      "*": "allow"
+    },
+    "task": {
+      "*": "allow"
+    },
+    "question": "allow",
+    "plan_enter": "allow",
+    "plan_exit": "allow",
+    "todowrite": "allow"
+  },
+  "default_agent": "build"
+}

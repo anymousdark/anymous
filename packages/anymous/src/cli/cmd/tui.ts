@@ -16,7 +16,7 @@ import { validateSession } from "../tui/validate-session"
 import { win32InstallCtrlCGuard } from "@anymous-ai/tui/terminal-win32"
 
 declare global {
-  const ANYMOUS_WORKER_PATH: string
+  var ANYMOUS_WORKER_PATH: string
 }
 
 type RpcClient = ReturnType<typeof Rpc.client<typeof rpc>>

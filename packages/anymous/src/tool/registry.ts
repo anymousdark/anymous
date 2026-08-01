@@ -4,6 +4,7 @@ import { Ripgrep } from "@anymous-ai/core/ripgrep"
 import { PlanExitTool } from "./plan"
 import { ComputerTool } from "./computer"
 import { MemoryTool } from "./memory"
+import { Memory } from "@/memory/memory"
 import { Session } from "@/session/session"
 import { QuestionTool } from "./question"
 import { ShellTool } from "./shell"
@@ -450,6 +451,7 @@ export const node = LayerNode.make({
     Truncate.node,
     RuntimeFlags.node,
     MCP.node,
+    Memory.node,
     Database.node,
     Ripgrep.node,
   ],

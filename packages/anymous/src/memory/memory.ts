@@ -1,5 +1,5 @@
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
-import { Effect, Layer, Context, Schema, ParseResult } from "effect"
+import { Effect, Layer, Context, Schema } from "effect"
 import { FSUtil } from "@anymous-ai/core/fs-util"
 import { Global } from "@anymous-ai/core/global"
 import path from "path"
@@ -39,8 +39,8 @@ const loadStore = (fs: FSUtil.Interface, filePath: string) =>
     }
     const raw = yield* fs.readFileString(filePath)
     const parsed = JSON.parse(raw) as unknown
-    const decoded = yield* Schema.decodeUnknown(MemoryStore)(parsed).pipe(
-      Effect.catchAll(() => Effect.succeed({ version: 1, memories: [] } as MemoryStoreType)),
+    const decoded = yield* Effect.sync(() => Schema.decodeUnknownSync(MemoryStore)(parsed)).pipe(
+      Effect.catch(() => Effect.succeed({ version: 1, memories: [] } as MemoryStoreType)),
     )
     return decoded
   })
@@ -58,38 +58,44 @@ const layer = Layer.effect(
     const filePath = memoryFilePath(global)
 
     const read: Interface["read"] = Effect.fn("Memory.read")(function* (key: string) {
-      const store = yield* loadStore(fs, filePath)
+      const store = yield* loadStore(fs, filePath).pipe(Effect.orDie)
       return store.memories.find((m) => m.key === key)
     })
 
-    const write: Interface["write"] = Effect.fn("Memory.write")(function* (key: string, value: string, sessionID?: string) {
-      const store = yield* loadStore(fs, filePath)
-      const existing = store.memories.findIndex((m) => m.key === key)
+    const write: Interface["write"] = Effect.fn("Memory.write")(function* (
+      key: string,
+      value: string,
+      sessionID?: string,
+    ) {
+      const store = yield* loadStore(fs, filePath).pipe(Effect.orDie)
+      const memories = [...store.memories]
+      const existing = memories.findIndex((m) => m.key === key)
       const entry: MemoryEntryType = { key, value, timestamp: Date.now(), ...(sessionID ? { sessionID } : {}) }
       if (existing >= 0) {
-        store.memories[existing] = entry
+        memories[existing] = entry
       } else {
-        store.memories.push(entry)
+        memories.push(entry)
       }
-      yield* saveStore(fs, filePath, store)
+      yield* saveStore(fs, filePath, { ...store, memories }).pipe(Effect.orDie)
     })
 
     const list: Interface["list"] = Effect.fn("Memory.list")(function* () {
-      const store = yield* loadStore(fs, filePath)
-      return store.memories
+      const store = yield* loadStore(fs, filePath).pipe(Effect.orDie)
+      return [...store.memories]
     })
 
     const remove: Interface["delete"] = Effect.fn("Memory.delete")(function* (key: string) {
-      const store = yield* loadStore(fs, filePath)
-      const idx = store.memories.findIndex((m) => m.key === key)
+      const store = yield* loadStore(fs, filePath).pipe(Effect.orDie)
+      const memories = [...store.memories]
+      const idx = memories.findIndex((m) => m.key === key)
       if (idx < 0) return false
-      store.memories.splice(idx, 1)
-      yield* saveStore(fs, filePath, store)
+      memories.splice(idx, 1)
+      yield* saveStore(fs, filePath, { ...store, memories }).pipe(Effect.orDie)
       return true
     })
 
     const allText: Interface["allText"] = Effect.fn("Memory.allText")(function* () {
-      const store = yield* loadStore(fs, filePath)
+      const store = yield* loadStore(fs, filePath).pipe(Effect.orDie)
       if (store.memories.length === 0) return undefined
       const lines = store.memories.map((m) => `- ${m.key}: ${m.value}`)
       return `## Shared Context / Memory\n\n${lines.join("\n")}`

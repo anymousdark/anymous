@@ -216,12 +216,12 @@ const typeText = Effect.fn("Computer.typeText")(function* (text: string, delayMs
   } else {
     for (const char of text) {
       yield* typeChar(char)
-      if (delayMs > 0) yield* Effect.promise<void>((resolve) => setTimeout(resolve, delayMs))
+      if (delayMs > 0) yield* Effect.sleep(delayMs)
     }
   }
 })
 
-const keyPress = Effect.fn("Computer.keyPress")(function* (keys: string[]) {
+const keyPress = Effect.fn("Computer.keyPress")(function* (keys: readonly string[]) {
   const combo = keys.join("+")
   if (platform === "win32") {
     const mapping: Record<string, string> = {
@@ -324,7 +324,7 @@ Write-Output "$($s.Width) $($s.Height)"
           proc.on("error", reject)
         }),
     )
-    const [_, __, w, h] = d.split(", ").map(Number)
+    const [_, __, w, h] = raw.split(", ").map(Number)
     return { width: w, height: h }
   }
   if (platform === "linux") {
@@ -345,17 +345,17 @@ Write-Output "$($s.Width) $($s.Height)"
 })
 
 export const Action = Schema.Struct({
-  action: Schema.Literal("screenshot", "click", "doubleclick", "rightclick", "move", "type", "keypress", "scroll", "screensize"),
+  action: Schema.Literals(["screenshot", "click", "doubleclick", "rightclick", "move", "type", "keypress", "scroll", "screensize"]),
   x: Schema.optional(Schema.Number).annotate({ description: "X coordinate for click/move actions" }),
   y: Schema.optional(Schema.Number).annotate({ description: "Y coordinate for click/move actions" }),
   text: Schema.optional(Schema.String).annotate({ description: "Text to type (for type action)" }),
   delayMs: Schema.optional(Schema.Number).annotate({ description: "Delay in ms between keystrokes (for type action, default: 0)" }),
   keys: Schema.optional(Schema.Array(Schema.String)).annotate({ description: "Keys to press (for keypress action), e.g. ['ctrl', 'c']" }),
-  button: Schema.optional(Schema.Literal("left", "right", "middle")).annotate({ description: "Mouse button (default: left)" }),
+  button: Schema.optional(Schema.Literals(["left", "right", "middle"])).annotate({ description: "Mouse button (default: left)" }),
   clicks: Schema.optional(Schema.Number).annotate({ description: "Scroll clicks (positive=up, negative=down)" }),
 })
 
-export const ComputerTool = Tool.define<typeof Action, {}, Question.Service>(
+export const ComputerTool = Tool.define<typeof Action, {}, never>(
   "computer",
   Effect.gen(function* () {
     return {
@@ -366,12 +366,12 @@ export const ComputerTool = Tool.define<typeof Action, {}, Question.Service>(
           const { action } = params
 
           if (action === "screenshot") {
-            const dataUrl = yield* captureScreenshot
+            const dataUrl = yield* captureScreenshot()
             return {
               title: "Captured screenshot",
               output: "Screenshot captured. Use the image to decide the next action.",
               attachments: [{
-                type: "file",
+                type: "file" as const,
                 mime: "image/png",
                 filename: "screenshot.png",
                 url: dataUrl,
@@ -394,12 +394,12 @@ export const ComputerTool = Tool.define<typeof Action, {}, Question.Service>(
             if (action === "doubleclick") {
               yield* clickMouse(btn as "left" | "right" | "middle")
             }
-            const dataUrl = yield* captureScreenshot
+            const dataUrl = yield* captureScreenshot()
             return {
               title: `${action} at (${params.x ?? "current"}, ${params.y ?? "current"})`,
               output: `Performed ${action}. Screenshot shows the result.`,
               attachments: [{
-                type: "file",
+                type: "file" as const,
                 mime: "image/png",
                 filename: "screenshot.png",
                 url: dataUrl,
@@ -410,12 +410,12 @@ export const ComputerTool = Tool.define<typeof Action, {}, Question.Service>(
 
           if (action === "type") {
             yield* typeText(params.text!, params.delayMs ?? 0)
-            const dataUrl = yield* captureScreenshot
+            const dataUrl = yield* captureScreenshot()
             return {
               title: `Typed text`,
               output: `Typed "${params.text!.length > 50 ? params.text!.slice(0, 50) + "..." : params.text!}". Screenshot shows the result.`,
               attachments: [{
-                type: "file",
+                type: "file" as const,
                 mime: "image/png",
                 filename: "screenshot.png",
                 url: dataUrl,
@@ -426,12 +426,12 @@ export const ComputerTool = Tool.define<typeof Action, {}, Question.Service>(
 
           if (action === "keypress") {
             yield* keyPress(params.keys!)
-            const dataUrl = yield* captureScreenshot
+            const dataUrl = yield* captureScreenshot()
             return {
               title: `Key press: ${params.keys!.join("+")}`,
               output: `Pressed ${params.keys!.join("+")}. Screenshot shows the result.`,
               attachments: [{
-                type: "file",
+                type: "file" as const,
                 mime: "image/png",
                 filename: "screenshot.png",
                 url: dataUrl,
@@ -442,12 +442,12 @@ export const ComputerTool = Tool.define<typeof Action, {}, Question.Service>(
 
           if (action === "scroll") {
             yield* scrollMouse(params.clicks ?? 3)
-            const dataUrl = yield* captureScreenshot
+            const dataUrl = yield* captureScreenshot()
             return {
               title: `Scrolled ${params.clicks ?? 3} clicks`,
               output: `Scrolled. Screenshot shows the result.`,
               attachments: [{
-                type: "file",
+                type: "file" as const,
                 mime: "image/png",
                 filename: "screenshot.png",
                 url: dataUrl,
@@ -457,7 +457,7 @@ export const ComputerTool = Tool.define<typeof Action, {}, Question.Service>(
           }
 
           if (action === "screensize") {
-            const size = yield* getScreenSize
+            const size = yield* getScreenSize()
             return {
               title: "Screen size",
               output: `Screen resolution: ${size.width}x${size.height}`,

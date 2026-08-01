@@ -4,7 +4,7 @@ import { Memory } from "@/memory/memory"
 import DESCRIPTION from "./memory.txt"
 
 export const Parameters = Schema.Struct({
-  action: Schema.Literal("read", "write", "delete", "list").annotate({ description: "Action to perform" }),
+  action: Schema.Literals(["read", "write", "delete", "list"]).annotate({ description: "Action to perform" }),
   key: Schema.optional(Schema.String).annotate({ description: "Memory key (required for read/write/delete)" }),
   value: Schema.optional(Schema.String).annotate({ description: "Memory value (required for write)" }),
 })

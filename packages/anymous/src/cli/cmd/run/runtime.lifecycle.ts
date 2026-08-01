@@ -196,7 +196,11 @@ export async function createRuntimeLifecycle(input: LifecycleInput): Promise<Lif
     const theme = await resolveRunTheme(renderer)
     renderer.setBackgroundColor(theme.background)
     const keymap = createDefaultOpenTuiKeymap(renderer)
-    unregisterKeymap = registeranymousKeymap(keymap, renderer, input.tuiConfig)
+    unregisterKeymap = registeranymousKeymap(
+      keymap as Parameters<typeof registeranymousKeymap>[0],
+      renderer,
+      input.tuiConfig,
+    )
     const state: SplashState = {
       entry: false,
       exit: false,
@@ -267,7 +271,7 @@ export async function createRuntimeLifecycle(input: LifecycleInput): Promise<Lif
           return await openEditor({
             value,
             cwd: input.directory,
-            renderer,
+            renderer: renderer as Parameters<typeof openEditor>[0]["renderer"],
             stdin: source.stdin,
           })
         } finally {

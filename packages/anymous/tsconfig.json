@@ -12,5 +12,6 @@
       "@/*": ["./src/*"],
       "@test/*": ["./test/*"]
     }
-  }
+  },
+  "exclude": ["dist-npm", "node_modules"]
 }

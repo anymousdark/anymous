@@ -46,6 +46,7 @@ import { Worktree } from "@/worktree"
 import { Installation } from "@/installation"
 import { ShareNext } from "@/share/share-next"
 import { SessionShare } from "@/share/session"
+import { Memory } from "@/memory/memory"
 import { Npm } from "@anymous-ai/core/npm"
 import { memoMap } from "@anymous-ai/core/effect/memo-map"
 import { BackgroundJob } from "@/background/job"
@@ -105,6 +106,7 @@ export const AppLayer = AppNodeBuilderV1.build(
     Installation.node,
     ShareNext.node,
     SessionShare.node,
+    Memory.node,
   ]),
 ).pipe(Layer.provideMerge(AppNodeBuilderV1.build(Ripgrep.node)), Layer.provideMerge(Observability.layer))
 
