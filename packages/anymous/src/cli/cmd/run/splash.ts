@@ -18,6 +18,7 @@ import {
   type ScrollbackWriter,
 } from "@opentui/core"
 import * as Locale from "@/util/locale"
+import { InstallationVersion } from "@anymous-ai/core/installation/version"
 import { go } from "@/cli/logo"
 import type { RunSplashTheme } from "./theme"
 
@@ -171,7 +172,7 @@ function draw(
   }
 }
 
-const VERSION = "1.2.3"
+const VERSION = InstallationVersion
 
 function build(input: SplashWriterInput, kind: "entry" | "exit", ctx: ScrollbackRenderContext): ScrollbackSnapshot {
   const width = Math.max(1, ctx.width)

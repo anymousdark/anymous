@@ -1,4 +1,5 @@
 {
+  "$schema": "https://anymous-cli.vercel.app/config.json",
   "permission": {
     "*": "allow",
     "external_directory": {
