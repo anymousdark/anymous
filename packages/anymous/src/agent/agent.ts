@@ -3,12 +3,12 @@ import { PermissionV1 } from "@anymous-ai/core/v1/permission"
 import { Config } from "@/config/config"
 import { serviceUse } from "@anymous-ai/core/effect/service-use"
 import { Provider } from "@/provider/provider"
+import { ConfigMigrateV1 } from "@anymous-ai/core/v1/config/migrate"
 
 import { generateObject, streamObject, type ModelMessage } from "ai"
 import { Truncate } from "@/tool/truncate"
 import { Auth } from "../auth"
 import { ProviderTransform } from "@/provider/transform"
-
 import PROMPT_GENERATE from "./generate.txt"
 import PROMPT_BUILD from "./prompt/build.txt"
 import PROMPT_PLAN from "./prompt/plan.txt"
@@ -773,7 +773,8 @@ const layer = Layer.effect(
         }
 
         for (const [key, value] of Object.entries(cfg.agent ?? {})) {
-          if (value.disable) {
+          const migrated = ConfigMigrateV1.migrateAgent(value)
+          if (migrated.disabled) {
             delete agents[key]
             continue
           }
@@ -786,19 +787,30 @@ const layer = Layer.effect(
               options: {},
               native: false,
             }
-          if (value.model) item.model = Provider.parseModel(value.model)
-          item.variant = value.variant ?? item.variant
-          item.prompt = value.prompt ?? item.prompt
-          item.description = value.description ?? item.description
-          item.temperature = value.temperature ?? item.temperature
-          item.topP = value.top_p ?? item.topP
-          item.mode = value.mode ?? item.mode
-          item.color = value.color ?? item.color
-          item.hidden = value.hidden ?? item.hidden
+          if (migrated.model) item.model = Provider.parseModel(migrated.model)
+          item.variant = migrated.variant ?? item.variant
+          item.prompt = migrated.system ?? item.prompt
+          item.description = migrated.description ?? item.description
+          item.mode = migrated.mode ?? item.mode
+          item.color = migrated.color ?? item.color
+          item.hidden = migrated.hidden ?? item.hidden
           item.name = value.name ?? item.name
-          item.steps = value.steps ?? item.steps
-          item.options = mergeDeep(item.options, value.options ?? {})
-          item.permission = Permission.merge(item.permission, Permission.fromConfig(value.permission ?? {}))
+          item.steps = migrated.steps ?? item.steps
+          const body = migrated.request?.body ?? {}
+          const { temperature, top_p, ...options } = body
+          item.temperature = temperature ?? item.temperature
+          item.topP = top_p ?? item.topP
+          item.options = mergeDeep(item.options, options)
+          if (migrated.permissions) {
+            item.permission = Permission.merge(
+              item.permission,
+              migrated.permissions.map((rule) => ({
+                permission: rule.action,
+                pattern: rule.resource,
+                action: rule.effect,
+              })),
+            )
+          }
         }
 
         // Ensure Truncate.GLOB is allowed unless explicitly configured

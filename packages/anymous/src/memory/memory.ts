@@ -2,6 +2,7 @@ import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { Effect, Layer, Context, Schema } from "effect"
 import { FSUtil } from "@anymous-ai/core/fs-util"
 import { Global } from "@anymous-ai/core/global"
+import { InstanceState } from "@/effect/instance-state"
 import path from "path"
 
 const MemoryEntry = Schema.Struct({
@@ -9,6 +10,7 @@ const MemoryEntry = Schema.Struct({
   value: Schema.String,
   timestamp: Schema.Number,
   sessionID: Schema.optional(Schema.String),
+  scope: Schema.optional(Schema.String),
 })
 
 const MemoryStore = Schema.Struct({
@@ -50,6 +52,10 @@ const saveStore = (fs: FSUtil.Interface, filePath: string, store: MemoryStoreTyp
     yield* fs.writeFileString(filePath, JSON.stringify(store, null, 2))
   })
 
+// Resolve the current workspace scope. Falls back to the process-wide default workspace
+// when the effect is run outside a project instance (e.g. CLI/global context).
+const currentScope = Effect.map(InstanceState.workspaceID, (id) => id ?? undefined)
+
 const layer = Layer.effect(
   Service,
   Effect.gen(function* () {
@@ -67,10 +73,17 @@ const layer = Layer.effect(
       value: string,
       sessionID?: string,
     ) {
+      const scope = yield* currentScope
       const store = yield* loadStore(fs, filePath).pipe(Effect.orDie)
       const memories = [...store.memories]
-      const existing = memories.findIndex((m) => m.key === key)
-      const entry: MemoryEntryType = { key, value, timestamp: Date.now(), ...(sessionID ? { sessionID } : {}) }
+      const existing = memories.findIndex((m) => m.key === key && m.scope === scope)
+      const entry: MemoryEntryType = {
+        key,
+        value,
+        timestamp: Date.now(),
+        ...(sessionID ? { sessionID } : {}),
+        ...(scope ? { scope } : {}),
+      }
       if (existing >= 0) {
         memories[existing] = entry
       } else {
@@ -80,14 +93,16 @@ const layer = Layer.effect(
     })
 
     const list: Interface["list"] = Effect.fn("Memory.list")(function* () {
+      const scope = yield* currentScope
       const store = yield* loadStore(fs, filePath).pipe(Effect.orDie)
-      return [...store.memories]
+      return store.memories.filter((m) => m.scope === scope)
     })
 
     const remove: Interface["delete"] = Effect.fn("Memory.delete")(function* (key: string) {
+      const scope = yield* currentScope
       const store = yield* loadStore(fs, filePath).pipe(Effect.orDie)
       const memories = [...store.memories]
-      const idx = memories.findIndex((m) => m.key === key)
+      const idx = memories.findIndex((m) => m.key === key && m.scope === scope)
       if (idx < 0) return false
       memories.splice(idx, 1)
       yield* saveStore(fs, filePath, { ...store, memories }).pipe(Effect.orDie)
@@ -95,9 +110,13 @@ const layer = Layer.effect(
     })
 
     const allText: Interface["allText"] = Effect.fn("Memory.allText")(function* () {
+      const scope = yield* currentScope
       const store = yield* loadStore(fs, filePath).pipe(Effect.orDie)
-      if (store.memories.length === 0) return undefined
-      const lines = store.memories.map((m) => `- ${m.key}: ${m.value}`)
+      // Project-scoped memories are visible only within their own project; unscoped
+      // entries remain global (shared context for every workspace).
+      const entries = store.memories.filter((m) => m.scope === undefined || m.scope === scope)
+      if (entries.length === 0) return undefined
+      const lines = entries.map((m) => `- ${m.key}: ${m.value}`)
       return `## Shared Context / Memory\n\n${lines.join("\n")}`
     })
 

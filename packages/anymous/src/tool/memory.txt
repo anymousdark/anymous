@@ -6,7 +6,7 @@ Actions:
 - delete (key): Remove a memory
 - list: List all memories
 
-Memories are automatically injected into the system prompt at the start of every session as shared context. Use this for:
+Memories are scoped to the current project (workspace). Memories you write are only visible when working inside this same project. They are automatically injected into the system prompt at the start of every session as shared context. Use this for:
 - Project architecture decisions
 - Coding conventions and preferences
 - Authentication tokens or API keys
