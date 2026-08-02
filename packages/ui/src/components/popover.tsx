@@ -1,5 +1,6 @@
 import { Popover as Kobalte } from "@kobalte/core/popover"
-import { ComponentProps, JSXElement, ParentProps, Show, createEffect, splitProps, ValidComponent } from "solid-js"
+import type { ComponentProps, JSXElement, ParentProps, ValidComponent } from "solid-js"
+import { Show, createEffect, splitProps } from "solid-js"
 import { createStore } from "solid-js/store"
 import { makeEventListener } from "@solid-primitives/event-listener"
 import { useI18n } from "../context/i18n"

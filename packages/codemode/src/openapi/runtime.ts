@@ -1,5 +1,6 @@
 import { Effect, Option, Schema, Stream } from "effect"
-import { HttpClient, HttpClientRequest, HttpClientResponse, type HttpMethod } from "effect/unstable/http"
+import type { HttpClientResponse } from "effect/unstable/http"
+import { HttpClient, HttpClientRequest, type HttpMethod } from "effect/unstable/http"
 import { ToolError, toolError } from "../tool-error.js"
 import { isRecord, own } from "./spec.js"
 import type { AppliedAuth, Credential, Plan, SecurityScheme } from "./types.js"

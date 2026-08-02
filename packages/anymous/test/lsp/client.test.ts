@@ -3,7 +3,7 @@ import path from "path"
 import { pathToFileURL } from "url"
 import { tmpdir, withTestInstance } from "../fixture/fixture"
 import { LSPClient } from "@/lsp/client"
-import * as LSPServer from "@/lsp/server"
+import type * as LSPServer from "@/lsp/server"
 
 function spawnFakeServer() {
   const { spawn } = require("child_process")

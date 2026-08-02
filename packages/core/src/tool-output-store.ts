@@ -6,7 +6,7 @@ import { Config } from "./config"
 import { FSUtil } from "./fs-util"
 import { Global } from "./global"
 import { makeGlobalNode, makeLocationNode } from "./effect/app-node"
-import { SessionSchema } from "./session/schema"
+import type { SessionSchema } from "./session/schema"
 import { Identifier } from "./util/identifier"
 import type { ToolOutput } from "@anymous-ai/llm"
 

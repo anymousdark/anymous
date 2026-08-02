@@ -1,10 +1,10 @@
 import { describe, expect } from "bun:test"
 import { Directory } from "@/acp/directory"
-import { Command } from "@/command"
+import type { Command } from "@/command"
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { ProviderV2 } from "@anymous-ai/core/provider"
 import { ModelV2 } from "@anymous-ai/core/model"
-import { Provider } from "@/provider/provider"
+import type { Provider } from "@/provider/provider"
 import { Effect, Layer } from "effect"
 import { it } from "../lib/effect"
 

@@ -9,7 +9,12 @@ import fs from "fs"
 const root = path.resolve(import.meta.dir, "..")
 const repoRoot = path.resolve(root, "../..")
 const dist = path.join(root, "dist-npm")
-const pkg = JSON.parse(await Bun.file(path.join(root, "package.json")).text())
+const pkg = JSON.parse(await Bun.file(path.join(root, "package.json")).text()) as {
+  version: string
+  dependencies: Record<string, string>
+  devDependencies: Record<string, string>
+  overrides?: Record<string, string>
+}
 
 // Clean dist
 if (await fs.existsSync(dist)) await fs.rmSync(dist, { recursive: true })
@@ -126,7 +131,7 @@ if (await fs.existsSync(binPath)) {
   // Replace the bun run command to include version define
   binContent = binContent.replace(
     'spawn(bun, ["run", "--conditions=browser", src, ...process.argv.slice(2)]',
-    `spawn(bun, ["run", "--conditions=browser", "--define", "ANYMOUS_VERSION='${npmPkg.version}'", src, ...process.argv.slice(2)]`
+    `spawn(bun, ["run", "--conditions=browser", "--define", "ANYMOUS_VERSION='${npmPkg.version}'", src, ...process.argv.slice(2)]`,
   )
   await Bun.write(binPath, binContent)
   console.log("Injected version define into bin/anymous.cjs")
@@ -134,11 +139,7 @@ if (await fs.existsSync(binPath)) {
 
 // Resolve workspace deps to actual versions (map @anymous-ai/* -> @opencode-ai/* for npm)
 const npmScope = "@opencode-ai"
-const workspaceDeps = [
-  "core", "codemode", "llm",
-  "plugin", "protocol", "schema",
-  "script", "sdk", "server", "tui",
-]
+const workspaceDeps = ["core", "codemode", "llm", "plugin", "protocol", "schema", "script", "sdk", "server", "tui"]
 
 for (const [name, version] of Object.entries(pkg.dependencies ?? {})) {
   if (version.startsWith("workspace:*")) {

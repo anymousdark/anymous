@@ -1,5 +1,6 @@
 import { NodeFileSystem } from "@effect/platform-node"
-import { Deferred, Effect, Exit, FiberSet, Layer, Ref, Scope, Semaphore } from "effect"
+import type { Scope } from "effect"
+import { Deferred, Effect, Exit, FiberSet, Layer, Ref, Semaphore } from "effect"
 import { Socket } from "effect/unstable/socket"
 import * as CassetteService from "./cassette.js"
 import { canonicalizeJson, decodeJson, safeText } from "./matching.js"

@@ -2,7 +2,7 @@ import { spyOn } from "bun:test"
 import path from "path"
 import { resolve, type Info, type Resolved } from "@anymous-ai/tui/config"
 import { TuiConfig } from "../../src/config/tui"
-import { TuiKeybind } from "@anymous-ai/tui/config/keybind"
+import type { TuiKeybind } from "@anymous-ai/tui/config/keybind"
 
 type PluginSpec = string | [string, Record<string, unknown>]
 type PluginOrigin = {

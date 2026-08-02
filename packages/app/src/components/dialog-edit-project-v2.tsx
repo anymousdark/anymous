@@ -9,7 +9,7 @@ import { TextInputV2 } from "@anymous-ai/ui/v2/text-input-v2"
 import { For, Show } from "solid-js"
 import { useLanguage } from "@/context/language"
 import { getProjectAvatarVariant, type LocalProject } from "@/context/layout"
-import { ServerConnection } from "@/context/server"
+import type { ServerConnection } from "@/context/server"
 import { getProjectAvatarSource } from "@/pages/layout/helpers"
 import { createEditProjectModel } from "./edit-project"
 

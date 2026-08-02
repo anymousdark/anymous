@@ -1,13 +1,15 @@
 import { describe, expect } from "bun:test"
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { httpClient } from "@anymous-ai/core/effect/app-node-platform"
-import { Effect, Layer } from "effect"
-import { FetchHttpClient, HttpClient } from "effect/unstable/http"
+import type { Layer } from "effect"
+import { Effect } from "effect"
+import type { HttpClient } from "effect/unstable/http"
+import { FetchHttpClient } from "effect/unstable/http"
 import { Agent } from "../../src/agent/agent"
 import { Truncate } from "@/tool/truncate"
 import { WebFetchTool } from "../../src/tool/webfetch"
 import { SessionID, MessageID } from "../../src/session/schema"
-import { Tool } from "@/tool/tool"
+import type { Tool } from "@/tool/tool"
 import { testEffect } from "../lib/effect"
 
 const it = testEffect(

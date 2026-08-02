@@ -1,7 +1,7 @@
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { Deferred, Effect, Layer, Schema, Context } from "effect"
 import { InstanceState } from "@/effect/instance-state"
-import { SessionID } from "@/session/schema"
+import type { SessionID } from "@/session/schema"
 import { QuestionID } from "./schema"
 import { EventV2Bridge } from "@/event-v2-bridge"
 import { QuestionV1 } from "@anymous-ai/schema/question-v1"

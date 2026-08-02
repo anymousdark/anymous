@@ -1,6 +1,6 @@
 import { parseCommentNote, readCommentMetadata } from "@/utils/comment-note"
 import type { SessionMessageInfo } from "@anymous-ai/client/promise"
-import { AssistantMessage, Part, SessionStatus, UserMessage } from "@anymous-ai/sdk/v2"
+import type { AssistantMessage, Part, SessionStatus, UserMessage } from "@anymous-ai/sdk/v2"
 import { groupParts, renderable, type PartGroup } from "@anymous-ai/session-ui/message-part"
 import { TimelineRow, type SummaryDiff } from "./timeline-row"
 import { uniqueSummaryDiffs } from "./summary-diffs"

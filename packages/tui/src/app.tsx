@@ -1110,9 +1110,7 @@ function App(props: { onSnapshot?: () => Promise<string[]>; pluginHost: TuiPlugi
         evt.stopPropagation()
       }}
       onMouseUp={
-        !Flag.ANYMOUS_EXPERIMENTAL_DISABLE_COPY_ON_SELECT
-          ? () => Selection.copy(renderer, toast, clipboard)
-          : undefined
+        !Flag.ANYMOUS_EXPERIMENTAL_DISABLE_COPY_ON_SELECT ? () => Selection.copy(renderer, toast, clipboard) : undefined
       }
     >
       <Show when={Flag.ANYMOUS_SHOW_TTFD}>
@@ -1129,9 +1127,7 @@ function App(props: { onSnapshot?: () => Promise<string[]>; pluginHost: TuiPlugi
             </Show>
           </Match>
         </Switch>
-        <Show when={ready()}>
-          {plugin()}
-        </Show>
+        <Show when={ready()}>{plugin()}</Show>
       </box>
       <Show when={ready()}>
         <box flexShrink={0}>

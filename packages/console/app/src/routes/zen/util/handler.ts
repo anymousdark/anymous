@@ -27,12 +27,12 @@ import {
   GoUsageLimitError,
   BlackUsageLimitError,
 } from "./error"
+import type { UsageInfo } from "./provider/provider"
 import {
   buildCostChunk,
   createBodyConverter,
   createStreamPartConverter,
   createResponseConverter,
-  UsageInfo,
 } from "./provider/provider"
 import { anthropicHelper } from "./provider/anthropic"
 import { googleHelper } from "./provider/google"

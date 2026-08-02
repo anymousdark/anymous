@@ -1,5 +1,5 @@
 import { Effect } from "effect"
-import { FSUtil } from "@anymous-ai/core/fs-util"
+import type { FSUtil } from "@anymous-ai/core/fs-util"
 
 const BOM_CODE = 0xfeff
 const BOM = String.fromCharCode(BOM_CODE)

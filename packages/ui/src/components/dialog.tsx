@@ -1,5 +1,6 @@
 import { Dialog as Kobalte } from "@kobalte/core/dialog"
-import { ComponentProps, JSXElement, Match, ParentProps, Show, Switch } from "solid-js"
+import type { ComponentProps, JSXElement, ParentProps } from "solid-js"
+import { Match, Show, Switch } from "solid-js"
 import { useI18n } from "../context/i18n"
 import { IconButton } from "./icon-button"
 

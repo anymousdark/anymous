@@ -1,4 +1,5 @@
-import { Component, createMemo, Show } from "solid-js"
+import type { Component } from "solid-js"
+import { createMemo, Show } from "solid-js"
 import { useSync } from "@/context/sync"
 import { Dialog } from "@anymous-ai/ui/dialog"
 import { List } from "@anymous-ai/ui/list"

@@ -1,4 +1,4 @@
-import { Schema } from "effect"
+import type { Schema } from "effect"
 import { OpenApi } from "effect/unstable/httpapi"
 
 export function described<S extends Schema.Top>(schema: S, description: string): S {

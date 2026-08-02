@@ -6,7 +6,7 @@ import { SessionTodo } from "@anymous-ai/schema/session-todo"
 import { Database } from "../database/database"
 import { makeLocationNode } from "../effect/app-node"
 import { EventV2 } from "../event"
-import { SessionSchema } from "./schema"
+import type { SessionSchema } from "./schema"
 import { TodoTable } from "./sql"
 
 export const Info = SessionTodo.Info

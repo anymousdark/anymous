@@ -4,7 +4,7 @@ import { ProviderTransform } from "@/provider/transform"
 import { LLMRequestPrep } from "@/session/llm/request"
 import { ProviderV2 } from "@anymous-ai/core/provider"
 import { ModelV2 } from "@anymous-ai/core/model"
-import { ModelsDev } from "@anymous-ai/core/models-dev"
+import type { ModelsDev } from "@anymous-ai/core/models-dev"
 import { jsonSchema } from "ai"
 
 describe("ProviderTransform.options - setCacheKey", () => {

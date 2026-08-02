@@ -156,8 +156,7 @@ export const dict = {
   "home.faq.a2.before": "Den nemmeste måde at komme i gang på er at læse",
   "home.faq.a2.link": "introen",
   "home.faq.q3": "Skal jeg have ekstra AI-abonnementer for at bruge anymous?",
-  "home.faq.a3.p1":
-    "Ikke nødvendigvis. anymous kommer med gratis modeller, som du kan bruge uden at oprette en konto.",
+  "home.faq.a3.p1": "Ikke nødvendigvis. anymous kommer med gratis modeller, som du kan bruge uden at oprette en konto.",
   "home.faq.a3.p2.beforeZen": "Derudover kan du bruge populære kodningsmodeller ved at oprette en",
   "home.faq.a3.p2.afterZen": " konto.",
   "home.faq.a3.p3":

@@ -3,7 +3,7 @@ export * as Image from "./image"
 import { makeLocationNode } from "./effect/app-node"
 import { Context, Effect, Layer, Schema } from "effect"
 import { Config } from "./config"
-import { FileSystem } from "./filesystem"
+import type { FileSystem } from "./filesystem"
 
 export class ResizerUnavailableError extends Schema.TaggedErrorClass<ResizerUnavailableError>()(
   "Image.ResizerUnavailableError",

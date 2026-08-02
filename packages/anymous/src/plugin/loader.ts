@@ -9,7 +9,7 @@ import {
   type PluginSource,
 } from "./shared"
 import { ConfigPlugin } from "@/config/plugin"
-import { ConfigPluginV1 } from "@anymous-ai/core/v1/config/plugin"
+import type { ConfigPluginV1 } from "@anymous-ai/core/v1/config/plugin"
 import { InstallationVersion } from "@anymous-ai/core/installation/version"
 
 export namespace PluginLoader {

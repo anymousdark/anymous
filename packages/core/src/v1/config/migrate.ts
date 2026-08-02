@@ -1,10 +1,10 @@
 export * as ConfigMigrateV1 from "./migrate"
 
-import { ConfigV1 } from "./config"
-import { ConfigAgentV1 } from "./agent"
-import { ConfigMCPV1 } from "./mcp"
-import { ConfigPermissionV1 } from "./permission"
-import { ConfigProviderV1 } from "./provider"
+import type { ConfigV1 } from "./config"
+import type { ConfigAgentV1 } from "./agent"
+import type { ConfigMCPV1 } from "./mcp"
+import type { ConfigPermissionV1 } from "./permission"
+import type { ConfigProviderV1 } from "./provider"
 import { ConfigProviderOptionsV1 } from "./provider-options"
 
 const keys = new Set([

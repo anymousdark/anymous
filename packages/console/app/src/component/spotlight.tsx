@@ -1,4 +1,5 @@
-import { createSignal, createEffect, onMount, onCleanup, Accessor } from "solid-js"
+import type { Accessor } from "solid-js"
+import { createSignal, createEffect, onMount, onCleanup } from "solid-js"
 import "./spotlight.css"
 
 export interface ParticlesConfig {

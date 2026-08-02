@@ -7,7 +7,7 @@ import {
   type Model,
   type ProviderMetadata,
 } from "@anymous-ai/llm"
-import { SessionMessage } from "../message"
+import type { SessionMessage } from "../message"
 import type { FileAttachment } from "../prompt"
 
 const media = (file: FileAttachment): ContentPart => ({

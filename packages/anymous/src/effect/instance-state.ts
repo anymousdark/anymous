@@ -1,4 +1,5 @@
-import { Effect, ScopedCache, Scope } from "effect"
+import type { Scope } from "effect"
+import { Effect, ScopedCache } from "effect"
 import type { InstanceContext } from "@/project/instance-context"
 import { InstanceRef, WorkspaceRef } from "./instance-ref"
 import { registerDisposer } from "./instance-registry"

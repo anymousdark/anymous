@@ -1,4 +1,5 @@
-import { A, createAsync, RouteSectionProps } from "@solidjs/router"
+import type { RouteSectionProps } from "@solidjs/router"
+import { A, createAsync } from "@solidjs/router"
 import { Title, Meta } from "@solidjs/meta"
 import { createMemo, createSignal } from "solid-js"
 import { github } from "~/lib/github"

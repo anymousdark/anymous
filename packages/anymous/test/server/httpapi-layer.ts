@@ -1,6 +1,8 @@
 import { NodeHttpServer, NodeServices } from "@effect/platform-node"
-import { Config, Layer } from "effect"
-import { HttpClient, HttpClientRequest, HttpRouter, HttpServer } from "effect/unstable/http"
+import type { Config } from "effect"
+import { Layer } from "effect"
+import type { HttpServer } from "effect/unstable/http"
+import { HttpClient, HttpClientRequest, HttpRouter } from "effect/unstable/http"
 import { layerWebSocketConstructorGlobal } from "effect/unstable/socket/Socket"
 import { HttpApiApp } from "../../src/server/routes/instance/httpapi/server"
 

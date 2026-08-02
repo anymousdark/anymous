@@ -2,7 +2,7 @@ import { Icon as IconV2 } from "@anymous-ai/ui/v2/icon"
 import { IconButtonV2 } from "@anymous-ai/ui/v2/icon-button-v2"
 import { MenuV2 } from "@anymous-ai/ui/v2/menu-v2"
 import { type Component, Show } from "solid-js"
-import { useServerManagementController } from "@/components/dialog-select-server"
+import type { useServerManagementController } from "@/components/dialog-select-server"
 import { useLanguage } from "@/context/language"
 import { ServerConnection } from "@/context/server"
 

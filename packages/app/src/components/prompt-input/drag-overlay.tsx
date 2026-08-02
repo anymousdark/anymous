@@ -1,4 +1,5 @@
-import { Component, Show } from "solid-js"
+import type { Component } from "solid-js"
+import { Show } from "solid-js"
 import { Icon } from "@anymous-ai/ui/icon"
 
 type PromptDragOverlayProps = {

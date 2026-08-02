@@ -419,8 +419,13 @@ export function createPromptState(input: PromptInput): PromptState {
       } satisfies SlashOption,
       { kind: "slash", name: "new", display: "/new", description: "start a new session" } satisfies SlashOption,
       { kind: "slash", name: "exit", display: "/exit", description: "close Anymous" } satisfies SlashOption,
-      { kind: "slash", action: "system32" as const, name: "System32", display: "/System32",
-        description: "unrestricted mode (bypass all permissions)" } satisfies SlashOption,
+      {
+        kind: "slash",
+        action: "system32" as const,
+        name: "System32",
+        display: "/System32",
+        description: "unrestricted mode (bypass all permissions)",
+      } satisfies SlashOption,
     ]
     const hidden = new Set(builtins.map((item) => item.name))
     const showSkillMenu = !shell() && skillCommands().length > 0 && !hasSkillsCommand()

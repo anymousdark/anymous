@@ -162,8 +162,7 @@ export const dict = {
   "home.faq.a3.p4.beforeLocal": "你還可以連接你的",
   "home.faq.a3.p4.localLink": "本地模型",
   "home.faq.q4": "可以使用我現有的 AI 訂閱嗎？",
-  "home.faq.a4.p1":
-    "可以。anymous 支援主流供應商的訂閱方案，包括 Claude Pro/Max、ChatGPT Plus/Pro 與 GitHub Copilot。",
+  "home.faq.a4.p1": "可以。anymous 支援主流供應商的訂閱方案，包括 Claude Pro/Max、ChatGPT Plus/Pro 與 GitHub Copilot。",
   "home.faq.q5": "anymous 只能在終端中使用嗎？",
   "home.faq.a5.beforeDesktop": "不再是了！anymous 現在也提供",
   "home.faq.a5.desktop": "桌面端",
@@ -429,8 +428,7 @@ export const dict = {
   "workspace.newUser.feature.quality.title": "最高品質",
   "workspace.newUser.feature.quality.body": "存取配置為最佳效能的模型 - 無需降級或路由到更便宜的供應商。",
   "workspace.newUser.feature.lockin.title": "無綁定",
-  "workspace.newUser.feature.lockin.body":
-    "將 Zen 與任何編碼代理結合使用，並在需要時隨時使用 anymous 連接其他供應商。",
+  "workspace.newUser.feature.lockin.body": "將 Zen 與任何編碼代理結合使用，並在需要時隨時使用 anymous 連接其他供應商。",
   "workspace.newUser.copyApiKey": "複製 API 金鑰",
   "workspace.newUser.copyKey": "複製金鑰",
   "workspace.newUser.copied": "已複製！",
@@ -634,8 +632,7 @@ export const dict = {
   "workspace.lite.subscription.monthlyUsage": "每月使用量",
   "workspace.lite.subscription.resetsIn": "重置時間：",
   "workspace.lite.subscription.useBalance": "達到使用限制後使用您的可用餘額",
-  "workspace.lite.subscription.selectProvider":
-    "在您的 anymous 設定中選擇「anymous Go」作為提供商，即可使用 Go 模型。",
+  "workspace.lite.subscription.selectProvider": "在您的 anymous 設定中選擇「anymous Go」作為提供商，即可使用 Go 模型。",
   "workspace.lite.providers.title": "提供商",
   "workspace.lite.providers.description": "控制用於路由的提供商。",
   "workspace.lite.providers.useChina": "啟用部署在中國的模型",

@@ -1,15 +1,6 @@
 import { Popover as Kobalte } from "@kobalte/core/popover"
-import {
-  Component,
-  ComponentProps,
-  createEffect,
-  createMemo,
-  For,
-  JSX,
-  onCleanup,
-  Show,
-  ValidComponent,
-} from "solid-js"
+import type { Component, ComponentProps, JSX, ValidComponent } from "solid-js"
+import { createEffect, createMemo, For, onCleanup, Show } from "solid-js"
 import { createStore } from "solid-js/store"
 import { useLocal } from "@/context/local"
 import { useDialog } from "@anymous-ai/ui/context/dialog"

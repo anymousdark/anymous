@@ -1,4 +1,5 @@
-import { Effect, JsonSchema, Schema } from "effect"
+import type { JsonSchema } from "effect"
+import { Effect, Schema } from "effect"
 import type {
   ToolCallPart,
   ToolContent,

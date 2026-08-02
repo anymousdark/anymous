@@ -1,4 +1,4 @@
-import { ProviderHelper } from "./provider"
+import type { ProviderHelper } from "./provider"
 
 /*
 {

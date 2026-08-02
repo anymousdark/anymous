@@ -2,7 +2,7 @@ import { usePlatform } from "@/context/platform"
 import { Button } from "@anymous-ai/ui/button"
 import { useDialog } from "@anymous-ai/ui/context/dialog"
 import { Dialog } from "@anymous-ai/ui/dialog"
-import { JSX } from "solid-js"
+import type { JSX } from "solid-js"
 
 export type DialogGoUpsellProps = {
   title: string

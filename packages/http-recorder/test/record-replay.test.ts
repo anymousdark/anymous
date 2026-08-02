@@ -1,6 +1,7 @@
 import { NodeFileSystem } from "@effect/platform-node"
 import { describe, expect, test } from "bun:test"
-import { Cause, Deferred, Effect, Exit, Layer, Scope, Stream } from "effect"
+import type { Scope } from "effect"
+import { Cause, Deferred, Effect, Exit, Layer, Stream } from "effect"
 import { Headers, HttpBody, HttpClient, HttpClientRequest } from "effect/unstable/http"
 import { Socket } from "effect/unstable/socket"
 import * as fs from "node:fs"

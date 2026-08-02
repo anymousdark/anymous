@@ -1,5 +1,5 @@
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
-import { SessionID } from "./schema"
+import type { SessionID } from "./schema"
 import { Effect, Layer, Context } from "effect"
 import { Database } from "@anymous-ai/core/database/database"
 import { eq } from "drizzle-orm"

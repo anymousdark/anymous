@@ -1,5 +1,5 @@
 import { describe, expect } from "bun:test"
-import { SessionV1 } from "@anymous-ai/core/v1/session"
+import type { SessionV1 } from "@anymous-ai/core/v1/session"
 import { EventV2 } from "@anymous-ai/core/event"
 import { SessionProjector } from "@anymous-ai/core/session/projector"
 import { Deferred, Effect, Exit, Layer } from "effect"

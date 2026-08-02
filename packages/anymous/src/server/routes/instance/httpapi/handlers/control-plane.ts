@@ -3,7 +3,8 @@ import { SessionV2 } from "@anymous-ai/core/session"
 import { Effect } from "effect"
 import { HttpApiBuilder } from "effect/unstable/httpapi"
 import { RootHttpApi } from "../api"
-import { ApiMoveSessionError, MoveSessionPayload } from "../groups/control-plane"
+import type { MoveSessionPayload } from "../groups/control-plane"
+import { ApiMoveSessionError } from "../groups/control-plane"
 
 export const controlPlaneHandlers = HttpApiBuilder.group(RootHttpApi, "controlPlane", (handlers) =>
   Effect.gen(function* () {

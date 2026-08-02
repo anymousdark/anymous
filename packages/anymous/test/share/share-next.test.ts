@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect } from "bun:test"
 import { Effect, Exit, Layer, Option } from "effect"
-import { HttpClient, HttpClientRequest, HttpClientResponse } from "effect/unstable/http"
+import type { HttpClientRequest } from "effect/unstable/http"
+import { HttpClient, HttpClientResponse } from "effect/unstable/http"
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { httpClient } from "@anymous-ai/core/effect/app-node-platform"
 import { CrossSpawnSpawner } from "@anymous-ai/core/cross-spawn-spawner"

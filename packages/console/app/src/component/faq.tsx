@@ -1,5 +1,5 @@
 import { Collapsible } from "@kobalte/core/collapsible"
-import { ParentProps } from "solid-js"
+import type { ParentProps } from "solid-js"
 
 export function Faq(props: ParentProps & { question: string }) {
   return (

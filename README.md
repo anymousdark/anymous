@@ -102,6 +102,12 @@ bun dev
 bun test
 ```
 
+### Documentation
+
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** — contribution guide, code conventions, and release process
+- **[CHANGELOG.md](CHANGELOG.md)** — release history
+- **[V2_MIGRATION_TODOS.md](V2_MIGRATION_TODOS.md)** — tracker for the V2 architecture migration
+
 ## 📦 Published Packages
 
 | Package | Description |

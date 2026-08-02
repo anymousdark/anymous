@@ -1,5 +1,5 @@
 import { Glob } from "@anymous-ai/core/util/glob"
-import { ConfigPluginV1 } from "@anymous-ai/core/v1/config/plugin"
+import type { ConfigPluginV1 } from "@anymous-ai/core/v1/config/plugin"
 import { pathToFileURL } from "url"
 import { isPathPluginSpec, parsePluginSpecifier, resolvePathPluginTarget } from "@/plugin/shared"
 import path from "path"

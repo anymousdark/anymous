@@ -1,5 +1,5 @@
 import { AppNodeBuilder } from "@anymous-ai/core/effect/app-node-builder"
-import { LayerNode } from "@anymous-ai/core/effect/layer-node"
+import type { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { InstanceBootstrap } from "@/project/bootstrap"
 import { InstanceStore } from "@/project/instance-store"
 

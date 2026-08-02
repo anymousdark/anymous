@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { SessionV1 } from "@anymous-ai/core/v1/session"
+import type { SessionV1 } from "@anymous-ai/core/v1/session"
 import path from "path"
 import { Effect, FileSystem, Layer } from "effect"
 import { CrossSpawnSpawner } from "@anymous-ai/core/cross-spawn-spawner"

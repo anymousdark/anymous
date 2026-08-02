@@ -1,6 +1,6 @@
 export * as ProviderV2 from "./provider"
 
-import { Types } from "effect"
+import type { Types } from "effect"
 import { Provider } from "@anymous-ai/schema/provider"
 
 export const ID = Provider.ID

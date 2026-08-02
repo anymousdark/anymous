@@ -1,5 +1,5 @@
 import { test, expect, describe } from "bun:test"
-import { SessionV1 } from "@anymous-ai/core/v1/session"
+import type { SessionV1 } from "@anymous-ai/core/v1/session"
 import { extractResponseText, formatPromptTooLargeError } from "../../src/cli/cmd/github"
 import type { MessageV2 } from "../../src/session/message-v2"
 import { SessionID, MessageID, PartID } from "../../src/session/schema"

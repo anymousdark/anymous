@@ -1,5 +1,5 @@
 import { Session } from "@/session/session"
-import { SessionV1 } from "@anymous-ai/core/v1/session"
+import type { SessionV1 } from "@anymous-ai/core/v1/session"
 import { MessageV2 } from "../../session/message-v2"
 import { SessionID } from "../../session/schema"
 import { effectCmd, fail } from "../effect-cmd"

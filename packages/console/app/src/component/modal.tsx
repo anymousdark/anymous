@@ -1,5 +1,6 @@
 import { Dialog as Kobalte } from "@kobalte/core/dialog"
-import { JSX, Show } from "solid-js"
+import type { JSX } from "solid-js"
+import { Show } from "solid-js"
 import "./modal.css"
 
 interface ModalProps {

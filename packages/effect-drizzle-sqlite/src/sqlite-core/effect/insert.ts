@@ -15,7 +15,7 @@ import type {
 } from "drizzle-orm/sqlite-core/query-builders/insert"
 import type { SelectedFieldsFlat } from "drizzle-orm/sqlite-core/query-builders/select.types"
 import type { PreparedQueryConfig } from "drizzle-orm/sqlite-core/session"
-import { SQLiteTable } from "drizzle-orm/sqlite-core/table"
+import type { SQLiteTable } from "drizzle-orm/sqlite-core/table"
 import { extractUsedTable } from "drizzle-orm/sqlite-core/utils"
 import type { Subquery } from "drizzle-orm/subquery"
 import { type DrizzleTypeError, haveSameKeys } from "drizzle-orm/utils"

@@ -3,7 +3,7 @@ import { LocationServiceMap } from "../../location-service-map"
 import { makeGlobalNode } from "../../effect/app-node"
 import { SessionRunCoordinator } from "../run-coordinator"
 import { SessionRunner } from "../runner"
-import { SessionSchema } from "../schema"
+import type { SessionSchema } from "../schema"
 import { SessionStore } from "../store"
 import { SessionExecution } from "../execution"
 

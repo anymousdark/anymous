@@ -2,7 +2,7 @@ import { createSimpleContext } from "@anymous-ai/ui/context"
 import type { AsyncStorage, SyncStorage } from "@solid-primitives/storage"
 import type { Accessor } from "solid-js"
 import type { DesktopMenuAction } from "../desktop-menu"
-import { ServerConnection } from "./server"
+import type { ServerConnection } from "./server"
 import type { WslServersPlatform } from "../wsl/types"
 import type { UpdaterPlatform } from "../updater"
 

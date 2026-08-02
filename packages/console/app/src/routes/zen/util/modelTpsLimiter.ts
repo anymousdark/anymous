@@ -1,6 +1,6 @@
 import { and, Database, inArray, sql } from "@anymous-ai/console-core/drizzle/index.js"
 import { ModelTpsRateLimitTable } from "@anymous-ai/console-core/schema/ip.sql.js"
-import { UsageInfo } from "./provider/provider"
+import type { UsageInfo } from "./provider/provider"
 
 export function createModelTpsLimiter(providers: { id: string; model: string; tpsGoal?: number }[]) {
   const tpsGoals = Object.fromEntries(

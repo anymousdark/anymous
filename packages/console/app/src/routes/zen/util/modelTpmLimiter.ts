@@ -1,6 +1,6 @@
 import { and, Database, eq, inArray, sql } from "@anymous-ai/console-core/drizzle/index.js"
 import { ModelTpmRateLimitTable } from "@anymous-ai/console-core/schema/ip.sql.js"
-import { UsageInfo } from "./provider/provider"
+import type { UsageInfo } from "./provider/provider"
 
 export function createModelTpmLimiter(providers: { id: string; model: string; tpmLimit?: number }[]) {
   const ids = providers.filter((p) => p.tpmLimit).map((p) => `${p.id}/${p.model}`)

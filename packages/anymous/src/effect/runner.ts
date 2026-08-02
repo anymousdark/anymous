@@ -1,4 +1,5 @@
-import { Cause, Deferred, Effect, Exit, Fiber, Latch, Schema, Scope, SynchronizedRef } from "effect"
+import type { Latch, Scope } from "effect"
+import { Cause, Deferred, Effect, Exit, Fiber, Schema, SynchronizedRef } from "effect"
 
 export interface Runner<A, E = never> {
   readonly state: State<A, E>

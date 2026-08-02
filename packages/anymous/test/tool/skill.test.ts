@@ -1,4 +1,4 @@
-import { PermissionV1 } from "@anymous-ai/core/v1/permission"
+import type { PermissionV1 } from "@anymous-ai/core/v1/permission"
 import { CrossSpawnSpawner } from "@anymous-ai/core/cross-spawn-spawner"
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { Ripgrep } from "@anymous-ai/core/ripgrep"

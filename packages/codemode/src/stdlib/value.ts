@@ -73,7 +73,8 @@ export const invokeCoercion = (ref: CoercionFunction, args: Array<unknown>, node
   if (ref.name === "parseFloat") return parseFloat(coerceToString(value))
   return coerceToString(value)
 }
-import { type AstNode, CoercionFunction, InterpreterRuntimeError } from "../interpreter/model.js"
+import type { CoercionFunction } from "../interpreter/model.js"
+import { type AstNode, InterpreterRuntimeError } from "../interpreter/model.js"
 import { copyIn, type SafeObject } from "../tool-runtime.js"
 import {
   isSandboxValue,

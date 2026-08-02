@@ -18,7 +18,7 @@ import { Config } from "@/config/config"
 import { SessionShareTable } from "@anymous-ai/core/share/sql"
 import { ProviderV2 } from "@anymous-ai/core/provider"
 import { ModelV2 } from "@anymous-ai/core/model"
-import { EventV2 } from "@anymous-ai/core/event"
+import type { EventV2 } from "@anymous-ai/core/event"
 
 const disabled = process.env["ANYMOUS_DISABLE_SHARE"] === "true" || process.env["ANYMOUS_DISABLE_SHARE"] === "1"
 

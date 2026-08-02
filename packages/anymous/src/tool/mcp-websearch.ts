@@ -1,4 +1,5 @@
-import { Duration, Effect, Schema } from "effect"
+import type { Duration } from "effect"
+import { Effect, Schema } from "effect"
 import { HttpClient, HttpClientRequest } from "effect/unstable/http"
 
 export const EXA_URL = process.env.EXA_API_KEY

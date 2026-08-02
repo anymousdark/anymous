@@ -3,11 +3,11 @@
 import { Database, and, eq, isNull, sql } from "@anymous-ai/console-core/drizzle/index.js"
 import { AuthTable } from "@anymous-ai/console-core/schema/auth.sql.js"
 import { UserTable } from "@anymous-ai/console-core/schema/user.sql.js"
+import type { BlackPlans } from "@anymous-ai/console-core/schema/billing.sql.js"
 import {
   BillingTable,
   PaymentTable,
   SubscriptionTable,
-  BlackPlans,
   UsageTable,
   LiteTable,
 } from "@anymous-ai/console-core/schema/billing.sql.js"

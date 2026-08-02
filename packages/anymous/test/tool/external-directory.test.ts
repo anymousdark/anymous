@@ -1,4 +1,4 @@
-import { PermissionV1 } from "@anymous-ai/core/v1/permission"
+import type { PermissionV1 } from "@anymous-ai/core/v1/permission"
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { describe, expect } from "bun:test"
 import path from "path"

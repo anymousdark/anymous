@@ -90,5 +90,5 @@ export const invokeDateMethod = (value: SandboxDate, name: string, node: AstNode
   }
 }
 import { type AstNode, InterpreterRuntimeError } from "../interpreter/model.js"
-import { SandboxDate } from "../values.js"
+import type { SandboxDate } from "../values.js"
 import { coerceToNumber, coerceToString } from "./value.js"

@@ -12,7 +12,7 @@ import { Agent } from "../../src/agent/agent"
 import { EventV2Bridge } from "../../src/event-v2-bridge"
 import { Truncate } from "@/tool/truncate"
 import { SessionID, MessageID } from "../../src/session/schema"
-import * as Tool from "../../src/tool/tool"
+import type * as Tool from "../../src/tool/tool"
 import { testEffect } from "../lib/effect"
 import { Watcher } from "@anymous-ai/core/filesystem/watcher"
 

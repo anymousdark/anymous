@@ -2,7 +2,7 @@ import { getRequestEvent } from "solid-js/web"
 import { and, Database, eq, inArray, isNull, sql } from "@anymous-ai/console-core/drizzle/index.js"
 import { UserTable } from "@anymous-ai/console-core/schema/user.sql.js"
 import { redirect } from "@solidjs/router"
-import { Actor } from "@anymous-ai/console-core/actor.js"
+import type { Actor } from "@anymous-ai/console-core/actor.js"
 
 import { createClient } from "@openauthjs/openauth/client"
 

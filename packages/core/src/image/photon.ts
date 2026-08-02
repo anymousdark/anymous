@@ -3,7 +3,7 @@ import photonWasm from "@silvia-odwyer/photon-node/photon_rs_bg.wasm" with { typ
 import { Effect } from "effect"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
-import { FileSystem } from "../filesystem"
+import type { FileSystem } from "../filesystem"
 import { DecodeError, ResizerUnavailableError, SizeError } from "../image"
 
 const JPEG_QUALITIES = [80, 85, 70, 55, 40]

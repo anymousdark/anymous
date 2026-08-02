@@ -1,4 +1,4 @@
-import { Message, Model, Part, Session, SessionStatus, SnapshotFileDiff, UserMessage } from "@anymous-ai/sdk/v2"
+import type { Message, Model, Part, Session, SessionStatus, SnapshotFileDiff, UserMessage } from "@anymous-ai/sdk/v2"
 import { SessionTurn } from "@anymous-ai/session-ui/session-turn"
 import { SessionReview } from "@anymous-ai/session-ui/session-review"
 import { DataProvider } from "@anymous-ai/session-ui/context"

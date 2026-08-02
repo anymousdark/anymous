@@ -3,8 +3,8 @@ export * as SessionExecution from "./execution"
 import { Context, Effect, Layer } from "effect"
 import { LayerNode } from "../effect/layer-node"
 import { Node } from "../effect/app-node"
-import { SessionRunner } from "./runner/index"
-import { SessionSchema } from "./schema"
+import type { SessionRunner } from "./runner/index"
+import type { SessionSchema } from "./schema"
 
 export interface Interface {
   /** Snapshots active execution owned by this process. */

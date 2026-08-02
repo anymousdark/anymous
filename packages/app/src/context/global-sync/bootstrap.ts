@@ -38,9 +38,10 @@ import {
   normalizeProviderList,
 } from "./utils"
 import { formatServerError } from "@/utils/server-errors"
-import { QueryClient, queryOptions } from "@tanstack/solid-query"
+import type { QueryClient } from "@tanstack/solid-query"
+import { queryOptions } from "@tanstack/solid-query"
 import { loadMcpQuery, loadMcpResourcesQuery } from "../server-sync"
-import { NormalizedProviderListResponse } from "@anymous-ai/session-ui/context"
+import type { NormalizedProviderListResponse } from "@anymous-ai/session-ui/context"
 import { ScopedKey, type ServerScope } from "@/utils/server-scope"
 import { normalizeSessionInfo } from "@/utils/session"
 import type { ServerProtocol } from "@/utils/server-protocol"

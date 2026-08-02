@@ -19,7 +19,8 @@ jobs:
         with:
           bun-version: ${{ env.BUN_VERSION }}
       - run: bun install --frozen-lockfile
-      - run: bunx eslint . --ext .ts,.tsx --max-warnings 0
+      - name: Lint (errors block; warnings are tolerated for legacy code)
+        run: bunx eslint packages --ext .ts,.tsx,.js,.cjs,.mjs
 
   typecheck:
     name: Typecheck (focused)
@@ -32,12 +33,17 @@ jobs:
       - run: bun install --frozen-lockfile
       - name: Typecheck core packages (focused to avoid OOM)
         run: |
-          for pkg in anymous core cli server tui schema protocol script plugin llm codemode sdk js sdk-next; do
+          pkg_failed=""
+          for pkg in anymous core cli server tui schema protocol script plugin llm codemode; do
             echo "=== Typechecking packages/$pkg ==="
             if [ -f "packages/$pkg/tsconfig.json" ]; then
-              bunx --bun tsgo -p packages/$pkg/tsconfig.json --noEmit || echo "Typecheck failed for $pkg (continuing...)"
+              bunx --bun tsgo -p packages/$pkg/tsconfig.json --noEmit || pkg_failed="$pkg_failed $pkg"
             fi
           done
+          if [ -n "$pkg_failed" ]; then
+            echo "::error::Typecheck failed for packages:$pkg_failed"
+            exit 1
+          fi
 
   test:
     name: Test

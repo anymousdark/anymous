@@ -1,6 +1,6 @@
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { InstanceState } from "@/effect/instance-state"
-import { SessionID } from "./schema"
+import type { SessionID } from "./schema"
 import { Effect, Layer, Context } from "effect"
 import { EventV2Bridge } from "@/event-v2-bridge"
 import { SessionStatusEvent } from "@anymous-ai/schema/session-status-event"

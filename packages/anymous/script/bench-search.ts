@@ -1,4 +1,4 @@
-import { Effect } from "effect"
+import type { Effect } from "effect"
 import { Fff } from "@anymous-ai/core/filesystem/fff.bun"
 import { AppRuntime } from "@/effect/app-runtime"
 import { FileSystem } from "@anymous-ai/core/filesystem"

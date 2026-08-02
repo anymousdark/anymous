@@ -1,4 +1,5 @@
-import { JSX, Show, createEffect, onCleanup } from "solid-js"
+import type { JSX } from "solid-js"
+import { Show, createEffect, onCleanup } from "solid-js"
 import { createStore } from "solid-js/store"
 import { IconChevron } from "./icon"
 import "./dropdown.css"

@@ -1,6 +1,6 @@
-import { PermissionV1 } from "@anymous-ai/core/v1/permission"
+import type { PermissionV1 } from "@anymous-ai/core/v1/permission"
 import { Agent } from "@/agent/agent"
-import { SessionV1 } from "@anymous-ai/core/v1/session"
+import type { SessionV1 } from "@anymous-ai/core/v1/session"
 import { EventV2Bridge } from "@/event-v2-bridge"
 import { Command } from "@/command"
 import { Permission } from "@/permission"
@@ -14,7 +14,7 @@ import { SessionRunState } from "@/session/run-state"
 import { SessionStatus } from "@/session/status"
 import { SessionSummary } from "@/session/summary"
 import { Todo } from "@/session/todo"
-import { MessageID, PartID, SessionID } from "@/session/schema"
+import type { MessageID, PartID, SessionID } from "@/session/schema"
 import { NamedError } from "@anymous-ai/core/util/error"
 import { Cause, Effect, Option, Schema, Scope } from "effect"
 import * as Stream from "effect/Stream"
@@ -22,10 +22,9 @@ import { InstanceState } from "@/effect/instance-state"
 import { HttpServerRequest, HttpServerResponse } from "effect/unstable/http"
 import { HttpApiBuilder, HttpApiError, HttpApiSchema } from "effect/unstable/httpapi"
 import { InstanceHttpApi } from "../api"
-import {
+import type {
   CommandPayload,
   DiffQuery,
-  ForkPayload,
   InitPayload,
   ListQuery,
   MessagesQuery,
@@ -36,6 +35,7 @@ import {
   SummarizePayload,
   UpdatePayload,
 } from "../groups/session"
+import { ForkPayload } from "../groups/session"
 import { PermissionNotFoundError } from "../errors"
 import * as SessionError from "./session-errors"
 

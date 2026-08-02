@@ -1,7 +1,9 @@
-import { Effect, Stream } from "effect"
-import { HttpClient } from "effect/unstable/http"
-import { ClientError, anymous } from "./generated"
-import { Missing } from "./fixture"
+import type { Stream } from "effect"
+import { Effect } from "effect"
+import type { HttpClient } from "effect/unstable/http"
+import type { ClientError } from "./generated"
+import { anymous } from "./generated"
+import type { Missing } from "./fixture"
 
 export const program = anymous.make().pipe(
   Effect.map((client) => {

@@ -7,7 +7,7 @@ import { type LocalProject, getAvatarColors } from "@/context/layout"
 import { Avatar } from "@anymous-ai/ui/avatar"
 import { useLanguage } from "@/context/language"
 import { getProjectAvatarSource } from "@/pages/layout/helpers"
-import { ServerConnection } from "@/context/server"
+import type { ServerConnection } from "@/context/server"
 import { createEditProjectModel } from "./edit-project"
 
 const AVATAR_COLOR_KEYS = ["pink", "mint", "orange", "purple", "cyan", "lime"] as const

@@ -7,7 +7,8 @@ import { HttpApiBuilder } from "effect/unstable/httpapi"
 import { InstanceHttpApi } from "../api"
 import { notFound } from "../errors"
 import { ApiVcsApplyError } from "../groups/instance"
-import { ApiWorkspaceCreateError, ApiWorkspaceWarpError, CreatePayload, WarpPayload } from "../groups/workspace"
+import type { CreatePayload, WarpPayload } from "../groups/workspace"
+import { ApiWorkspaceCreateError, ApiWorkspaceWarpError } from "../groups/workspace"
 
 export const workspaceHandlers = HttpApiBuilder.group(InstanceHttpApi, "workspace", (handlers) =>
   Effect.gen(function* () {

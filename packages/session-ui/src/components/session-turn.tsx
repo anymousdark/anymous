@@ -1,9 +1,5 @@
-import {
-  AssistantMessage,
-  type SnapshotFileDiff,
-  Message as MessageType,
-  Part as PartType,
-} from "@anymous-ai/sdk/v2/client"
+import type { AssistantMessage, Message as MessageType, Part as PartType } from "@anymous-ai/sdk/v2/client"
+import { type SnapshotFileDiff } from "@anymous-ai/sdk/v2/client"
 import type { FileDiffInfo } from "@anymous-ai/client/promise"
 import type { SessionStatus } from "@anymous-ai/sdk/v2"
 import { useData } from "../context"
@@ -11,7 +7,8 @@ import { useFileComponent } from "@anymous-ai/ui/context/file"
 
 import { Binary } from "@anymous-ai/core/util/binary"
 import { getDirectory, getFilename } from "@anymous-ai/core/util/path"
-import { createEffect, createMemo, createSignal, For, on, ParentProps, Show } from "solid-js"
+import type { ParentProps } from "solid-js"
+import { createEffect, createMemo, createSignal, For, on, Show } from "solid-js"
 import { createStore } from "solid-js/store"
 import { Dynamic } from "solid-js/web"
 import { AssistantParts, Message, MessageDivider, PART_MAPPING, type UserActions } from "./message-part"

@@ -1,4 +1,4 @@
-import { PermissionV1 } from "@anymous-ai/core/v1/permission"
+import type { PermissionV1 } from "@anymous-ai/core/v1/permission"
 import { describe, expect } from "bun:test"
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { Cause, Effect, Exit, Layer } from "effect"
@@ -18,9 +18,9 @@ import { CrossSpawnSpawner } from "@anymous-ai/core/cross-spawn-spawner"
 import { FSUtil } from "@anymous-ai/core/fs-util"
 import { Plugin } from "../../src/plugin"
 import { testEffect } from "../lib/effect"
-import { Tool } from "@/tool/tool"
+import type { Tool } from "@/tool/tool"
 import { RuntimeFlags } from "@/effect/runtime-flags"
-import { InstanceStore } from "@/project/instance-store"
+import type { InstanceStore } from "@/project/instance-store"
 
 const shellLayer = Layer.mergeAll(
   LayerNode.compile(

@@ -1,7 +1,7 @@
 import * as Effect from "effect/Effect"
 import * as Command from "effect/unstable/cli/Command"
-import { Spec } from "./spec"
-import { Daemon } from "../services/daemon"
+import type { Spec } from "./spec"
+import type { Daemon } from "../services/daemon"
 
 export type Input<Value> =
   Value extends Spec.Node<infer _Name, infer Command, infer _Commands>

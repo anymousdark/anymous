@@ -1,4 +1,4 @@
-import { Agent } from "@/agent/agent"
+import type { Agent } from "@/agent/agent"
 import { Provider } from "@/provider/provider"
 import { LLM } from "@/session/llm"
 import { MessageID, SessionID } from "@/session/schema"

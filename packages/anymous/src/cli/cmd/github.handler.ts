@@ -26,7 +26,7 @@ import { MessageID, PartID } from "../../session/schema"
 import { Provider } from "@/provider/provider"
 import { MessageV2 } from "../../session/message-v2"
 import { EventV2Bridge } from "@/event-v2-bridge"
-import { EventV2 } from "@anymous-ai/core/event"
+import type { EventV2 } from "@anymous-ai/core/event"
 import { SessionPrompt } from "@/session/prompt"
 import { Git } from "@/git"
 import { setTimeout as sleep } from "node:timers/promises"
@@ -320,7 +320,9 @@ export const githubInstall = Effect.fn("Cli.github.install")(function* () {
         s.stop("Installed GitHub app")
 
         async function getInstallation() {
-          return await fetch(`https://anymous-cli.vercel.app/get_github_app_installation?owner=${app.owner}&repo=${app.repo}`)
+          return await fetch(
+            `https://anymous-cli.vercel.app/get_github_app_installation?owner=${app.owner}&repo=${app.repo}`,
+          )
             .then((res) => res.json())
             .then((data) => data.installation)
         }

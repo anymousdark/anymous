@@ -8,7 +8,7 @@ import { AbsolutePath, RelativePath } from "./schema"
 import { FSUtil } from "./fs-util"
 import { AppProcess } from "./process"
 import { makeGlobalNode } from "./effect/app-node"
-import { File } from "./file"
+import type { File } from "./file"
 import { KeyedMutex } from "./effect/keyed-mutex"
 
 export class Repository extends Schema.Class<Repository>("Git.Repository")({

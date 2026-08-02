@@ -1,7 +1,7 @@
 import { afterEach, describe, expect } from "bun:test"
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { Effect, Layer } from "effect"
-import { HttpClientResponse } from "effect/unstable/http"
+import type { HttpClientResponse } from "effect/unstable/http"
 import { eq } from "drizzle-orm"
 import { Database } from "@anymous-ai/core/database/database"
 

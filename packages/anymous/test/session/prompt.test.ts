@@ -1,5 +1,5 @@
-import { ConfigV1 } from "@anymous-ai/core/v1/config/config"
-import { SessionV1 } from "@anymous-ai/core/v1/session"
+import type { ConfigV1 } from "@anymous-ai/core/v1/config/config"
+import type { SessionV1 } from "@anymous-ai/core/v1/session"
 import { Database } from "@anymous-ai/core/database/database"
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { SessionProjector } from "@anymous-ai/core/session/projector"

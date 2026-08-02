@@ -4,7 +4,7 @@ import { Session } from "@/session/session"
 import { NotFoundError } from "@/storage/storage"
 import { Database } from "@anymous-ai/core/database/database"
 import { SessionTable } from "@anymous-ai/core/session/sql"
-import { Project } from "@/project/project"
+import type { Project } from "@/project/project"
 import { InstanceRef } from "@/effect/instance-ref"
 
 interface SessionStats {

@@ -1,4 +1,4 @@
-import { Message, Model, Part, Session, SnapshotFileDiff } from "@anymous-ai/sdk/v2"
+import type { Message, Model, Part, Session, SnapshotFileDiff } from "@anymous-ai/sdk/v2"
 import { iife } from "@anymous-ai/core/util/iife"
 import z from "zod"
 import { Storage } from "./storage"

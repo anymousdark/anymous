@@ -5,7 +5,7 @@ import { InstanceState } from "@/effect/instance-state"
 import { Watcher } from "@anymous-ai/core/filesystem/watcher"
 import { Git } from "@/git"
 import { EventV2Bridge } from "@/event-v2-bridge"
-import { EventV2 } from "@anymous-ai/core/event"
+import type { EventV2 } from "@anymous-ai/core/event"
 import { VcsEvent } from "@anymous-ai/schema/vcs-event"
 
 const PATCH_CONTEXT_LINES = 2_147_483_647

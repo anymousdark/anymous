@@ -1,4 +1,5 @@
-import { Component, For, Show } from "solid-js"
+import type { Component } from "solid-js"
+import { For, Show } from "solid-js"
 import { Dynamic } from "solid-js/web"
 import { FileIcon } from "@anymous-ai/ui/file-icon"
 import { IconButton } from "@anymous-ai/ui/icon-button"

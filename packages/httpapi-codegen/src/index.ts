@@ -1,7 +1,9 @@
 import { isAbsolute, join } from "node:path"
-import { Effect, FileSystem, PlatformError, Schema, SchemaAST, SchemaRepresentation } from "effect"
+import type { PlatformError } from "effect"
+import { Effect, FileSystem, Schema, SchemaAST, SchemaRepresentation } from "effect"
 import { HttpMethod, type HttpRouter } from "effect/unstable/http"
-import { HttpApi, HttpApiEndpoint, HttpApiGroup, HttpApiSchema } from "effect/unstable/httpapi"
+import type { HttpApiGroup } from "effect/unstable/httpapi"
+import { HttpApi, HttpApiEndpoint, HttpApiSchema } from "effect/unstable/httpapi"
 import { format } from "prettier"
 
 export type InputField = {

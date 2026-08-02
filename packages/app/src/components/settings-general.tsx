@@ -1,4 +1,5 @@
-import { Component, Show, createMemo, createResource, onMount, type JSX } from "solid-js"
+import type { Component } from "solid-js"
+import { Show, createMemo, createResource, onMount, type JSX } from "solid-js"
 import { Button } from "@anymous-ai/ui/button"
 import { Icon } from "@anymous-ai/ui/icon"
 import { Select } from "@anymous-ai/ui/select"

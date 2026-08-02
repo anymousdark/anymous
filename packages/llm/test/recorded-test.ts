@@ -1,5 +1,5 @@
 import { NodeFileSystem } from "@effect/platform-node"
-import { HttpRecorder } from "@anymous-ai/http-recorder"
+import type { HttpRecorder } from "@anymous-ai/http-recorder"
 import { HttpRecorderInternal } from "@anymous-ai/http-recorder/internal"
 import { Layer } from "effect"
 import { FetchHttpClient } from "effect/unstable/http"

@@ -5,9 +5,9 @@ import { IconButton } from "@anymous-ai/ui/icon-button"
 import { IconButtonV2 } from "@anymous-ai/ui/v2/icon-button-v2"
 import { Icon as IconV2 } from "@anymous-ai/ui/v2/icon"
 
-import { useCommand } from "@/context/command"
+import type { useCommand } from "@/context/command"
 import { DESKTOP_MENU, desktopMenuVisible, type DesktopMenuAction, type DesktopMenuEntry } from "@/desktop-menu"
-import { usePlatform } from "@/context/platform"
+import type { usePlatform } from "@/context/platform"
 
 export function WindowsAppMenu(props: {
   command: ReturnType<typeof useCommand>

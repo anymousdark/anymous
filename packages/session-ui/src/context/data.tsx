@@ -1,7 +1,7 @@
 import type { Message, Session, Part, SnapshotFileDiff, SessionStatus, Provider } from "@anymous-ai/sdk/v2"
 import type { FileDiffInfo } from "@anymous-ai/client/promise"
 import { createSimpleContext } from "@anymous-ai/ui/context"
-import { PreloadMultiFileDiffResult } from "@pierre/diffs/ssr"
+import type { PreloadMultiFileDiffResult } from "@pierre/diffs/ssr"
 
 export type NormalizedProviderListResponse = {
   all: Map<string, Provider>

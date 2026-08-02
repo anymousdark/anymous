@@ -1,5 +1,6 @@
 import { describe, expect } from "bun:test"
-import { Config, ConfigProvider, Context, Effect, Layer, Option } from "effect"
+import type { Context } from "effect"
+import { Config, ConfigProvider, Effect, Layer, Option } from "effect"
 import { ConfigService } from "../../src/effect/config-service"
 import { it } from "../lib/effect"
 

@@ -1,4 +1,4 @@
-import { Effect, Schema } from "effect"
+import type { Effect, Schema } from "effect"
 
 /**
  * JSON Schema subset accepted for render-only tool schemas.

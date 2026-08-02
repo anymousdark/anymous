@@ -1,4 +1,5 @@
-import { Context, Effect } from "effect"
+import type { Context } from "effect"
+import { Effect } from "effect"
 
 type EffectMethod = (...args: ReadonlyArray<never>) => Effect.Effect<unknown, unknown, unknown>
 

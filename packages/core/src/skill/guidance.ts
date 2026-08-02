@@ -2,7 +2,7 @@ export * as SkillGuidance from "./guidance"
 
 import { makeLocationNode } from "../effect/app-node"
 import { Context, Effect, Layer, Schema } from "effect"
-import { AgentV2 } from "../agent"
+import type { AgentV2 } from "../agent"
 import { PermissionV2 } from "../permission"
 import { SkillV2 } from "../skill"
 import { SystemContext } from "../system-context/index"

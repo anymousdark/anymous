@@ -1,5 +1,5 @@
 import { useDialog } from "@anymous-ai/ui/context/dialog"
-import { ServerConnection } from "@/context/server"
+import type { ServerConnection } from "@/context/server"
 import { usePlatform } from "@/context/platform"
 import { useSettings } from "@/context/settings"
 import { lazy } from "solid-js"

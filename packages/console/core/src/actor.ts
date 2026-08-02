@@ -1,5 +1,5 @@
 import { Context } from "./context"
-import { UserRole } from "./schema/user.sql"
+import type { UserRole } from "./schema/user.sql"
 import { Log } from "./util/log"
 
 export namespace Actor {

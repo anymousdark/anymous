@@ -1,7 +1,7 @@
 import type { ContentBlock, ContentChunk, ResourceLink, Role } from "@agentclientprotocol/sdk"
 import path from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
-import { SessionV1 } from "@anymous-ai/core/v1/session"
+import type { SessionV1 } from "@anymous-ai/core/v1/session"
 
 export type PromptPart = SessionV1.TextPartInput | SessionV1.FilePartInput
 

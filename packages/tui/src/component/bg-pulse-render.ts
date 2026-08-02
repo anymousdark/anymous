@@ -1,4 +1,5 @@
-import { OptimizedBuffer, RGBA, TextAttributes } from "@opentui/core"
+import type { OptimizedBuffer } from "@opentui/core"
+import { RGBA, TextAttributes } from "@opentui/core"
 import { go } from "../logo"
 
 const PERIOD = 4600

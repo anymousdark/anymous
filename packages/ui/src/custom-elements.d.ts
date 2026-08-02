@@ -1,4 +1,4 @@
-import { DIFFS_TAG_NAME } from "@pierre/diffs"
+import type { DIFFS_TAG_NAME } from "@pierre/diffs"
 
 /**
  * TypeScript declaration for the <diffs-container> custom element.

@@ -1,11 +1,12 @@
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { InstanceState } from "@/effect/instance-state"
-import { SessionV1 } from "@anymous-ai/core/v1/session"
+import type { SessionV1 } from "@anymous-ai/core/v1/session"
 import { Runner } from "@/effect/runner"
 import { BackgroundJob } from "@/background/job"
-import { Effect, Latch, Layer, Scope, Context } from "effect"
+import type { Latch } from "effect"
+import { Effect, Layer, Scope, Context } from "effect"
 import { Session } from "./session"
-import { SessionID } from "./schema"
+import type { SessionID } from "./schema"
 import { SessionStatus } from "./status"
 
 export interface Interface {

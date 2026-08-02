@@ -34,9 +34,7 @@ export const Flag = {
   ANYMOUS_DISABLE_FFF: fff === undefined ? process.platform === "win32" : truthy("ANYMOUS_DISABLE_FFF"),
 
   // Experimental
-  ANYMOUS_EXPERIMENTAL_FILEWATCHER: Config.boolean("ANYMOUS_EXPERIMENTAL_FILEWATCHER").pipe(
-    Config.withDefault(false),
-  ),
+  ANYMOUS_EXPERIMENTAL_FILEWATCHER: Config.boolean("ANYMOUS_EXPERIMENTAL_FILEWATCHER").pipe(Config.withDefault(false)),
   ANYMOUS_EXPERIMENTAL_DISABLE_FILEWATCHER: Config.boolean("ANYMOUS_EXPERIMENTAL_DISABLE_FILEWATCHER").pipe(
     Config.withDefault(false),
   ),

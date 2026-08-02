@@ -1,6 +1,7 @@
 export * as SessionV1 from "./session"
 
-import { Effect, Schema, Types } from "effect"
+import type { Types } from "effect"
+import { Effect, Schema } from "effect"
 import { define, inventory } from "../event"
 import { FileDiff } from "../file-diff"
 import { Project } from "../project"

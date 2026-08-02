@@ -1,7 +1,8 @@
 import { Select as Kobalte } from "@kobalte/core/select"
 import { createMemo, onCleanup, splitProps, type ComponentProps, type JSX } from "solid-js"
 import { pipe, groupBy, entries, map } from "remeda"
-import { Button, ButtonProps } from "./button"
+import type { ButtonProps } from "./button"
+import { Button } from "./button"
 import { Icon } from "./icon"
 
 export type SelectProps<T> = Omit<ComponentProps<typeof Kobalte<T>>, "value" | "onSelect" | "children"> & {

@@ -7,7 +7,8 @@ import { FSUtil } from "./fs-util"
 import { Location } from "./location"
 import { PositiveInt, RelativePath } from "./schema"
 import { FileSystemSearch } from "./filesystem/search"
-import { Entry, FileSystem, FindInput, Match } from "@anymous-ai/schema/filesystem"
+import type { Match } from "@anymous-ai/schema/filesystem"
+import { Entry, FileSystem, FindInput } from "@anymous-ai/schema/filesystem"
 export { Entry, Match, Submatch } from "@anymous-ai/schema/filesystem"
 
 export const ReadInput = Schema.Struct({

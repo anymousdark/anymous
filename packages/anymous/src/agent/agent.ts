@@ -301,7 +301,8 @@ const layer = Layer.effect(
           },
           "reverser-static": {
             name: "reverser-static",
-            description: "Specialist in static binary analysis, disassembly, and decompilation. Use for IDA/Ghidra analysis, binary structure evaluation, algorithm extraction.",
+            description:
+              "Specialist in static binary analysis, disassembly, and decompilation. Use for IDA/Ghidra analysis, binary structure evaluation, algorithm extraction.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -316,7 +317,8 @@ const layer = Layer.effect(
           },
           "reverser-dynamic": {
             name: "reverser-dynamic",
-            description: "Specialist in dynamic/runtime binary analysis, debugging, and instrumentation. Use for Frida, debugger automation, API monitoring, anti-debug bypass.",
+            description:
+              "Specialist in dynamic/runtime binary analysis, debugging, and instrumentation. Use for Frida, debugger automation, API monitoring, anti-debug bypass.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -331,7 +333,8 @@ const layer = Layer.effect(
           },
           "reverser-binary": {
             name: "reverser-binary",
-            description: "Specialist in binary formats, packers, and protection analysis. Use for PE/ELF/Mach-O analysis, unpacking, shellcode analysis.",
+            description:
+              "Specialist in binary formats, packers, and protection analysis. Use for PE/ELF/Mach-O analysis, unpacking, shellcode analysis.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -346,7 +349,8 @@ const layer = Layer.effect(
           },
           "reverser-source": {
             name: "reverser-source",
-            description: "Specialist in source-level reverse engineering and deobfuscation. Use for pseudocode reconstruction, algorithm recovery, decompilation.",
+            description:
+              "Specialist in source-level reverse engineering and deobfuscation. Use for pseudocode reconstruction, algorithm recovery, decompilation.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -361,7 +365,8 @@ const layer = Layer.effect(
           },
           "reverser-automator": {
             name: "reverser-automator",
-            description: "Specialist in automation, detection engineering, and binary patching. Use for YARA rules, IDAPython scripts, binary patches, loaders.",
+            description:
+              "Specialist in automation, detection engineering, and binary patching. Use for YARA rules, IDAPython scripts, binary patches, loaders.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -376,7 +381,8 @@ const layer = Layer.effect(
           },
           "memory-dump": {
             name: "memory-dump",
-            description: "Specialist in memory dumping, analysis, and forensic acquisition. Use for process dump, crash dump analysis, heap inspection, memory forensics with Volatility.",
+            description:
+              "Specialist in memory dumping, analysis, and forensic acquisition. Use for process dump, crash dump analysis, heap inspection, memory forensics with Volatility.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -391,7 +397,8 @@ const layer = Layer.effect(
           },
           "exe-extractor": {
             name: "exe-extractor",
-            description: "Specialist in extracting executables from packers, installers, and archives. Use for unpacking UPX/Themida/VMProtect, resource extraction, embedded EXE carving.",
+            description:
+              "Specialist in extracting executables from packers, installers, and archives. Use for unpacking UPX/Themida/VMProtect, resource extraction, embedded EXE carving.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -406,7 +413,8 @@ const layer = Layer.effect(
           },
           "debug-tools": {
             name: "debug-tools",
-            description: "Specialist in creating custom debugging tools, hook engines, and instrumentation utilities. Use for API monitor creation, DLL injectors, debuggers, runtime patchers.",
+            description:
+              "Specialist in creating custom debugging tools, hook engines, and instrumentation utilities. Use for API monitor creation, DLL injectors, debuggers, runtime patchers.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -421,7 +429,8 @@ const layer = Layer.effect(
           },
           "pentest-lead": {
             name: "pentest-lead",
-            description: "Lead strategist and coordinator for penetration testing engagements. Breaks down attacks into phases, dispatches specialist subagents, and tracks engagement state.",
+            description:
+              "Lead strategist and coordinator for penetration testing engagements. Breaks down attacks into phases, dispatches specialist subagents, and tracks engagement state.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -436,7 +445,8 @@ const layer = Layer.effect(
           },
           "pentest-recon": {
             name: "pentest-recon",
-            description: "Reconnaissance and OSINT specialist. Gathers passive intelligence, discovers subdomains, enumerates technologies, and maps attack surface before active testing.",
+            description:
+              "Reconnaissance and OSINT specialist. Gathers passive intelligence, discovers subdomains, enumerates technologies, and maps attack surface before active testing.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -451,7 +461,8 @@ const layer = Layer.effect(
           },
           "pentest-scanner": {
             name: "pentest-scanner",
-            description: "Network scanning specialist. Identifies live hosts, open ports, service versions, and OS fingerprints using nmap, masscan, and other scanning tools.",
+            description:
+              "Network scanning specialist. Identifies live hosts, open ports, service versions, and OS fingerprints using nmap, masscan, and other scanning tools.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -466,7 +477,8 @@ const layer = Layer.effect(
           },
           "pentest-enumerator": {
             name: "pentest-enumerator",
-            description: "Service enumeration specialist. Deeply enumerates SMB, LDAP, DNS, SNMP, HTTP, and database services to extract maximum information.",
+            description:
+              "Service enumeration specialist. Deeply enumerates SMB, LDAP, DNS, SNMP, HTTP, and database services to extract maximum information.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -481,7 +493,8 @@ const layer = Layer.effect(
           },
           "pentest-exploiter": {
             name: "pentest-exploiter",
-            description: "Exploitation specialist. Weaponizes findings to gain initial access, execute known exploits (web, network, AD), and perform credential-based attacks.",
+            description:
+              "Exploitation specialist. Weaponizes findings to gain initial access, execute known exploits (web, network, AD), and perform credential-based attacks.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -496,7 +509,8 @@ const layer = Layer.effect(
           },
           "pentest-identity": {
             name: "pentest-identity",
-            description: "Active Directory and identity infrastructure specialist. Performs AD enumeration, Kerberos attacks (AS-REP, Kerberoasting, DCSync), and Azure AD assessment.",
+            description:
+              "Active Directory and identity infrastructure specialist. Performs AD enumeration, Kerberos attacks (AS-REP, Kerberoasting, DCSync), and Azure AD assessment.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -511,7 +525,8 @@ const layer = Layer.effect(
           },
           "pentest-webapp": {
             name: "pentest-webapp",
-            description: "Web application security specialist. Tests OWASP Top 10 (injection, broken access control, SSRF, API security) with comprehensive payload crafting.",
+            description:
+              "Web application security specialist. Tests OWASP Top 10 (injection, broken access control, SSRF, API security) with comprehensive payload crafting.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -526,7 +541,8 @@ const layer = Layer.effect(
           },
           "pentest-postexploit": {
             name: "pentest-postexploit",
-            description: "Post-exploitation and lateral movement specialist. Escalates privileges, extracts credentials, moves laterally, and establishes persistence across Windows and Linux.",
+            description:
+              "Post-exploitation and lateral movement specialist. Escalates privileges, extracts credentials, moves laterally, and establishes persistence across Windows and Linux.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -541,7 +557,8 @@ const layer = Layer.effect(
           },
           "pentest-critic": {
             name: "pentest-critic",
-            description: "False-positive validator and findings reviewer. Independently verifies every vulnerability, exploit result, and credential before reporting.",
+            description:
+              "False-positive validator and findings reviewer. Independently verifies every vulnerability, exploit result, and credential before reporting.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -556,7 +573,8 @@ const layer = Layer.effect(
           },
           "pentest-reporter": {
             name: "pentest-reporter",
-            description: "Report generation specialist. Compiles all validated findings into professional reports with executive summaries, technical details, CVSS scoring, and remediation plans.",
+            description:
+              "Report generation specialist. Compiles all validated findings into professional reports with executive summaries, technical details, CVSS scoring, and remediation plans.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -571,7 +589,8 @@ const layer = Layer.effect(
           },
           "code-reviewer": {
             name: "code-reviewer",
-            description: "Code review specialist. Analyzes code for security vulnerabilities, correctness bugs, performance issues, and maintainability concerns with line-level feedback.",
+            description:
+              "Code review specialist. Analyzes code for security vulnerabilities, correctness bugs, performance issues, and maintainability concerns with line-level feedback.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -587,7 +606,8 @@ const layer = Layer.effect(
           },
           debug: {
             name: "debug",
-            description: "Debugging specialist. Systematically diagnoses and fixes software defects by reproducing, isolating, and resolving root causes.",
+            description:
+              "Debugging specialist. Systematically diagnoses and fixes software defects by reproducing, isolating, and resolving root causes.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -602,7 +622,8 @@ const layer = Layer.effect(
           },
           "test-writer": {
             name: "test-writer",
-            description: "Test engineering specialist. Writes thorough, maintainable tests covering happy path, error cases, edge cases, and boundary conditions.",
+            description:
+              "Test engineering specialist. Writes thorough, maintainable tests covering happy path, error cases, edge cases, and boundary conditions.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -617,7 +638,8 @@ const layer = Layer.effect(
           },
           security: {
             name: "security",
-            description: "Application security specialist. Assesses code for OWASP Top 10 vulnerabilities, dependency CVEs, secrets exposure, and auth bypasses with CVSS-scored findings.",
+            description:
+              "Application security specialist. Assesses code for OWASP Top 10 vulnerabilities, dependency CVEs, secrets exposure, and auth bypasses with CVSS-scored findings.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -633,7 +655,8 @@ const layer = Layer.effect(
           },
           frontend: {
             name: "frontend",
-            description: "Senior frontend engineer specializing in React, SolidJS, TypeScript, CSS, accessibility, and web performance. Builds composable UIs with modern best practices.",
+            description:
+              "Senior frontend engineer specializing in React, SolidJS, TypeScript, CSS, accessibility, and web performance. Builds composable UIs with modern best practices.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -648,7 +671,8 @@ const layer = Layer.effect(
           },
           backend: {
             name: "backend",
-            description: "Senior backend engineer specializing in API design, databases, auth, message queues, caching, and observability. Builds scalable server-side systems.",
+            description:
+              "Senior backend engineer specializing in API design, databases, auth, message queues, caching, and observability. Builds scalable server-side systems.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -663,7 +687,8 @@ const layer = Layer.effect(
           },
           database: {
             name: "database",
-            description: "Database specialist. Designs schemas, optimizes queries, plans migrations, and advises on data modeling for SQL and NoSQL systems.",
+            description:
+              "Database specialist. Designs schemas, optimizes queries, plans migrations, and advises on data modeling for SQL and NoSQL systems.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -679,7 +704,8 @@ const layer = Layer.effect(
           },
           devops: {
             name: "devops",
-            description: "DevOps/platform engineer specializing in CI/CD, Docker, Kubernetes, cloud infrastructure (AWS/GCP/Azure), IaC, and observability.",
+            description:
+              "DevOps/platform engineer specializing in CI/CD, Docker, Kubernetes, cloud infrastructure (AWS/GCP/Azure), IaC, and observability.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -694,7 +720,8 @@ const layer = Layer.effect(
           },
           docs: {
             name: "docs",
-            description: "Technical documentation specialist. Writes clear READMEs, API references, guides, ADRs, and troubleshooting docs with code examples.",
+            description:
+              "Technical documentation specialist. Writes clear READMEs, API references, guides, ADRs, and troubleshooting docs with code examples.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -710,7 +737,8 @@ const layer = Layer.effect(
           },
           refactor: {
             name: "refactor",
-            description: "Code refactoring specialist. Improves code structure — extracts duplication, simplifies complexity, renames for clarity — without changing behavior.",
+            description:
+              "Code refactoring specialist. Improves code structure — extracts duplication, simplifies complexity, renames for clarity — without changing behavior.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -725,7 +753,8 @@ const layer = Layer.effect(
           },
           architect: {
             name: "architect",
-            description: "Software architect. Designs system-level solutions, evaluates technology trade-offs, produces ADRs, and creates implementation roadmaps.",
+            description:
+              "Software architect. Designs system-level solutions, evaluates technology trade-offs, produces ADRs, and creates implementation roadmaps.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -741,7 +770,8 @@ const layer = Layer.effect(
           },
           performance: {
             name: "performance",
-            description: "Performance optimization specialist. Profiles and optimizes CPU, memory, I/O, network, rendering, and build bottlenecks with measured improvements.",
+            description:
+              "Performance optimization specialist. Profiles and optimizes CPU, memory, I/O, network, rendering, and build bottlenecks with measured improvements.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -757,7 +787,8 @@ const layer = Layer.effect(
           },
           "web-designer": {
             name: "web-designer",
-            description: "Web design specialist. Creates polished UI with HTML, CSS, Tailwind, Three.js, glassmorphism, animations, and responsive layouts.",
+            description:
+              "Web design specialist. Creates polished UI with HTML, CSS, Tailwind, Three.js, glassmorphism, animations, and responsive layouts.",
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({

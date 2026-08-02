@@ -7,10 +7,11 @@ import { type Accessor, batch, createMemo, createResource, onCleanup, onMount } 
 import { createApiForServer, createSdkForServer, type ServerApi } from "@/utils/server"
 import { useLanguage } from "./language"
 import { usePlatform } from "./platform"
-import { ServerConnection, useServer } from "./server"
+import type { ServerConnection } from "./server"
+import { useServer } from "./server"
 import { createRefCountMap } from "@/utils/refcount"
 import { useGlobal } from "./global"
-import { ServerScope } from "@/utils/server-scope"
+import type { ServerScope } from "@/utils/server-scope"
 import { detectServerProtocol, type ServerProtocol } from "@/utils/server-protocol"
 import { createCompatibleApi, type CompatibleApi } from "@/utils/server-compat"
 

@@ -215,20 +215,16 @@ const layer: Layer.Layer<Service, never, HttpClient.HttpClient | AppProcess.Serv
             const info = yield* Schema.decodeUnknownEffect(Schema.fromJsonString(BrewInfoV2))(infoJson)
             return info.formulae[0].versions.stable
           }
-          const response = yield* httpOk.execute(
-            HttpClientRequest.get("https://").pipe(
-              HttpClientRequest.acceptJson,
-            ),
-          )
+          const response = yield* httpOk.execute(HttpClientRequest.get("https://").pipe(HttpClientRequest.acceptJson))
           const data = yield* HttpClientResponse.schemaBodyJson(BrewFormula)(response)
           return data.versions.stable
         }
 
         if (detectedMethod === "npm" || detectedMethod === "bun" || detectedMethod === "pnpm") {
           const response = yield* httpOk.execute(
-            HttpClientRequest.get(
-              `${yield* NpmConfig.registry(process.cwd())}/anymous-ai/${InstallationChannel}`,
-            ).pipe(HttpClientRequest.acceptJson),
+            HttpClientRequest.get(`${yield* NpmConfig.registry(process.cwd())}/anymous-ai/${InstallationChannel}`).pipe(
+              HttpClientRequest.acceptJson,
+            ),
           )
           const data = yield* HttpClientResponse.schemaBodyJson(NpmPackage)(response)
           return data.version

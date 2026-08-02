@@ -1,5 +1,5 @@
 import { describe, test, expect } from "bun:test"
-import { ConfigV1 } from "@anymous-ai/core/v1/config/config"
+import type { ConfigV1 } from "@anymous-ai/core/v1/config/config"
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { filesystem } from "@anymous-ai/core/effect/app-node-platform"
 import { FSUtil } from "@anymous-ai/core/fs-util"

@@ -12,7 +12,7 @@ import { type Accessor, batch, createMemo, getOwner, onCleanup, onMount, untrack
 import { createStore, produce, reconcile } from "solid-js/store"
 import { useLanguage } from "@/context/language"
 import type { InitError } from "../pages/error"
-import { ServerSDK } from "./server-sdk"
+import type { ServerSDK } from "./server-sdk"
 import {
   bootstrapDirectory,
   bootstrapGlobal,
@@ -36,10 +36,10 @@ import { queryOptions, useMutation, useQueries, useQuery, useQueryClient } from 
 import type { SolidQueryOptions } from "@tanstack/solid-query"
 import { createRefreshQueue } from "./global-sync/queue"
 import { directoryKey } from "./global-sync/utils"
-import { PathKey } from "@/utils/path-key"
+import type { PathKey } from "@/utils/path-key"
 import { createDirSyncContext } from "./directory-sync"
 import { createSimpleContext } from "@anymous-ai/ui/context"
-import { NormalizedProviderListResponse } from "@anymous-ai/session-ui/context"
+import type { NormalizedProviderListResponse } from "@anymous-ai/session-ui/context"
 import { createRefCountMap } from "@/utils/refcount"
 import { useGlobal } from "./global"
 import { ServerConnection, useServer } from "./server"

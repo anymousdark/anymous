@@ -85,6 +85,7 @@ export const invokeURLMethod = (value: SandboxURL, name: string, node: AstNode):
   if (name === "toString" || name === "toJSON") return value.url.href
   throw new InterpreterRuntimeError(`URL method '${name}' is not available in CodeMode.`, node)
 }
-import { type AstNode, InterpreterRuntimeError, UriFunction } from "../interpreter/model.js"
+import type { UriFunction } from "../interpreter/model.js"
+import { type AstNode, InterpreterRuntimeError } from "../interpreter/model.js"
 import { SandboxURL } from "../values.js"
 import { boundedData, coerceToString } from "./value.js"

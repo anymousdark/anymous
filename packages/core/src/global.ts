@@ -14,14 +14,17 @@ const config = path.join(xdgConfig!, app)
 const state = path.join(xdgState!, app)
 const tmp = path.join(os.tmpdir(), app)
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function migrateOldData() {
   const oldApp = "opencode"
   const oldData = path.join(xdgData!, oldApp)
   const oldConfig = path.join(xdgConfig!, oldApp)
   const oldState = path.join(xdgState!, oldApp)
 
-  for (const [oldDir, newDir] of [[oldConfig, config], [oldData, data], [oldState, state]] as const) {
+  for (const [oldDir, newDir] of [
+    [oldConfig, config],
+    [oldData, data],
+    [oldState, state],
+  ] as const) {
     try {
       await fs.access(oldDir)
     } catch {

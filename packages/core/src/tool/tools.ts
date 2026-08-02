@@ -1,7 +1,8 @@
 export * as Tools from "./tools"
 
-import { Context, Effect, Scope } from "effect"
-import { Tool } from "./tool"
+import type { Effect, Scope } from "effect"
+import { Context } from "effect"
+import type { Tool } from "./tool"
 
 export interface Interface {
   readonly register: (

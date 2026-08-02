@@ -3,9 +3,9 @@ import { describe, expect } from "bun:test"
 import { Flag } from "@anymous-ai/core/flag/flag"
 import { ConfigProvider, Effect, Layer, Option } from "effect"
 import { AppNodeBuilder } from "@anymous-ai/core/effect/app-node-builder"
+import type { HttpClientRequest } from "effect/unstable/http"
 import {
   HttpClient,
-  HttpClientRequest,
   HttpClientResponse,
   HttpRouter,
   HttpServer,

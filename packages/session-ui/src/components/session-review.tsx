@@ -17,7 +17,7 @@ import { createEffect, createMemo, For, Match, onCleanup, Show, Switch, untrack,
 import { createStore } from "solid-js/store"
 import { type FileContent, type SnapshotFileDiff, type VcsFileDiff } from "@anymous-ai/sdk/v2"
 import type { FileDiffInfo } from "@anymous-ai/client/promise"
-import { PreloadMultiFileDiffResult } from "@pierre/diffs/ssr"
+import type { PreloadMultiFileDiffResult } from "@pierre/diffs/ssr"
 import { type SelectedLineRange } from "@pierre/diffs"
 import { Dynamic } from "solid-js/web"
 import { mediaKindFromPath } from "../pierre/media"

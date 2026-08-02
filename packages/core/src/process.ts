@@ -1,4 +1,5 @@
-import { Context, Duration, Effect, Fiber, Layer, Schema, Stream } from "effect"
+import type { Duration } from "effect"
+import { Context, Effect, Fiber, Layer, Schema, Stream } from "effect"
 import type { PlatformError } from "effect/PlatformError"
 import { ChildProcess } from "effect/unstable/process"
 import { ChildProcessSpawner } from "effect/unstable/process/ChildProcessSpawner"

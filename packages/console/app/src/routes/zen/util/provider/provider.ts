@@ -1,4 +1,4 @@
-import { ZenData } from "@anymous-ai/console-core/model.js"
+import type { ZenData } from "@anymous-ai/console-core/model.js"
 import {
   fromAnthropicChunk,
   fromAnthropicRequest,

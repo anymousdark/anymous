@@ -1,6 +1,7 @@
 import { FSUtil } from "@anymous-ai/core/fs-util"
 import { Effect, Stream } from "effect"
-import { HttpBody, HttpClient, HttpClientRequest, HttpServerRequest, HttpServerResponse } from "effect/unstable/http"
+import type { HttpClient, HttpServerRequest } from "effect/unstable/http"
+import { HttpBody, HttpClientRequest, HttpServerResponse } from "effect/unstable/http"
 import { createHash } from "node:crypto"
 import { ProxyUtil } from "../proxy-util"
 

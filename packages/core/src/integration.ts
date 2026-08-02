@@ -1,25 +1,13 @@
 export * as Integration from "./integration"
 
 import { makeLocationNode } from "./effect/app-node"
-import {
-  Cause,
-  Clock,
-  Context,
-  Duration,
-  Effect,
-  Exit,
-  Layer,
-  Schedule,
-  Schema,
-  Scope,
-  SynchronizedRef,
-  Types,
-} from "effect"
+import type { Types } from "effect"
+import { Cause, Clock, Context, Duration, Effect, Exit, Layer, Schedule, Schema, Scope, SynchronizedRef } from "effect"
 import { Integration } from "@anymous-ai/schema/integration"
 import { Credential } from "./credential"
 import { State } from "./state"
 import { EventV2 } from "./event"
-import { IntegrationConnection } from "./integration/connection"
+import type { IntegrationConnection } from "./integration/connection"
 
 export const ID = Integration.ID
 export type ID = Integration.ID

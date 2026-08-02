@@ -1,4 +1,5 @@
-import { CliRenderEvents, SyntaxStyle, type TerminalColors } from "@opentui/core"
+import type { SyntaxStyle } from "@opentui/core"
+import { CliRenderEvents, type TerminalColors } from "@opentui/core"
 import { useRenderer } from "@opentui/solid"
 import {
   DEFAULT_THEMES,

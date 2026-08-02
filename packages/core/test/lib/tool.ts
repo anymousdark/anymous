@@ -1,6 +1,6 @@
 import { AgentV2 } from "@anymous-ai/core/agent"
 import { SessionMessage } from "@anymous-ai/core/session/message"
-import { ToolRegistry } from "@anymous-ai/core/tool/registry"
+import type { ToolRegistry } from "@anymous-ai/core/tool/registry"
 import { Effect } from "effect"
 
 export const toolIdentity = {

@@ -1,4 +1,4 @@
-import { PermissionV1 } from "@anymous-ai/core/v1/permission"
+import type { PermissionV1 } from "@anymous-ai/core/v1/permission"
 import type { Agent } from "./agent"
 
 /**

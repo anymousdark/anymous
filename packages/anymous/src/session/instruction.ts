@@ -1,7 +1,7 @@
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { httpClient } from "@anymous-ai/core/effect/app-node-platform"
 import path from "path"
-import { SessionV1 } from "@anymous-ai/core/v1/session"
+import type { SessionV1 } from "@anymous-ai/core/v1/session"
 import { Effect, Layer, Context } from "effect"
 import { FetchHttpClient, HttpClient, HttpClientRequest } from "effect/unstable/http"
 import { Config } from "@/config/config"

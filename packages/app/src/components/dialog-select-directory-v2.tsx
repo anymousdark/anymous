@@ -7,7 +7,7 @@ import { useDialog } from "@anymous-ai/ui/context/dialog"
 import { createEffect, createMemo, createResource, createSignal, For, onCleanup, onMount, Show } from "solid-js"
 import { useGlobal } from "@/context/global"
 import { useLanguage } from "@/context/language"
-import { ServerConnection } from "@/context/server"
+import type { ServerConnection } from "@/context/server"
 import type { Path } from "@anymous-ai/sdk/v2/client"
 import {
   absoluteTreePath,

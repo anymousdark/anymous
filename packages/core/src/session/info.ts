@@ -7,7 +7,7 @@ import { ProviderV2 } from "../provider"
 import { AbsolutePath, RelativePath } from "../schema"
 import { WorkspaceV2 } from "../workspace"
 import { SessionSchema } from "./schema"
-import { SessionTable } from "./sql"
+import type { SessionTable } from "./sql"
 import { SessionMessage } from "./message"
 import { Snapshot } from "../snapshot"
 

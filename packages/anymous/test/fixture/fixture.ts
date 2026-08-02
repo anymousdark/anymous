@@ -1,5 +1,5 @@
 import { $ } from "bun"
-import { ConfigV1 } from "@anymous-ai/core/v1/config/config"
+import type { ConfigV1 } from "@anymous-ai/core/v1/config/config"
 import * as fs from "fs/promises"
 import os from "os"
 import path from "path"

@@ -1,3 +1,4 @@
+import type { ParentProps } from "solid-js"
 import {
   createEffect,
   createMemo,
@@ -6,14 +7,14 @@ import {
   on,
   onCleanup,
   onMount,
-  ParentProps,
   Show,
   untrack,
   type Accessor,
 } from "solid-js"
 import { makeEventListener } from "@solid-primitives/event-listener"
 import { useNavigate, useParams } from "@solidjs/router"
-import { useLayout, LocalProject } from "@/context/layout"
+import type { LocalProject } from "@/context/layout"
+import { useLayout } from "@/context/layout"
 import { useServerSync } from "@/context/server-sync"
 import { Persist, persisted } from "@/utils/persist"
 import { base64Encode } from "@anymous-ai/core/util/encode"
@@ -26,7 +27,7 @@ import { Tooltip } from "@anymous-ai/ui/tooltip"
 import { DropdownMenu } from "@anymous-ai/ui/dropdown-menu"
 import { Dialog } from "@anymous-ai/ui/dialog"
 import { getFilename } from "@anymous-ai/core/util/path"
-import { Session } from "@anymous-ai/sdk/v2/client"
+import type { Session } from "@anymous-ai/sdk/v2/client"
 import { usePlatform } from "@/context/platform"
 import { useSettings } from "@/context/settings"
 import { createStore, produce, reconcile } from "solid-js/store"
@@ -59,7 +60,8 @@ import { DebugBar } from "@/components/debug-bar"
 import { TabsInfoPopup } from "@/components/help-button"
 import { Titlebar, type TitlebarUpdate } from "@/components/titlebar"
 import { useDirectoryPicker } from "@/components/directory-picker"
-import { ServerConnection, useServer } from "@/context/server"
+import type { ServerConnection } from "@/context/server"
+import { useServer } from "@/context/server"
 import { useLanguage, type Locale } from "@/context/language"
 import { pathKey } from "@/utils/path-key"
 import {

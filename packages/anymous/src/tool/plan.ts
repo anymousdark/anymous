@@ -1,5 +1,5 @@
 import path from "path"
-import { SessionV1 } from "@anymous-ai/core/v1/session"
+import type { SessionV1 } from "@anymous-ai/core/v1/session"
 import { Effect, Schema } from "effect"
 import * as Tool from "./tool"
 import { Question } from "../question"

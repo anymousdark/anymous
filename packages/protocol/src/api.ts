@@ -1,5 +1,6 @@
-import { Context } from "effect"
-import { HttpApi, HttpApiGroup, HttpApiMiddleware, OpenApi } from "effect/unstable/httpapi"
+import type { Context } from "effect"
+import type { HttpApiGroup, HttpApiMiddleware } from "effect/unstable/httpapi"
+import { HttpApi, OpenApi } from "effect/unstable/httpapi"
 import { SchemaErrorMiddleware } from "./middleware/schema-error"
 import { MessageGroup } from "./groups/message"
 import { ModelGroup } from "./groups/model"

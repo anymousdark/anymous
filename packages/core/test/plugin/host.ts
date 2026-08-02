@@ -1,6 +1,6 @@
 import type { PluginContext } from "@anymous-ai/plugin/v2/effect"
 import { AgentV2 } from "@anymous-ai/core/agent"
-import { Catalog } from "@anymous-ai/core/catalog"
+import type { Catalog } from "@anymous-ai/core/catalog"
 import { Credential } from "@anymous-ai/core/credential"
 import { Integration } from "@anymous-ai/core/integration"
 import { ModelV2 } from "@anymous-ai/core/model"

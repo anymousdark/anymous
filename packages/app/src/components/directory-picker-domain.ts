@@ -247,7 +247,7 @@ export function nativePickerPath(path: string) {
 }
 import { getFilename } from "@anymous-ai/core/util/path"
 import fuzzysort from "fuzzysort"
-import { ServerSDK } from "@/context/server-sdk"
+import type { ServerSDK } from "@/context/server-sdk"
 
 export function cleanPickerInput(value: string) {
   const first = (value ?? "").split(/\r?\n/)[0] ?? ""

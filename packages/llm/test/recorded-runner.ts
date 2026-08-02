@@ -1,5 +1,6 @@
 import { test, type TestOptions } from "bun:test"
-import { Effect, type Layer } from "effect"
+import type { Effect } from "effect"
+import { type Layer } from "effect"
 import { testEffect } from "./lib/effect"
 import { cassetteName, classifiedTags, matchesSelected, missingEnv, unique } from "./recorded-utils"
 

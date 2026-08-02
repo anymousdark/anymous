@@ -1,5 +1,6 @@
-import { DiffLineAnnotation, FileContents, FileDiffOptions, type SelectedLineRange } from "@pierre/diffs"
-import { ComponentProps } from "solid-js"
+import type { DiffLineAnnotation, FileContents, FileDiffOptions } from "@pierre/diffs"
+import { type SelectedLineRange } from "@pierre/diffs"
+import type { ComponentProps } from "solid-js"
 import { lineCommentStyles } from "../components/line-comment-styles"
 
 export type DiffProps<T = {}> = FileDiffOptions<T> & {

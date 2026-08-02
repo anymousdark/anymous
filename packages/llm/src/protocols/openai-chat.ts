@@ -4,8 +4,8 @@ import { Auth } from "../route/auth"
 import { Endpoint } from "../route/endpoint"
 import { HttpTransport } from "../route/transport"
 import { Protocol } from "../route/protocol"
+import type { LLMEvent } from "../schema"
 import {
-  LLMEvent,
   Usage,
   type FinishReason,
   type JsonSchema,

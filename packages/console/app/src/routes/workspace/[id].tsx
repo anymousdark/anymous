@@ -1,5 +1,6 @@
 import { Show } from "solid-js"
-import { createAsync, RouteSectionProps, useParams, A } from "@solidjs/router"
+import type { RouteSectionProps } from "@solidjs/router"
+import { createAsync, useParams, A } from "@solidjs/router"
 import { querySessionInfo } from "./common"
 import "./[id].css"
 import { useI18n } from "~/context/i18n"

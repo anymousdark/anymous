@@ -1,5 +1,5 @@
 import { Question } from "@/question"
-import { QuestionID } from "@/question/schema"
+import type { QuestionID } from "@/question/schema"
 import { Effect } from "effect"
 import { HttpApiBuilder } from "effect/unstable/httpapi"
 import { InstanceHttpApi } from "../api"

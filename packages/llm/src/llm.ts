@@ -1,5 +1,7 @@
-import { Effect, JsonSchema, Schema } from "effect"
+import type { JsonSchema } from "effect"
+import { Effect, Schema } from "effect"
 import { LLMClient } from "./route/client"
+import type { LLMResponse, ToolResultPart } from "./schema"
 import {
   GenerationOptions,
   HttpOptions,
@@ -7,14 +9,12 @@ import {
   LLMError,
   LLMEvent,
   LLMRequest,
-  LLMResponse,
   Message,
   type ModelInput as SchemaModelInput,
   SystemPart,
   ToolChoice,
   ToolDefinition,
   type ContentPart,
-  ToolResultPart,
 } from "./schema"
 import { make as makeTool, toDefinitions, type ToolSchema } from "./tool"
 

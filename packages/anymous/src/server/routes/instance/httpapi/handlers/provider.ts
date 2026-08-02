@@ -5,11 +5,12 @@ import { Provider } from "@/provider/provider"
 
 import { mapValues } from "remeda"
 import { Effect, Schema } from "effect"
-import { HttpServerRequest, HttpServerResponse } from "effect/unstable/http"
+import type { HttpServerRequest } from "effect/unstable/http"
+import { HttpServerResponse } from "effect/unstable/http"
 import { HttpApiBuilder } from "effect/unstable/httpapi"
 import { InstanceHttpApi } from "../api"
 import { ProviderAuthApiError } from "../groups/provider"
-import { ProviderV2 } from "@anymous-ai/core/provider"
+import type { ProviderV2 } from "@anymous-ai/core/provider"
 
 function mapProviderAuthError<A, R>(self: Effect.Effect<A, ProviderAuth.Error, R>) {
   return self.pipe(

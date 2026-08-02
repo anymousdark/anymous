@@ -1,8 +1,10 @@
 import { Question } from "@anymous-ai/schema/question"
 import { Location } from "@anymous-ai/schema/location"
 import { Session } from "@anymous-ai/schema/session"
-import { Context, Schema } from "effect"
-import { HttpApiEndpoint, HttpApiGroup, HttpApiMiddleware, HttpApiSchema, OpenApi } from "effect/unstable/httpapi"
+import type { Context } from "effect"
+import { Schema } from "effect"
+import type { HttpApiMiddleware } from "effect/unstable/httpapi"
+import { HttpApiEndpoint, HttpApiGroup, HttpApiSchema, OpenApi } from "effect/unstable/httpapi"
 import { QuestionNotFoundError, SessionNotFoundError } from "../errors"
 import { LocationQuery, locationQueryOpenApi } from "./location"
 

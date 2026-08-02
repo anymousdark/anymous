@@ -1,7 +1,8 @@
 export * as CommandV2 from "./command"
 
 import { makeLocationNode } from "./effect/app-node"
-import { Context, Effect, Layer, Types } from "effect"
+import type { Types } from "effect"
+import { Context, Effect, Layer } from "effect"
 import { Command } from "@anymous-ai/schema/command"
 import { State } from "./state"
 

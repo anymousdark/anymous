@@ -1,4 +1,4 @@
-import { APICallError } from "ai"
+import type { APICallError } from "ai"
 import { STATUS_CODES } from "http"
 import { iife } from "@/util/iife"
 import type { ProviderV2 } from "@anymous-ai/core/provider"

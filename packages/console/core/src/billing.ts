@@ -1,14 +1,7 @@
 import { Stripe } from "stripe"
 import { and, Database, eq, isNull, sql } from "./drizzle"
-import {
-  BillingTable,
-  CouponTable,
-  CouponType,
-  LiteTable,
-  PaymentTable,
-  SubscriptionTable,
-  UsageTable,
-} from "./schema/billing.sql"
+import type { CouponType } from "./schema/billing.sql"
+import { BillingTable, CouponTable, LiteTable, PaymentTable, SubscriptionTable, UsageTable } from "./schema/billing.sql"
 import { Actor } from "./actor"
 import { fn } from "./util/fn"
 import { z } from "zod"

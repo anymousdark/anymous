@@ -1,4 +1,5 @@
-import { Component, createMemo, createSignal, startTransition } from "solid-js"
+import type { Component } from "solid-js"
+import { createMemo, createSignal, startTransition } from "solid-js"
 import { Dialog } from "@anymous-ai/ui/v2/dialog-v2"
 import { TabsV2 } from "@anymous-ai/ui/v2/tabs-v2"
 import { Icon } from "@anymous-ai/ui/icon"

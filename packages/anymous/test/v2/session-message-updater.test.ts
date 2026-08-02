@@ -5,7 +5,7 @@ import { SessionID } from "../../src/session/schema"
 import { EventV2 } from "@anymous-ai/core/event"
 import { ModelV2 } from "@anymous-ai/core/model"
 import { ProviderV2 } from "@anymous-ai/core/provider"
-import { SessionEvent } from "@anymous-ai/core/session/event"
+import type { SessionEvent } from "@anymous-ai/core/session/event"
 import { SessionMessageUpdater } from "@anymous-ai/core/session/message-updater"
 import { SessionMessage } from "@anymous-ai/core/session/message"
 

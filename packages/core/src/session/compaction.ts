@@ -1,12 +1,13 @@
 export * as SessionCompaction from "./compaction"
 
-import { LLM, LLMError, LLMEvent, Message, type LLMRequest, type Model } from "@anymous-ai/llm"
+import type { LLMError } from "@anymous-ai/llm"
+import { LLM, LLMEvent, Message, type LLMRequest, type Model } from "@anymous-ai/llm"
 import { DateTime, Effect, Stream } from "effect"
 import type { Config } from "../config"
 import type { EventV2 } from "../event"
 import { SessionEvent } from "./event"
 import { SessionMessage } from "./message"
-import { SessionSchema } from "./schema"
+import type { SessionSchema } from "./schema"
 import { Token } from "../util/token"
 
 const DEFAULT_BUFFER = 20_000

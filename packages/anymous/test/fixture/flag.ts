@@ -1,6 +1,7 @@
 import type { WorkspaceV2 } from "@anymous-ai/core/workspace"
 import { Flag } from "@anymous-ai/core/flag/flag"
-import { Effect, Scope } from "effect"
+import type { Scope } from "effect"
+import { Effect } from "effect"
 
 /**
  * Scoped override for `Flag.ANYMOUS_WORKSPACE_ID`. Saves the previous value

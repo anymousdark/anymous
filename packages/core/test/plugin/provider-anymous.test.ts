@@ -19,10 +19,9 @@ const addPlugin = Effect.fn(function* () {
   const host = yield* PluginHost.make(plugin)
   const events = yield* EventV2.Service
   const integration = yield* Integration.Service
-  yield* anymousPlugin.effect(host).pipe(
-    Effect.provideService(EventV2.Service, events),
-    Effect.provideService(Integration.Service, integration),
-  )
+  yield* anymousPlugin
+    .effect(host)
+    .pipe(Effect.provideService(EventV2.Service, events), Effect.provideService(Integration.Service, integration))
 })
 
 function required<T>(value: T | undefined): T {

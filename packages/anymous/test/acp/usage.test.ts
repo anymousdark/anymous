@@ -4,7 +4,7 @@ import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { ProviderV2 } from "@anymous-ai/core/provider"
 import { ModelV2 } from "@anymous-ai/core/model"
 import { UsageService } from "@/acp/usage"
-import { Provider } from "@/provider/provider"
+import type { Provider } from "@/provider/provider"
 import { Effect, Layer } from "effect"
 import { it } from "../lib/effect"
 

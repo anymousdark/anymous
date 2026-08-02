@@ -32,10 +32,9 @@ export const create = Effect.fn("anymous.create")(function* () {
   const fetch = Object.assign((input: RequestInfo | URL, init?: RequestInit) => web.handler(new Request(input, init)), {
     preconnect: () => undefined,
   }) satisfies typeof globalThis.fetch
-  const client = yield* anymous.make({ baseUrl: "http://anymous.local" }).pipe(
-    Effect.provide(FetchHttpClient.layer),
-    Effect.provideService(FetchHttpClient.Fetch, fetch),
-  )
+  const client = yield* anymous
+    .make({ baseUrl: "http://anymous.local" })
+    .pipe(Effect.provide(FetchHttpClient.layer), Effect.provideService(FetchHttpClient.Fetch, fetch))
   return {
     ...client,
     tools: { register: tools.register },

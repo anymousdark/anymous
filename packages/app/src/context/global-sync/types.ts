@@ -14,7 +14,7 @@ import type {
   VcsInfo,
 } from "@anymous-ai/sdk/v2/client"
 import type { FileDiffInfo } from "@anymous-ai/client/promise"
-import { NormalizedProviderListResponse } from "@anymous-ai/session-ui/context"
+import type { NormalizedProviderListResponse } from "@anymous-ai/session-ui/context"
 import type { CommandInfo, McpResource, McpServer, SessionMessageInfo } from "@anymous-ai/client/promise"
 import type { Accessor } from "solid-js"
 import type { SetStoreFunction, Store } from "solid-js/store"

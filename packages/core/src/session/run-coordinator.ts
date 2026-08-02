@@ -1,6 +1,7 @@
 export * as SessionRunCoordinator from "./run-coordinator"
 
-import { Deferred, Effect, Exit, Fiber, FiberSet, Scope } from "effect"
+import type { Scope } from "effect"
+import { Deferred, Effect, Exit, Fiber, FiberSet } from "effect"
 
 /** Serializes execution for each key while allowing different keys to run concurrently. */
 export interface Coordinator<Key, E> {

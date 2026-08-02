@@ -1,20 +1,9 @@
-import { SessionID, MessageID } from "./schema"
+import type { SessionID } from "./schema"
+import { MessageID } from "./schema"
 import { SessionV1 } from "@anymous-ai/core/v1/session"
-import { ProviderV2 } from "@anymous-ai/core/provider"
-import {
-  APIError,
-  AbortedError,
-  Assistant,
-  AuthError,
-  CompactionPart,
-  ContextOverflowError,
-  Info,
-  OutputLengthError,
-  Part,
-  SubtaskPart,
-  User,
-  WithParts,
-} from "@anymous-ai/core/v1/session"
+import type { ProviderV2 } from "@anymous-ai/core/provider"
+import type { Assistant, CompactionPart, Info, Part, SubtaskPart, User, WithParts } from "@anymous-ai/core/v1/session"
+import { APIError, AbortedError, AuthError, ContextOverflowError, OutputLengthError } from "@anymous-ai/core/v1/session"
 
 import { NamedError } from "@anymous-ai/core/util/error"
 import { APICallError, convertToModelMessages, LoadAPIKeyError, type ModelMessage, type UIMessage } from "ai"

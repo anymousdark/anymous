@@ -4,7 +4,8 @@ import katex from "katex"
 import { bundledLanguages, type BundledLanguage } from "shiki"
 import { createSimpleContext } from "./helper"
 import { markedCodeSpanBoundary } from "./marked-code-span"
-import { getSharedHighlighter, registerCustomTheme, ThemeRegistrationResolved } from "@pierre/diffs"
+import type { ThemeRegistrationResolved } from "@pierre/diffs"
+import { getSharedHighlighter, registerCustomTheme } from "@pierre/diffs"
 
 export const anymousTheme = {
   name: "anymous",

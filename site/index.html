@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
+  <title>anymous — Engenharia Reversa com IA</title>
+  <meta name="description" content="8 agentes de IA especializados em engenharia reversa." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{blue:{400:'#60a5fa',500:'#3b82f6',600:'#2563eb'},gray:{50:'#fafafa',100:'#f5f5f5',200:'#e5e5e5',300:'#d4d4d4',400:'#a3a3a3',500:'#737373',600:'#525252',700:'#404040',800:'#262626',900:'#171717',950:'#0a0a0a'}},fontFamily:{mono:['JetBrains Mono','Fira Code','monospace'],sans:['Inter','system-ui','sans-serif']}}}}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',system-ui,sans-serif;background:#000;color:#fafafa;overflow-x:hidden}
+    #canvas3d{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0;opacity:0.6}
+    section{position:relative;z-index:1}
+    .navbar{position:fixed;top:0;inset-x:0;z-index:50;background:rgba(0,0,0,0.75);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(96,165,250,0.06);height:64px;display:flex;align-items:center}
+    .glass-card{background:rgba(23,23,23,0.5);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(96,165,250,0.06)}
+    .card-hover{transition:all 0.3s cubic-bezier(0.4,0,0.2,1)}
+    .card-hover:hover{transform:translateY(-4px);border-color:rgba(96,165,250,0.15)!important;box-shadow:0 12px 40px -8px rgba(96,165,250,0.05)}
+    .hero-logo{font-size:12rem;font-weight:900;letter-spacing:0.15em;line-height:1;user-select:none;font-family:'JetBrains Mono',monospace;text-shadow:0 0 60px rgba(59,130,246,0.08)}
+    .section-title{font-size:2.8rem;font-weight:800;letter-spacing:-0.02em}
+    .section-title span{background:linear-gradient(135deg,#3b82f6,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .code-block{background:rgba(23,23,23,0.6);border:1px solid rgba(96,165,250,0.06);overflow:hidden;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+    .code-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(38,38,38,0.5);border-bottom:1px solid rgba(96,165,250,0.06);font-size:13px;color:#a3a3a3;font-family:'JetBrains Mono',monospace}
+    .copy-btn{cursor:pointer;padding:5px 14px;border-radius:999px;font-size:12px;background:rgba(64,64,64,0.5);color:#d4d4d4;border:1px solid rgba(96,165,250,0.06);transition:all 0.2s;font-family:'JetBrains Mono',monospace;backdrop-filter:blur(8px)}
+    .copy-btn:hover{background:rgba(82,82,82,0.5);color:#fafafa}
+    .copy-btn.copied{background:rgba(37,99,235,0.3);color:#93c5fd;border-color:rgba(37,99,235,0.2)}
+    .terminal-line{display:block;padding:4px 0;font-family:'JetBrains Mono',monospace;font-size:15px}
+    .terminal-line .prompt{color:#60a5fa}
+    .hero-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+    .hero-bg div{width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,0.04),transparent 70%)}
+    .badge-glass{background:rgba(30,58,138,0.2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(59,130,246,0.1)}
+    .tag-glass{background:rgba(59,130,246,0.06);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      .hero-logo{font-size:4.5rem}
+      .section-title{font-size:1.8rem}
+      .navbar{height:56px;padding:0 12px}
+      .max-w-5xl{padding-left:16px;padding-right:16px}
+      .max-w-6xl{padding-left:16px;padding-right:16px}
+      .hidden-sm{display:none}
+      .mobile-menu{display:none}
+      .mobile-menu.open{display:block}
+      .code-header{padding:10px 12px}
+      .terminal-line{font-size:14px}
+    }
+  </style>
+</head>
+<body>
+  <div id="canvas3d"></div>
+
+  <nav class="navbar">
+    <div class="max-w-6xl mx-auto px-6 w-full flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <a href="/" class="text-xl font-bold tracking-[0.25em] text-blue-400 hover:text-blue-300 transition font-mono">anymous</a>
+      </div>
+      <div class="hidden sm:flex items-center gap-2">
+        <a href="#agentes" class="px-5 py-2 text-base text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition">RE</a>
+        <a href="#pentest" class="px-5 py-2 text-base text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition">Pentest</a>
+        <a href="#funcionalidades" class="px-5 py-2 text-base text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition">Recursos</a>
+        <a href="#instalar" class="px-5 py-2 text-base text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition">Instalar</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-mono badge-glass text-blue-400">v1.2.7</span>
+        <button id="nav-toggle" aria-label="Abrir menu" class="sm:hidden p-2 rounded-md text-gray-200 hover:bg-white/5">☰</button>
+      </div>
+    </div>
+    <div id="mobileMenu" class="mobile-menu sm:hidden bg-black/80 border-t border-gray-800">
+      <div class="px-6 py-4 flex flex-col gap-3">
+        <a href="#agentes" class="px-3 py-2 text-base text-gray-300 rounded">RE</a>
+        <a href="#pentest" class="px-3 py-2 text-base text-gray-300 rounded">Pentest</a>
+        <a href="#funcionalidades" class="px-3 py-2 text-base text-gray-300 rounded">Recursos</a>
+        <a href="#instalar" class="px-3 py-2 text-base text-gray-300 rounded">Instalar</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="min-h-screen flex items-center relative pt-16 overflow-hidden">
+    <div class="hero-bg"><div></div></div>
+    <div class="max-w-5xl mx-auto px-6 py-24 text-center relative w-full">
+      <span class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-mono badge-glass text-blue-400 mb-8">Plataforma Open-Source de Engenharia Reversa</span>
+      <div class="hero-logo text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 select-none mb-6">anymous</div>
+      <p class="text-xl sm:text-2xl text-gray-400 font-light max-w-2xl mx-auto leading-relaxed">18 agentes especializados em engenharia reversa e pentest,<br>alimentados por IA. Modo irrestrito incluso.</p>
+      <div class="flex flex-wrap justify-center gap-4 mt-12">
+        <a href="#instalar" class="inline-flex items-center gap-2 px-9 py-4 rounded-full bg-blue-600 text-white font-semibold text-lg hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/10">
+          Instalar
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </a>
+        <a href="#agentes" class="inline-flex items-center gap-2 px-9 py-4 rounded-full border border-blue-800/40 text-blue-400 hover:bg-blue-950/30 transition-all text-lg">
+          Conhecer os Agentes
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="agentes" class="relative py-32">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <span class="text-sm font-mono text-blue-400 tracking-widest uppercase mb-4 block">Especialistas</span>
+        <h2 class="section-title">8 Agentes de <span>Engenharia Reversa</span></h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 3h4v3a2 2 0 01-2 2h0a2 2 0 01-2-2V3zM8 14h8M4 17h16M12 8v6"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">reverser-static</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Disassembly, decompilação (IDA/Ghidra), análise de fluxo, identificação de algoritmos e geração de assinaturas YARA.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Estática</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">reverser-dynamic</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Análise runtime (Frida), debuggers (x64dbg/GDB/WinDbg), monitoramento de API, bypass de anti-debug.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Dinâmica</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">reverser-binary</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Análise de formatos PE/ELF/Mach-O, identificação de packers (UPX, Themida, VMProtect), shellcode.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Binário</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">reverser-source</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Reconstrução de código-fonte, deobfuscação, reversão de CFG, recuperação de algoritmos.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Source</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 2v4M6 12H2m20 0h-4M12 22v-4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="4" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="20" r="1.5" fill="currentColor" stroke="none"/><circle cx="4" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="20" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">reverser-automator</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Automação com YARA, IDAPython, Frida, patches binários, pipelines de análise.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Automação</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 3h6v2H9V3zm0 16h6v2H9v-2zm-6-8h2v6H3v-6zm16 0h2v6h-2v-6zM5 7l2-2 4 4-2 2-4-4zm8 8l2-2 4 4-2 2-4-4z"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">memory-dump</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Forense de memória (Volatility), dump de processos, análise de heap, detecção de rootkits.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Memória</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 3v3h8V3M4 9h16v2H4V9zm0 4h16v2H4v-2zm4 4h8v4H8v-4z"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">exe-extractor</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Unpacking de executáveis, extração de instaladores, dump .NET, carving de recursos.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Extração</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.7 6.3a1 1 0 00-1.4 0l-8 8a1 1 0 000 1.4l3 3a1 1 0 001.4 0l8-8a1 1 0 000-1.4l-3-3zM9 9l6 6"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 19l-4-4"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">debug-tools</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Criação de debuggers, hooks (Detours/MinHook), DLL injection, ETW tracing, kernel drivers.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Ferramentas</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pentest" class="relative py-32">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <span class="text-sm font-mono text-blue-400 tracking-widest uppercase mb-4 block">Pentest</span>
+        <h2 class="section-title">10 Agentes de <span>Teste de Invasão</span></h2>
+        <p class="text-gray-400 mt-4 text-lg max-w-2xl mx-auto">Especialistas em pentest coordenados — do reconhecimento à exploração e relatório final.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">pentest-lead</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Estrategista e coordenador do pentest. Divide o alvo em fases, despacha agentes especialistas e rastreia o progresso.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Coordenação</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">pentest-recon</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">OSINT e reconhecimento passivo. Descobre subdomínios, tecnologias, emails, e mapeia a superfície de ataque.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Recon</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.5 3L12 9l3.5-6M12 9v12"/><circle cx="12" cy="5" r="2"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">pentest-scanner</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Varredura de rede. Identifica hosts ativos, portas abertas, versões de serviços e fingerprint de SO.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Scanner</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">pentest-enumerator</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Enumeração profunda de SMB, LDAP, DNS, SNMP, HTTP e bancos de dados para extrair o máximo de informação.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Enumeração</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">pentest-exploiter</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Exploração de vulnerabilidades web, rede e AD. Executa exploits, força credenciais, realiza ataques Kerberos.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Exploit</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">pentest-identity</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Active Directory e identidade. Enumera domínios, trusts, executa AS-REP/Kerberoasting/DCSync, e avalia Azure AD.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Identidade</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18h.01M12 14v-4M8.5 3L12 9l3.5-6"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">pentest-webapp</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Segurança de aplicações web. Testa OWASP Top 10: SQLi, XSS, SSRF, IDOR, injeção, quebra de autenticação.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Web</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">pentest-postexploit</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Pós-exploração e movimento lateral. Escala privilégios, extrai credenciais, move-se lateralmente, estabelece persistência.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Pós-Exploit</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">pentest-critic</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Validador de falsos positivos. Verifica cada vulnerabilidade, exploit e credencial antes de entrar no relatório final.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Revisão</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">pentest-reporter</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Geração de relatórios profissionais. Compila achados com CVSS, sumário executivo, análise de risco e plano de remediação.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Relatório</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="funcionalidades" class="relative py-32">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <span class="text-sm font-mono text-blue-400 tracking-widest uppercase mb-4 block">Recursos</span>
+        <h2 class="section-title">Funcionalidades do <span>anymous</span></h2>
+        <p class="text-gray-400 mt-4 text-lg max-w-2xl mx-auto">Tudo que o agente faz por baixo dos panos — ferramentas, automação e infraestrutura de IA.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">Computer Use</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">O agente controla mouse, teclado e navegador de verdade. Automatiza qualquer tarefa direto no seu desktop.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Automação</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9z"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">Auto Memory</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Memória persistente compartilhada entre sessões e agentes. O anymous lembra de tudo automaticamente.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Memória</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19a2 2 0 002 2h6a2 2 0 002-2v-3.5l5.24-5.26zM2 2l20 20"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">Modo Irrestrito</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Sem filtro de conteúdo e sem padrões de recusa. Acesso completo a todas as ferramentas do sistema.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Irrestrito</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 17l6-6-6-6m8 14h8"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">TUI Interativa</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Interface de terminal rica: scrollback completo, abas de subagentes, busca e atalhos de teclado.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Terminal</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">Multi-Provedor</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Funciona com Anthropic, OpenAI, Google e outros. Troque de modelo e provedor quando quiser.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">IA</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 3.5a1.5 1.5 0 013 0V5h1a2 2 0 012 2v1h1.5a1.5 1.5 0 010 3H16v1.5a2 2 0 01-2 2h-1v4h-3v-4H9a2 2 0 01-2-2V11H5.5a1.5 1.5 0 010-3H7V7a2 2 0 012-2h1V3.5z"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">MCP</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Suporte nativo ao Model Context Protocol: conecte servidores MCP e ferramentas externas ao agente.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Protocolo</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 3v6a3 3 0 006 0V3M6 7h6M6 21v-6a3 3 0 016 0v6"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">Plugins</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Sistema de plugins para estender o comportamento do agente. Instale, crie e compartilhe seus próprios.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Extensível</span>
+        </div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
+          <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">Sessões</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Salve, resuma e compartilhe sessões com um link. Retome qualquer trabalho de onde parou.</p>
+          <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Compartilhar</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="instalar" class="relative py-32">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="text-center mb-14">
+        <span class="text-sm font-mono text-blue-400 tracking-widest uppercase mb-4 block">Comece Agora</span>
+        <h2 class="section-title">Instalação</h2>
+        <p class="text-gray-400 mt-4 text-lg">Publicado no npm como <code class="text-blue-400 px-3 py-1 rounded-full font-mono text-base badge-glass">anymous</code> — requer <a href="https://bun.sh" class="text-blue-400 hover:underline font-medium">Bun</a> runtime.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="code-block rounded-[1.75rem] card-hover" style="backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)">
+          <div class="code-header"><span>npm</span><button class="copy-btn" onclick="copyCmd(this,'npm install -g anymous')">Copiar</button></div>
+          <div class="p-5"><span class="terminal-line"><span class="prompt">$</span> npm install -g anymous</span></div>
+        </div>
+        <div class="code-block rounded-[1.75rem] card-hover" style="backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)">
+          <div class="code-header"><span>bun</span><button class="copy-btn" onclick="copyCmd(this,'bun install -g anymous')">Copiar</button></div>
+          <div class="p-5"><span class="terminal-line"><span class="prompt">$</span> bun install -g anymous</span></div>
+        </div>
+        <div class="code-block rounded-[1.75rem] card-hover" style="backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)">
+          <div class="code-header"><span>npx</span><button class="copy-btn" onclick="copyCmd(this,'npx anymous')">Copiar</button></div>
+          <div class="p-5"><span class="terminal-line"><span class="prompt">$</span> npx anymous</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="border-t border-gray-800 py-12 text-center relative">
+    <div class="max-w-3xl mx-auto px-6">
+      <p class="text-xl font-bold tracking-[0.25em] text-blue-400 mb-3 font-mono">anymous</p>
+      <p class="text-gray-500 text-sm mb-4">Engenharia Reversa com IA — MIT License</p>
+      <div class="flex justify-center gap-6 text-sm text-gray-500">
+        <a href="https://github.com/anymous-ai/anymous" class="hover:text-blue-400 transition">GitHub</a>
+        <a href="https://www.npmjs.com/package/anymous" class="hover:text-blue-400 transition">npm</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="importmap">
+  { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js" } }
+  </script>
+  <script type="module">
+  import * as THREE from 'three'
+
+  const container = document.getElementById('canvas3d')
+  const scene = new THREE.Scene()
+  const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 120)
+  camera.position.z = 32
+
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
+  renderer.setSize(window.innerWidth, window.innerHeight)
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  renderer.setClearColor(0x000000, 0)
+  container.appendChild(renderer.domElement)
+
+  const W = 22, H = 14, D = 20
+
+  const texts = [
+    "{ C }", "{ C++ }", "{ C# }", "{ Python }", "{ Rust }",
+    "{ x86 }", "{ x64 }", "{ ARM }",
+    "root", "syscall", "0x7F", "segfault", "shellcode",
+    "PWN", "DEBUG", "REVERSE", "HACK", "crack",
+    "buffer overflow", "ROP chain", "null byte",
+    "exploit", "disasm", "patch", "inject", "dump",
+    "trace", "breakpoint", "analyse", "kernel",
+  ]
+
+  function makeTextSprite(text) {
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+    const isLang = text.startsWith('{')
+    const fontSize = isLang ? 48 : 34
+    ctx.font = `bold ${fontSize}px "JetBrains Mono", monospace`
+    const metrics = ctx.measureText(text)
+    const w = metrics.width + 40
+    const h = fontSize + 40
+    canvas.width = w * 2
+    canvas.height = h * 2
+    ctx.scale(2, 2)
+
+    ctx.clearRect(0, 0, w, h)
+    ctx.font = `bold ${fontSize}px "JetBrains Mono", monospace`
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+
+    ctx.shadowColor = 'rgba(96,165,250,0.5)'
+    ctx.shadowBlur = 14
+    ctx.fillStyle = isLang ? 'rgba(96,165,250,0.8)' : 'rgba(255,255,255,0.4)'
+    ctx.fillText(text, w / 2, h / 2)
+    ctx.shadowBlur = 24
+    ctx.fillText(text, w / 2, h / 2)
+
+    const tex = new THREE.CanvasTexture(canvas)
+    tex.needsUpdate = true
+    const mat = new THREE.SpriteMaterial({
+      map: tex,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      opacity: 0.8,
+    })
+    const sprite = new THREE.Sprite(mat)
+    const aspect = w / h
+    const baseScale = isLang ? 2.2 : 1.5
+    sprite.scale.set(baseScale * aspect, baseScale, 1)
+    return sprite
+  }
+
+  const sprites = []
+  for (let i = 0; i < texts.length + 10; i++) {
+    const text = texts[i % texts.length]
+    const sprite = makeTextSprite(text)
+    sprite.position.set(
+      (Math.random() - 0.5) * W * 2,
+      (Math.random() - 0.5) * H * 2,
+      (Math.random() - 0.5) * D * 2
+    )
+    const speed = 0.06 + Math.random() * 0.14
+    const angle = Math.random() * Math.PI * 2
+    const angle2 = Math.random() * Math.PI * 2
+    sprite.userData = {
+      vx: Math.cos(angle) * Math.cos(angle2) * speed,
+      vy: Math.sin(angle2) * speed,
+      vz: Math.sin(angle) * Math.cos(angle2) * speed,
+      phase: Math.random() * 100,
+      wanderSpeed: 0.08 + Math.random() * 0.16,
+    }
+    scene.add(sprite)
+    sprites.push(sprite)
+  }
+
+  let scrollY = 0
+  window.addEventListener('scroll', () => {
+    scrollY = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)
+  }, { passive: true })
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix()
+    renderer.setSize(window.innerWidth, window.innerHeight)
+  })
+
+  function animate() {
+    requestAnimationFrame(animate)
+    const t = Date.now() * 0.001
+    const energy = 1 + scrollY * 0.4
+    const dt = 0.016
+
+    sprites.forEach((sprite, i) => {
+      const ud = sprite.userData
+      const w1 = Math.sin(t * ud.wanderSpeed + ud.phase + i * 0.5)
+      const w2 = Math.cos(t * ud.wanderSpeed * 0.6 + ud.phase + i * 0.7)
+      const w3 = Math.sin(t * ud.wanderSpeed * 0.4 + ud.phase + i * 0.3)
+
+      sprite.position.x += (ud.vx + w1 * 0.12) * dt * energy
+      sprite.position.y += (ud.vy + w2 * 0.12) * dt * energy
+      sprite.position.z += (ud.vz + w3 * 0.12) * dt * energy
+
+      if (sprite.position.x > W) { sprite.position.x = W; ud.vx *= -1 }
+      if (sprite.position.x < -W) { sprite.position.x = -W; ud.vx *= -1 }
+      if (sprite.position.y > H) { sprite.position.y = H; ud.vy *= -1 }
+      if (sprite.position.y < -H) { sprite.position.y = -H; ud.vy *= -1 }
+      if (sprite.position.z > D) { sprite.position.z = D; ud.vz *= -1 }
+      if (sprite.position.z < -D) { sprite.position.z = -D; ud.vz *= -1 }
+    })
+
+    renderer.render(scene, camera)
+  }
+  animate()
+  </script>
+
+  <script>
+  function copyCmd(btn, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copiado!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+  </script>
+  <script>
+  // Mobile menu toggle
+  (function(){
+    const btn = document.getElementById('nav-toggle')
+    const menu = document.getElementById('mobileMenu')
+    if (!btn || !menu) return
+    btn.addEventListener('click', () => {
+      const open = menu.classList.toggle('open')
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false')
+      btn.textContent = open ? '✕' : '☰'
+    })
+    // close on navigation
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { menu.classList.remove('open'); btn.textContent = '☰'; btn.setAttribute('aria-expanded','false') }))
+  })()
+  </script>
+</body>
+</html>

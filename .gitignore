@@ -9,7 +9,6 @@ dist-npm/
 .DS_Store
 .vscode/
 .vercel/
-site/
 packages/console/app/.stripe/
 packages/console/app/public/sitemap.xml
 packages/console/app/src/routes/s/

@@ -53,9 +53,9 @@ import { Permission } from "@/permission"
 import { BackgroundJob } from "@/background/job"
 import { RuntimeFlags } from "@/effect/runtime-flags"
 import { ProviderV2 } from "@anymous-ai/core/provider"
-import { ModelV2 } from "@anymous-ai/core/model"
+import type { ModelV2 } from "@anymous-ai/core/model"
 import { MCP } from "@/mcp"
-import { PermissionV1 } from "@anymous-ai/core/v1/permission"
+import type { PermissionV1 } from "@anymous-ai/core/v1/permission"
 import { McpCatalog } from "@/mcp/catalog"
 
 export function webSearchEnabled(providerID: ProviderV2.ID, flags = { exa: false, parallel: false }) {

@@ -1,7 +1,7 @@
 import path from "node:path"
 import { pathToFileURL } from "node:url"
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
-import { ConfigV1 } from "@anymous-ai/core/v1/config/config"
+import type { ConfigV1 } from "@anymous-ai/core/v1/config/config"
 import { serviceUse } from "@anymous-ai/core/effect/service-use"
 import { Client, type ClientOptions } from "@modelcontextprotocol/sdk/client/index.js"
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js"
@@ -16,7 +16,7 @@ import {
   ToolListChangedNotificationSchema,
 } from "@modelcontextprotocol/sdk/types.js"
 import { Config } from "@/config/config"
-import { ConfigMCPV1 } from "@anymous-ai/core/v1/config/mcp"
+import type { ConfigMCPV1 } from "@anymous-ai/core/v1/config/mcp"
 import { NamedError } from "@anymous-ai/core/util/error"
 import { InstallationVersion } from "@anymous-ai/core/installation/version"
 import { withTimeout } from "@/util/timeout"

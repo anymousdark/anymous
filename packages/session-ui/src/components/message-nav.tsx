@@ -1,6 +1,7 @@
-import { UserMessage } from "@anymous-ai/sdk/v2"
+import type { UserMessage } from "@anymous-ai/sdk/v2"
 import { HoverCard } from "@kobalte/core/hover-card"
-import { ComponentProps, For, Match, Show, createSignal, splitProps, Switch } from "solid-js"
+import type { ComponentProps } from "solid-js"
+import { For, Match, Show, createSignal, splitProps, Switch } from "solid-js"
 import { DiffChanges } from "@anymous-ai/ui/diff-changes"
 import { useI18n } from "@anymous-ai/ui/context/i18n"
 

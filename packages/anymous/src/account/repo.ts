@@ -5,7 +5,8 @@ import { Effect, Layer, Option, Schema, Context } from "effect"
 
 import { Database } from "@anymous-ai/core/database/database"
 import { AccountStateTable, AccountTable } from "@anymous-ai/core/account/sql"
-import { AccessToken, AccountID, AccountRepoError, Info, OrgID, RefreshToken } from "./schema"
+import type { AccessToken, AccountID, OrgID, RefreshToken } from "./schema"
+import { AccountRepoError, Info } from "./schema"
 import { normalizeServerUrl } from "./url"
 
 export type AccountRow = (typeof AccountTable)["$inferSelect"]

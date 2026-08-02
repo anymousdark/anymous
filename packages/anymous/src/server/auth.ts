@@ -2,7 +2,8 @@ export * as ServerAuth from "./auth"
 
 import { ConfigService } from "@/effect/config-service"
 import { Flag } from "@anymous-ai/core/flag/flag"
-import { Config as EffectConfig, Context, Option, Redacted } from "effect"
+import type { Context } from "effect"
+import { Config as EffectConfig, Option, Redacted } from "effect"
 
 export type Credentials = {
   password?: string

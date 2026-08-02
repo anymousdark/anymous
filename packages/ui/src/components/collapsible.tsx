@@ -1,5 +1,7 @@
-import { Collapsible as Kobalte, CollapsibleRootProps } from "@kobalte/core/collapsible"
-import { ComponentProps, ParentProps, splitProps } from "solid-js"
+import type { CollapsibleRootProps } from "@kobalte/core/collapsible"
+import { Collapsible as Kobalte } from "@kobalte/core/collapsible"
+import type { ComponentProps, ParentProps } from "solid-js"
+import { splitProps } from "solid-js"
 import { Icon } from "./icon"
 
 export interface CollapsibleProps extends ParentProps<CollapsibleRootProps> {

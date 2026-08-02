@@ -1,5 +1,5 @@
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
-import { ConfigPermissionV1 } from "@anymous-ai/core/v1/config/permission"
+import type { ConfigPermissionV1 } from "@anymous-ai/core/v1/config/permission"
 import { InstanceState } from "@/effect/instance-state"
 import { Wildcard } from "@anymous-ai/core/util/wildcard"
 import { Deferred, Effect, Layer, Context } from "effect"
@@ -26,8 +26,12 @@ interface State {
 }
 
 export let unrestricted = false
-export function unlock() { unrestricted = true }
-export function lock() { unrestricted = false }
+export function unlock() {
+  unrestricted = true
+}
+export function lock() {
+  unrestricted = false
+}
 
 export function evaluate(permission: string, pattern: string, ...rulesets: PermissionV1.Ruleset[]): PermissionV1.Rule {
   return (

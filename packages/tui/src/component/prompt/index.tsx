@@ -1,13 +1,5 @@
-import {
-  BoxRenderable,
-  RGBA,
-  TextareaRenderable,
-  MouseEvent,
-  PasteEvent,
-  decodePasteBytes,
-  type KeyEvent,
-  type Renderable,
-} from "@opentui/core"
+import type { BoxRenderable, TextareaRenderable, MouseEvent, PasteEvent } from "@opentui/core"
+import { RGBA, decodePasteBytes, type KeyEvent, type Renderable } from "@opentui/core"
 import type { CommandContext } from "@opentui/keymap"
 import { createEffect, createMemo, onMount, createSignal, onCleanup, on, Show, Switch, Match } from "solid-js"
 import { registeranymousSpinner } from "../register-spinner"

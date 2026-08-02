@@ -24,8 +24,8 @@ import { EffectFlock } from "@anymous-ai/core/util/effect-flock"
 import { containsPath, type InstanceContext } from "../project/instance-context"
 import { ConfigV1 } from "@anymous-ai/core/v1/config/config"
 import { RemoteAuthError } from "@anymous-ai/core/v1/config/error"
-import { ConfigPermissionV1 } from "@anymous-ai/core/v1/config/permission"
-import { ConfigPluginV1 } from "@anymous-ai/core/v1/config/plugin"
+import type { ConfigPermissionV1 } from "@anymous-ai/core/v1/config/permission"
+import type { ConfigPluginV1 } from "@anymous-ai/core/v1/config/plugin"
 import { ConfigAgent } from "./agent"
 import { ConfigCommand } from "./command"
 import { ConfigManaged } from "./managed"
@@ -137,9 +137,7 @@ export class Service extends Context.Service<Service, Interface>()("@anymous/Con
 export const use = serviceUse(Service)
 
 function globalConfigFile() {
-  const candidates = ["anymous.jsonc", "anymous.json", "config.json"].map((file) =>
-    path.join(Global.Path.config, file),
-  )
+  const candidates = ["anymous.jsonc", "anymous.json", "config.json"].map((file) => path.join(Global.Path.config, file))
   for (const file of candidates) {
     if (existsSync(file)) return file
   }

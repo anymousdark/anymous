@@ -1,6 +1,6 @@
 import { PermissionV1 } from "@anymous-ai/core/v1/permission"
 import { EOL } from "os"
-import { SessionV1 } from "@anymous-ai/core/v1/session"
+import type { SessionV1 } from "@anymous-ai/core/v1/session"
 import { basename } from "path"
 import { Cause, Effect } from "effect"
 import { Agent } from "../../../agent/agent"

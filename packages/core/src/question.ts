@@ -4,7 +4,7 @@ import { makeLocationNode } from "./effect/app-node"
 import { Context, Deferred, Effect, Layer, Schema } from "effect"
 import { Question } from "@anymous-ai/schema/question"
 import { EventV2 } from "./event"
-import { SessionSchema } from "./session/schema"
+import type { SessionSchema } from "./session/schema"
 
 export const ID = Question.ID
 export type ID = typeof ID.Type

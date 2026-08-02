@@ -1,4 +1,5 @@
-import { ComponentProps, splitProps } from "solid-js"
+import type { ComponentProps } from "solid-js"
+import { splitProps } from "solid-js"
 import { usePlatform } from "@/context/platform"
 
 export interface LinkProps extends Omit<ComponentProps<"a">, "href"> {

@@ -429,8 +429,7 @@ export const dict = {
   "workspace.newUser.feature.quality.title": "最高质量",
   "workspace.newUser.feature.quality.body": "访问配置为最佳性能的模型 - 无需降级或路由到更便宜的提供商。",
   "workspace.newUser.feature.lockin.title": "无锁定",
-  "workspace.newUser.feature.lockin.body":
-    "将 Zen 与任何编程代理结合使用，并在需要时继续在 anymous 中使用其他提供商。",
+  "workspace.newUser.feature.lockin.body": "将 Zen 与任何编程代理结合使用，并在需要时继续在 anymous 中使用其他提供商。",
   "workspace.newUser.copyApiKey": "复制 API 密钥",
   "workspace.newUser.copyKey": "复制密钥",
   "workspace.newUser.copied": "已复制！",
@@ -634,8 +633,7 @@ export const dict = {
   "workspace.lite.subscription.monthlyUsage": "每月用量",
   "workspace.lite.subscription.resetsIn": "重置于",
   "workspace.lite.subscription.useBalance": "达到使用限额后使用您的可用余额",
-  "workspace.lite.subscription.selectProvider":
-    "在你的 anymous 配置中选择「anymous Go」作为提供商，即可使用 Go 模型。",
+  "workspace.lite.subscription.selectProvider": "在你的 anymous 配置中选择「anymous Go」作为提供商，即可使用 Go 模型。",
   "workspace.lite.providers.title": "提供商",
   "workspace.lite.providers.description": "控制用于路由的提供商。",
   "workspace.lite.providers.useChina": "启用部署在中国的模型",

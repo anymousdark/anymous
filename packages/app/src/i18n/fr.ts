@@ -683,8 +683,7 @@ export const dict = {
   "sidebar.workspaces.enable": "Activer les espaces de travail",
   "sidebar.workspaces.disable": "Désactiver les espaces de travail",
   "sidebar.gettingStarted.title": "Commencer",
-  "sidebar.gettingStarted.line1":
-    "anymous inclut des modèles gratuits pour que vous puissiez commencer immédiatement.",
+  "sidebar.gettingStarted.line1": "anymous inclut des modèles gratuits pour que vous puissiez commencer immédiatement.",
   "sidebar.gettingStarted.line2":
     "Connectez n'importe quel fournisseur pour utiliser des modèles, y compris Claude, GPT, Gemini etc.",
   "sidebar.project.recentSessions": "Sessions récentes",

@@ -9,7 +9,7 @@ import type {
   ToolPart,
 } from "@anymous-ai/sdk/v2"
 import { Effect } from "effect"
-import { ACPSession } from "./session"
+import type { ACPSession } from "./session"
 import { ACPPermission } from "./permission"
 import { partsToContentChunks, type ReplayPart } from "./content"
 import {

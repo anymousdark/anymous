@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, mock, test } from "bun:test"
-import { ServerScope } from "@/utils/server-scope"
+import type { ServerScope } from "@/utils/server-scope"
 
 let getWorkspaceTerminalCacheKey: typeof import("./terminal").getWorkspaceTerminalCacheKey
 let getLegacyTerminalStorageKeys: (dir: string, legacySessionID?: string) => string[]

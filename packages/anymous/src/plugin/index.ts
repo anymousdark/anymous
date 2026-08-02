@@ -70,8 +70,10 @@ function internalPlugins(flags: RuntimeFlags.Info): PluginInstance[] {
         experimentalWebSockets: experimentalWebSocketsEnabled({ enabled: flags.experimentalWebSockets }),
       }),
     CopilotAuthPlugin,
-    GitlabAuthPlugin,
-    PoeAuthPlugin,
+    // External auth plugins are typed against a different @opencode-ai/plugin
+    // copy on the registry; adapt them to the local workspace types at the boundary.
+    GitlabAuthPlugin as unknown as PluginInstance,
+    PoeAuthPlugin as unknown as PluginInstance,
     CloudflareWorkersAuthPlugin,
     CloudflareAIGatewayAuthPlugin,
     AzureAuthPlugin,
@@ -170,7 +172,9 @@ const layer = Layer.effect(
                 try: () => plugin(input),
                 catch: errorMessage,
               }).pipe(
-                Effect.tapError((error) => Effect.logError("failed to load internal plugin", { name: plugin.name, error })),
+                Effect.tapError((error) =>
+                  Effect.logError("failed to load internal plugin", { name: plugin.name, error }),
+                ),
                 Effect.option,
               ),
             ),

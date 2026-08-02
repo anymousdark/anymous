@@ -1,4 +1,4 @@
-import { ProviderHelper, CommonRequest, CommonResponse, CommonChunk } from "./provider"
+import type { ProviderHelper, CommonRequest, CommonResponse, CommonChunk } from "./provider"
 
 type Usage = {
   input_tokens?: number

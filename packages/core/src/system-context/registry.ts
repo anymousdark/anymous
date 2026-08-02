@@ -1,6 +1,7 @@
 export * as SystemContextRegistry from "./registry"
 
-import { Context, Effect, Layer, Ref, Scope } from "effect"
+import type { Scope } from "effect"
+import { Context, Effect, Layer, Ref } from "effect"
 import { SystemContext } from "./index"
 import { makeLocationNode } from "../effect/app-node"
 

@@ -22,8 +22,10 @@ import { FSUtil } from "@anymous-ai/core/fs-util"
 import { AppNodeBuilder } from "@anymous-ai/core/effect/app-node-builder"
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { AppProcess } from "@anymous-ai/core/process"
-import { Deferred, Duration, Effect, Layer, Queue, Schedule, Scope, Stream } from "effect"
-import { FetchHttpClient, HttpClient } from "effect/unstable/http"
+import type { Scope } from "effect"
+import { Deferred, Duration, Effect, Layer, Queue, Schedule, Stream } from "effect"
+import type { HttpClient } from "effect/unstable/http"
+import { FetchHttpClient } from "effect/unstable/http"
 import { ChildProcess } from "effect/unstable/process"
 import path from "node:path"
 import { TestLLMServer } from "./llm-server"
@@ -497,11 +499,11 @@ function normalizeLines(value: string) {
 function expectExit(result: RunResult, expected: number, label = "anymous") {
   if (result.exitCode === expected) return
   const tail = (s: string, n: number) => (s.length > n ? "..." + s.slice(-n) : s)
-  // eslint-disable-next-line no-console
+
   console.error(`[${label}] expected exit ${expected}, got ${result.exitCode} after ${result.durationMs}ms`)
-  // eslint-disable-next-line no-console
+
   console.error(`[${label}] stderr (last 2000):\n${tail(result.stderr, 2000)}`)
-  // eslint-disable-next-line no-console
+
   console.error(`[${label}] stdout (last 500):\n${tail(result.stdout, 500)}`)
   throw new Error(`${label}: expected exit ${expected}, got ${result.exitCode}`)
 }

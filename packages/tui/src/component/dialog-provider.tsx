@@ -371,8 +371,7 @@ function ApiMethod(props: ApiMethodProps) {
           anymous: (
             <box gap={1}>
               <text fg={theme.textMuted}>
-                anymous Zen gives you access to all the best coding models at the cheapest prices with a single API
-                key.
+                anymous Zen gives you access to all the best coding models at the cheapest prices with a single API key.
               </text>
               <text fg={theme.text}>
                 Go to <span style={{ fg: theme.primary }}>https://anymous-cli.vercel.app/zen</span> to get a key

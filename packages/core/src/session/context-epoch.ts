@@ -10,7 +10,7 @@ import { SessionEvent } from "./event"
 import { SessionHistory } from "./history"
 import { SessionInput } from "./input"
 import { SessionMessage } from "./message"
-import { SessionSchema } from "./schema"
+import type { SessionSchema } from "./schema"
 import { SessionContextEpochTable } from "./sql"
 
 type DatabaseService = Database.Interface["db"]

@@ -1,6 +1,7 @@
 import { ProxyUtil } from "@/server/proxy-util"
 import { Effect, Stream } from "effect"
-import { HttpBody, HttpClient, HttpClientRequest, HttpServerRequest, HttpServerResponse } from "effect/unstable/http"
+import type { HttpClient, HttpServerRequest } from "effect/unstable/http"
+import { HttpBody, HttpClientRequest, HttpServerResponse } from "effect/unstable/http"
 import * as Socket from "effect/unstable/socket/Socket"
 import { WebSocketTracker } from "../websocket-tracker"
 

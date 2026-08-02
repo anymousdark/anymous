@@ -74,7 +74,8 @@ import { sessionTitle } from "@/utils/session-title"
 import { scheduleConnectedMeasure } from "./measure"
 import { observeElementOffsetReconnectAware } from "./observe-element-offset"
 import { createTimelineProjection } from "./projection"
-import { MessageComment, SummaryDiff, TimelineRow, TimelineRowMap } from "./rows"
+import type { SummaryDiff, TimelineRowMap } from "./rows"
+import { MessageComment, TimelineRow } from "./rows"
 import { filterVirtualIndexes } from "./virtual-items"
 
 const emptyMessages: MessageType[] = []

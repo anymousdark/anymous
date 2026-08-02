@@ -22,7 +22,7 @@ import { Location } from "@anymous-ai/core/location"
 import { LocationServiceMap, locationServiceMapLayer } from "@anymous-ai/core/location-services"
 import { Reference } from "@anymous-ai/core/reference"
 import { MCP } from "@/mcp"
-import { PermissionV1 } from "@anymous-ai/core/v1/permission"
+import type { PermissionV1 } from "@anymous-ai/core/v1/permission"
 
 export function provider(model: Provider.Model) {
   if (model.api.id.includes("muse-spark")) return [PROMPT_META]

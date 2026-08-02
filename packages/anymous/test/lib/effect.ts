@@ -1,13 +1,15 @@
 import { test, type TestOptions } from "bun:test"
-import { ConfigV1 } from "@anymous-ai/core/v1/config/config"
-import { Cause, Duration, Effect, Exit, Layer } from "effect"
+import type { ConfigV1 } from "@anymous-ai/core/v1/config/config"
+import type { Duration } from "effect"
+import { Cause, Effect, Exit, Layer } from "effect"
 import * as Scope from "effect/Scope"
 import * as TestClock from "effect/testing/TestClock"
 import * as TestConsole from "effect/testing/TestConsole"
 import { memoMap } from "@anymous-ai/core/effect/memo-map"
 import type { Config } from "@/config/config"
-import { TestInstance, withTmpdirInstance } from "../fixture/fixture"
-import { InstanceStore } from "@/project/instance-store"
+import type { TestInstance } from "../fixture/fixture"
+import { withTmpdirInstance } from "../fixture/fixture"
+import type { InstanceStore } from "@/project/instance-store"
 
 type Body<A, E, R> = Effect.Effect<A, E, R> | (() => Effect.Effect<A, E, R>)
 type InstanceOptions<E, R> = {

@@ -1,6 +1,6 @@
 import { and, asc, desc, eq, gt, gte, ne, or } from "drizzle-orm"
 import { Effect, Schema } from "effect"
-import { Database } from "../database/database"
+import type { Database } from "../database/database"
 import { MessageDecodeError } from "./error"
 import { SessionMessage } from "./message"
 import { SessionSchema } from "./schema"

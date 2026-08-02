@@ -7,7 +7,7 @@ import type {
 } from "@anymous-ai/client/promise"
 import type { Agent, PermissionRequest, Project, Provider, ProviderListResponse } from "@anymous-ai/sdk/v2/client"
 import type { Project as CurrentProject } from "@anymous-ai/client/promise"
-import { NormalizedProviderListResponse } from "@anymous-ai/session-ui/context"
+import type { NormalizedProviderListResponse } from "@anymous-ai/session-ui/context"
 export { pathKey as directoryKey, type PathKey as DirectoryKey } from "@/utils/path-key"
 
 export const cmp = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0)

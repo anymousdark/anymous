@@ -3,8 +3,8 @@ import { Auth } from "@/auth"
 import { Effect } from "effect"
 import { HttpApiBuilder } from "effect/unstable/httpapi"
 import { RootHttpApi } from "../api"
-import { LogInput } from "../groups/control"
-import { ProviderV2 } from "@anymous-ai/core/provider"
+import type { LogInput } from "../groups/control"
+import type { ProviderV2 } from "@anymous-ai/core/provider"
 
 export const controlHandlers = HttpApiBuilder.group(RootHttpApi, "control", (handlers) =>
   Effect.gen(function* () {

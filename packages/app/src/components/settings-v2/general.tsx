@@ -1,4 +1,5 @@
-import { Component, Show, createMemo, createResource, onMount } from "solid-js"
+import type { Component } from "solid-js"
+import { Show, createMemo, createResource, onMount } from "solid-js"
 import { createMediaQuery } from "@solid-primitives/media"
 import { ButtonV2 } from "@anymous-ai/ui/v2/button-v2"
 import { SelectV2 } from "@anymous-ai/ui/v2/select-v2"

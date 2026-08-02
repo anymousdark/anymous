@@ -1,7 +1,8 @@
 export * as Reference from "./reference"
 
 import { makeLocationNode } from "./effect/app-node"
-import { Context, Effect, Layer, Scope, Types } from "effect"
+import type { Types } from "effect"
+import { Context, Effect, Layer, Scope } from "effect"
 import { Reference } from "@anymous-ai/schema/reference"
 import { Global } from "./global"
 import { EventV2 } from "./event"

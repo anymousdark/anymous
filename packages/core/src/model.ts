@@ -1,4 +1,4 @@
-import { Types } from "effect"
+import type { Types } from "effect"
 import { Model } from "@anymous-ai/schema/model"
 import { ProviderV2 } from "./provider"
 

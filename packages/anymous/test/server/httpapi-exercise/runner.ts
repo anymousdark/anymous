@@ -1,6 +1,6 @@
 import { Flag } from "@anymous-ai/core/flag/flag"
-import { ConfigV1 } from "@anymous-ai/core/v1/config/config"
-import { SessionV1 } from "@anymous-ai/core/v1/session"
+import type { ConfigV1 } from "@anymous-ai/core/v1/config/config"
+import type { SessionV1 } from "@anymous-ai/core/v1/session"
 import { Cause, Duration, Effect, Layer, Scope } from "effect"
 import { TestLLMServer } from "../../lib/llm-server"
 import type { Config } from "../../../src/config/config"

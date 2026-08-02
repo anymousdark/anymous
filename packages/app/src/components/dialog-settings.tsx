@@ -1,4 +1,5 @@
-import { Component, createSignal, startTransition } from "solid-js"
+import type { Component } from "solid-js"
+import { createSignal, startTransition } from "solid-js"
 import { Dialog } from "@anymous-ai/ui/dialog"
 import { Tabs } from "@anymous-ai/ui/tabs"
 import { Icon } from "@anymous-ai/ui/icon"

@@ -1,6 +1,6 @@
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { Session } from "@/session/session"
-import { SessionID } from "@/session/schema"
+import type { SessionID } from "@/session/schema"
 import { Effect, Layer, Scope, Context } from "effect"
 import { Config } from "@/config/config"
 import { RuntimeFlags } from "@/effect/runtime-flags"

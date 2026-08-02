@@ -1,4 +1,4 @@
-import { BrowserWindow } from "electron"
+import type { BrowserWindow } from "electron"
 import type { DesktopMenuAction } from "@anymous-ai/app/desktop-menu"
 import { createMainWindow, updateTitlebar } from "./windows"
 

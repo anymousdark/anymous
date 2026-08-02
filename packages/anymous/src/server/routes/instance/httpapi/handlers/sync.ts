@@ -2,7 +2,7 @@ import { Workspace } from "@/control-plane/workspace"
 import * as InstanceState from "@/effect/instance-state"
 import { Session } from "@/session/session"
 import { Database } from "@anymous-ai/core/database/database"
-import { EventV2 } from "@anymous-ai/core/event"
+import type { EventV2 } from "@anymous-ai/core/event"
 import { EventV2Bridge } from "@/event-v2-bridge"
 import { EventTable } from "@anymous-ai/core/event/sql"
 import { asc } from "drizzle-orm"
@@ -14,7 +14,7 @@ import { or } from "drizzle-orm"
 import { Effect, Scope } from "effect"
 import { HttpApiBuilder, HttpApiError } from "effect/unstable/httpapi"
 import { InstanceHttpApi } from "../api"
-import { HistoryPayload, ReplayPayload, SessionPayload } from "../groups/sync"
+import type { HistoryPayload, ReplayPayload, SessionPayload } from "../groups/sync"
 
 export const syncHandlers = HttpApiBuilder.group(InstanceHttpApi, "sync", (handlers) =>
   Effect.gen(function* () {

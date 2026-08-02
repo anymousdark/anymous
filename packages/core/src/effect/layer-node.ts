@@ -1,4 +1,5 @@
-import { Brand, Context, Layer } from "effect"
+import type { Context } from "effect"
+import { Brand, Layer } from "effect"
 
 type AnyNode = Node<unknown, unknown, any>
 type RuntimeLayer = Layer.Layer<never, unknown, unknown>

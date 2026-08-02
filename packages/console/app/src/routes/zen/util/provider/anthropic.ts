@@ -1,5 +1,5 @@
 import { EventStreamCodec } from "@smithy/eventstream-codec"
-import { ProviderHelper, CommonRequest, CommonResponse, CommonChunk } from "./provider"
+import type { ProviderHelper, CommonRequest, CommonResponse, CommonChunk } from "./provider"
 import { fromUtf8, toUtf8 } from "@smithy/util-utf8"
 
 type Usage = {

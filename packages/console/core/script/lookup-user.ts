@@ -1,14 +1,8 @@
 import { Database, and, eq, sql } from "../src/drizzle/index.js"
 import { AuthTable } from "../src/schema/auth.sql.js"
 import { UserTable } from "../src/schema/user.sql.js"
-import {
-  BillingTable,
-  PaymentTable,
-  SubscriptionTable,
-  BlackPlans,
-  UsageTable,
-  LiteTable,
-} from "../src/schema/billing.sql.js"
+import type { BlackPlans } from "../src/schema/billing.sql.js"
+import { BillingTable, PaymentTable, SubscriptionTable, UsageTable, LiteTable } from "../src/schema/billing.sql.js"
 import { WorkspaceTable } from "../src/schema/workspace.sql.js"
 import { KeyTable } from "../src/schema/key.sql.js"
 import { BlackData } from "../src/black.js"

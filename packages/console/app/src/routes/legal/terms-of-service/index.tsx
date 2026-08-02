@@ -25,8 +25,8 @@ export default function TermsOfService() {
 
               <p>
                 Welcome to anymous. Please read on to learn the rules and restrictions that govern your use of
-                anymous&apos;s website, inference product and hosted software offering (the "Services"). If you have
-                any questions, comments, or concerns regarding these terms or the Services, please contact us at:
+                anymous&apos;s website, inference product and hosted software offering (the "Services"). If you have any
+                questions, comments, or concerns regarding these terms or the Services, please contact us at:
               </p>
 
               <p>
@@ -38,7 +38,10 @@ export default function TermsOfService() {
                 <strong>ANOMALY INNOVATIONS, INC.</strong> ("anymous," "we" and "us"). Your use of the Services in any
                 way means that you agree to all of these Terms, and these Terms will remain in effect while you use the
                 Services. These Terms include the provisions in this document as well as those in the Privacy Policy{" "}
-                <a href={language.route("/legal/privacy-policy")}>https://anymous-cli.vercel.app/legal/privacy-policy</a>.{" "}
+                <a href={language.route("/legal/privacy-policy")}>
+                  https://anymous-cli.vercel.app/legal/privacy-policy
+                </a>
+                .{" "}
                 <strong>
                   Your use of or participation in certain Services may also be subject to additional policies, rules
                   and/or conditions ("Additional Terms"), which are incorporated herein by reference, and you understand
@@ -76,8 +79,8 @@ export default function TermsOfService() {
                 anymous is an AI-powered coding agent that helps you write, understand, and modify code using large
                 language models. Certain of these large language models are provided by third parties ("Third Party
                 Models") and certain of these models are provided directly by us if you use the anymous Zen paid
-                offering ("Zen"). Regardless of whether you use Third Party Models or Zen, anymous enables you to
-                access the functionality of models through a coding agent running within your terminal.
+                offering ("Zen"). Regardless of whether you use Third Party Models or Zen, anymous enables you to access
+                the functionality of models through a coding agent running within your terminal.
               </p>
 
               <h2 id="will-these-terms-ever-change">Will these Terms ever change?</h2>
@@ -102,7 +105,10 @@ export default function TermsOfService() {
               <p>
                 anymous takes the privacy of its users very seriously. For the current anymous Privacy Policy, please
                 click here{" "}
-                <a href="https://anymous-cli.vercel.app/legal/privacy-policy">https://anymous-cli.vercel.app/legal/privacy-policy</a>.
+                <a href="https://anymous-cli.vercel.app/legal/privacy-policy">
+                  https://anymous-cli.vercel.app/legal/privacy-policy
+                </a>
+                .
               </p>
 
               <h3>Children's Online Privacy Protection Act</h3>
@@ -239,11 +245,11 @@ export default function TermsOfService() {
               </p>
 
               <p>
-                anymous has no control over, and assumes no responsibility for, the content, accuracy, privacy
-                policies, or practices of any providers of Third Party Models. We encourage you to read the terms and
-                conditions and privacy policy of each provider of a Third Party Model that you choose to utilize. By
-                using the Services, you release and hold us harmless from any and all liability arising from your use of
-                any Third Party Model.
+                anymous has no control over, and assumes no responsibility for, the content, accuracy, privacy policies,
+                or practices of any providers of Third Party Models. We encourage you to read the terms and conditions
+                and privacy policy of each provider of a Third Party Model that you choose to utilize. By using the
+                Services, you release and hold us harmless from any and all liability arising from your use of any Third
+                Party Model.
               </p>
 
               <h2 id="will-anymous-ever-change-the-services">Will anymous ever change the Services?</h2>
@@ -265,9 +271,9 @@ export default function TermsOfService() {
               <p>
                 Certain of our Services, including Zen, may be subject to payments now or in the future (the "Paid
                 Services"). Please see our Paid Services page{" "}
-                <a href={language.route("/zen")}>https://anymous-cli.vercel.app/zen</a> for a description of the current Paid
-                Services. Please note that any payment terms presented to you in the process of using or signing up for
-                a Paid Service are deemed part of these Terms.
+                <a href={language.route("/zen")}>https://anymous-cli.vercel.app/zen</a> for a description of the current
+                Paid Services. Please note that any payment terms presented to you in the process of using or signing up
+                for a Paid Service are deemed part of these Terms.
               </p>
 
               <h3>Billing</h3>
@@ -321,9 +327,11 @@ export default function TermsOfService() {
               <h2 id="what-if-i-want-to-stop">What if I want to stop using the Services?</h2>
               <p>
                 You're free to do that at any time; please refer to our Privacy Policy{" "}
-                <a href={language.route("/legal/privacy-policy")}>https://anymous-cli.vercel.app/legal/privacy-policy</a>, as well
-                as the licenses above, to understand how we treat information you provide to us after you have stopped
-                using our Services.
+                <a href={language.route("/legal/privacy-policy")}>
+                  https://anymous-cli.vercel.app/legal/privacy-policy
+                </a>
+                , as well as the licenses above, to understand how we treat information you provide to us after you have
+                stopped using our Services.
               </p>
 
               <p>
@@ -343,8 +351,8 @@ export default function TermsOfService() {
 
               <h3>Warranty Disclaimer</h3>
               <p>
-                anymous and its licensors, suppliers, partners, parent, subsidiaries or affiliated entities, and each
-                of their respective officers, directors, members, employees, consultants, contract employees,
+                anymous and its licensors, suppliers, partners, parent, subsidiaries or affiliated entities, and each of
+                their respective officers, directors, members, employees, consultants, contract employees,
                 representatives and agents, and each of their respective successors and assigns (anymous and all such
                 parties together, the "anymous Parties") make no representations or warranties concerning the Services,
                 including without limitation regarding any Content contained in or accessed through the Services, and
@@ -353,8 +361,8 @@ export default function TermsOfService() {
                 procedures, costs, expenses, damages or liabilities arising out of use of, or in any way related to your
                 participation in, the Services. The anymous Parties make no representations or warranties regarding
                 suggestions or recommendations of services or products offered or purchased through or in connection
-                with the Services. THE SERVICES AND CONTENT ARE PROVIDED BY anymous (AND ITS LICENSORS AND SUPPLIERS)
-                ON AN "AS-IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, WITHOUT
+                with the Services. THE SERVICES AND CONTENT ARE PROVIDED BY anymous (AND ITS LICENSORS AND SUPPLIERS) ON
+                AN "AS-IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, WITHOUT
                 LIMITATION, IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT,
                 OR THAT USE OF THE SERVICES WILL BE UNINTERRUPTED OR ERROR-FREE. SOME STATES DO NOT ALLOW LIMITATIONS ON
                 HOW LONG AN IMPLIED WARRANTY LASTS, SO THE ABOVE LIMITATIONS MAY NOT APPLY TO YOU.
@@ -363,16 +371,15 @@ export default function TermsOfService() {
               <h3 id="limitation-of-liability">Limitation of Liability</h3>
               <p>
                 TO THE FULLEST EXTENT ALLOWED BY APPLICABLE LAW, UNDER NO CIRCUMSTANCES AND UNDER NO LEGAL THEORY
-                (INCLUDING, WITHOUT LIMITATION, TORT, CONTRACT, STRICT LIABILITY, OR OTHERWISE) SHALL ANY OF THE
-                anymous PARTIES BE LIABLE TO YOU OR TO ANY OTHER PERSON FOR (A) ANY INDIRECT, SPECIAL, INCIDENTAL,
-                PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND, INCLUDING DAMAGES FOR LOST PROFITS, BUSINESS
-                INTERRUPTION, LOSS OF DATA, LOSS OF GOODWILL, WORK STOPPAGE, ACCURACY OF RESULTS, OR COMPUTER FAILURE OR
-                MALFUNCTION, (B) ANY SUBSTITUTE GOODS, SERVICES OR TECHNOLOGY, (C) ANY AMOUNT, IN THE AGGREGATE, IN
-                EXCESS OF THE GREATER OF (I) ONE-HUNDRED ($100) DOLLARS OR (II) THE AMOUNTS PAID AND/OR PAYABLE BY YOU
-                TO anymous IN CONNECTION WITH THE SERVICES IN THE TWELVE (12) MONTH PERIOD PRECEDING THIS APPLICABLE
-                CLAIM OR (D) ANY MATTER BEYOND OUR REASONABLE CONTROL. SOME STATES DO NOT ALLOW THE EXCLUSION OR
-                LIMITATION OF INCIDENTAL OR CONSEQUENTIAL OR CERTAIN OTHER DAMAGES, SO THE ABOVE LIMITATION AND
-                EXCLUSIONS MAY NOT APPLY TO YOU.
+                (INCLUDING, WITHOUT LIMITATION, TORT, CONTRACT, STRICT LIABILITY, OR OTHERWISE) SHALL ANY OF THE anymous
+                PARTIES BE LIABLE TO YOU OR TO ANY OTHER PERSON FOR (A) ANY INDIRECT, SPECIAL, INCIDENTAL, PUNITIVE OR
+                CONSEQUENTIAL DAMAGES OF ANY KIND, INCLUDING DAMAGES FOR LOST PROFITS, BUSINESS INTERRUPTION, LOSS OF
+                DATA, LOSS OF GOODWILL, WORK STOPPAGE, ACCURACY OF RESULTS, OR COMPUTER FAILURE OR MALFUNCTION, (B) ANY
+                SUBSTITUTE GOODS, SERVICES OR TECHNOLOGY, (C) ANY AMOUNT, IN THE AGGREGATE, IN EXCESS OF THE GREATER OF
+                (I) ONE-HUNDRED ($100) DOLLARS OR (II) THE AMOUNTS PAID AND/OR PAYABLE BY YOU TO anymous IN CONNECTION
+                WITH THE SERVICES IN THE TWELVE (12) MONTH PERIOD PRECEDING THIS APPLICABLE CLAIM OR (D) ANY MATTER
+                BEYOND OUR REASONABLE CONTROL. SOME STATES DO NOT ALLOW THE EXCLUSION OR LIMITATION OF INCIDENTAL OR
+                CONSEQUENTIAL OR CERTAIN OTHER DAMAGES, SO THE ABOVE LIMITATION AND EXCLUSIONS MAY NOT APPLY TO YOU.
               </p>
 
               <h3>Indemnity</h3>
@@ -388,9 +395,8 @@ export default function TermsOfService() {
               <h3>Assignment</h3>
               <p>
                 You may not assign, delegate or transfer these Terms or your rights or obligations hereunder, or your
-                Services account, in any way (by operation of law or otherwise) without anymous's prior written
-                consent. We may transfer, assign, or delegate these Terms and our rights and obligations without
-                consent.
+                Services account, in any way (by operation of law or otherwise) without anymous's prior written consent.
+                We may transfer, assign, or delegate these Terms and our rights and obligations without consent.
               </p>
 
               <h3>Choice of Law</h3>
@@ -403,11 +409,11 @@ export default function TermsOfService() {
               <p>
                 Please read the following ARBITRATION AGREEMENT carefully because it requires you to arbitrate certain
                 disputes and claims with anymous and limits the manner in which you can seek relief from anymous. Both
-                you and anymous acknowledge and agree that for the purposes of any dispute arising out of or relating
-                to the subject matter of these Terms, anymous's officers, directors, employees and independent
-                contractors ("Personnel") are third-party beneficiaries of these Terms, and that upon your acceptance of
-                these Terms, Personnel will have the right (and will be deemed to have accepted the right) to enforce
-                these Terms against you as the third-party beneficiary hereof.
+                you and anymous acknowledge and agree that for the purposes of any dispute arising out of or relating to
+                the subject matter of these Terms, anymous's officers, directors, employees and independent contractors
+                ("Personnel") are third-party beneficiaries of these Terms, and that upon your acceptance of these
+                Terms, Personnel will have the right (and will be deemed to have accepted the right) to enforce these
+                Terms against you as the third-party beneficiary hereof.
               </p>
 
               <h4>Arbitration Rules; Applicability of Arbitration Agreement</h4>
@@ -446,8 +452,8 @@ export default function TermsOfService() {
                 OF A JUDGE OR JURY. You and anymous are instead choosing to have claims and disputes resolved by
                 arbitration. Arbitration procedures are typically more limited, more efficient, and less costly than
                 rules applicable in court and are subject to very limited review by a court. In any litigation between
-                you and anymous over whether to vacate or enforce an arbitration award, YOU AND anymous WAIVE ALL
-                RIGHTS TO A JURY TRIAL, and elect instead to have the dispute be resolved by a judge.
+                you and anymous over whether to vacate or enforce an arbitration award, YOU AND anymous WAIVE ALL RIGHTS
+                TO A JURY TRIAL, and elect instead to have the dispute be resolved by a judge.
               </p>
 
               <h4 id="waiver-of-class">Waiver of Class or Consolidated Actions</h4>
@@ -455,9 +461,9 @@ export default function TermsOfService() {
                 ALL CLAIMS AND DISPUTES WITHIN THE SCOPE OF THIS ARBITRATION AGREEMENT MUST BE ARBITRATED OR LITIGATED
                 ON AN INDIVIDUAL BASIS AND NOT ON A CLASS BASIS. CLAIMS OF MORE THAN ONE CUSTOMER OR USER CANNOT BE
                 ARBITRATED OR LITIGATED JOINTLY OR CONSOLIDATED WITH THOSE OF ANY OTHER CUSTOMER OR USER. If however,
-                this waiver of class or consolidated actions is deemed invalid or unenforceable, neither you nor
-                anymous is entitled to arbitration; instead all claims and disputes will be resolved in a court as set
-                forth in (g) below.
+                this waiver of class or consolidated actions is deemed invalid or unenforceable, neither you nor anymous
+                is entitled to arbitration; instead all claims and disputes will be resolved in a court as set forth in
+                (g) below.
               </p>
 
               <h4>Opt-out</h4>
@@ -491,10 +497,10 @@ export default function TermsOfService() {
               <p>
                 You will be responsible for paying, withholding, filing, and reporting all taxes, duties, and other
                 governmental assessments associated with your activity in connection with the Services, provided that
-                the anymous may, in its sole discretion, do any of the foregoing on your behalf or for itself as it
-                sees fit. The failure of either you or us to exercise, in any way, any right herein shall not be deemed
-                a waiver of any further rights hereunder. If any provision of these Terms are found to be unenforceable
-                or invalid, that provision will be limited or eliminated, to the minimum extent necessary, so that these
+                the anymous may, in its sole discretion, do any of the foregoing on your behalf or for itself as it sees
+                fit. The failure of either you or us to exercise, in any way, any right herein shall not be deemed a
+                waiver of any further rights hereunder. If any provision of these Terms are found to be unenforceable or
+                invalid, that provision will be limited or eliminated, to the minimum extent necessary, so that these
                 Terms shall otherwise remain in full force and effect and enforceable. You and anymous agree that these
                 Terms are the complete and exclusive statement of the mutual understanding between you and anymous, and
                 that these Terms supersede and cancel all previous written and oral agreements, communications and other

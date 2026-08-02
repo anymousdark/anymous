@@ -1,0 +1,6 @@
+.vercel
+*.txt
+deploy-*
+inspect-*
+*output*
+test_response*

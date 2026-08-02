@@ -1,7 +1,7 @@
 import { Client } from "@planetscale/database"
 import { Effect } from "effect"
 import { Resource } from "sst/resource"
-import { DatabaseError } from "../database"
+import type { DatabaseError } from "../database"
 import type { GeoStatMetric } from "./geo"
 import { ModelStatRepo, type ModelStatMetric } from "./model"
 import type { ProviderStatMetric } from "./provider"

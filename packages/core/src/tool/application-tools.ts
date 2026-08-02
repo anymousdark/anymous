@@ -1,6 +1,7 @@
 export * as ApplicationTools from "./application-tools"
 
-import { Context, Effect, Layer, Scope } from "effect"
+import type { Scope } from "effect"
+import { Context, Effect, Layer } from "effect"
 import { State } from "../state"
 import { Tool } from "./tool"
 import { makeGlobalNode } from "../effect/app-node"

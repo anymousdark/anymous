@@ -12,7 +12,8 @@ export async function statsProxy(evt: APIEvent) {
 
   const targetUrl = new URL(req.url)
   targetUrl.protocol = "https:"
-  targetUrl.hostname = Resource.App.stage === "production" ? "stats.anymous-cli.vercel.app" : "stats.dev.anymous-cli.vercel.app"
+  targetUrl.hostname =
+    Resource.App.stage === "production" ? "stats.anymous-cli.vercel.app" : "stats.dev.anymous-cli.vercel.app"
   targetUrl.port = ""
 
   if (

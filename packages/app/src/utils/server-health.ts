@@ -2,7 +2,8 @@ import { usePlatform } from "@/context/platform"
 import { ServerConnection } from "@/context/server"
 import { authTokenFromCredentials, createSdkForServer } from "./server"
 import { ClientError, anymous } from "@anymous-ai/client"
-import { Accessor, createEffect, onCleanup } from "solid-js"
+import type { Accessor } from "solid-js"
+import { createEffect, onCleanup } from "solid-js"
 import { createStore, reconcile } from "solid-js/store"
 
 export type ServerHealth = { healthy: boolean; version?: string }
@@ -85,15 +86,16 @@ export async function checkServerHealth(
       .catch(() => ({ healthy: false }))
   }
   const attempt = async (count: number): Promise<ServerHealth> => {
-    const current = await anymous.make({
-      baseUrl: server.url,
-      fetch,
-      headers: server.password
-        ? {
-            Authorization: `Basic ${authTokenFromCredentials({ username: server.username, password: server.password })}`,
-          }
-        : undefined,
-    })
+    const current = await anymous
+      .make({
+        baseUrl: server.url,
+        fetch,
+        headers: server.password
+          ? {
+              Authorization: `Basic ${authTokenFromCredentials({ username: server.username, password: server.password })}`,
+            }
+          : undefined,
+      })
       .health.get({ signal })
       .then((x) =>
         typeof x.healthy === "boolean"

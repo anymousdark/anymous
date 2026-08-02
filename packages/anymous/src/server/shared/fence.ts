@@ -1,4 +1,4 @@
-import { Database } from "@anymous-ai/core/database/database"
+import type { Database } from "@anymous-ai/core/database/database"
 import { inArray } from "drizzle-orm"
 import { EventSequenceTable } from "@anymous-ai/core/event/sql"
 import { Workspace } from "@/control-plane/workspace"

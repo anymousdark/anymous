@@ -1,12 +1,6 @@
 import { Cause, Context, Effect, Layer, Random } from "effect"
-import {
-  FetchHttpClient,
-  Headers,
-  HttpClient,
-  HttpClientError,
-  HttpClientRequest,
-  HttpClientResponse,
-} from "effect/unstable/http"
+import type { HttpClientRequest, HttpClientResponse } from "effect/unstable/http"
+import { FetchHttpClient, Headers, HttpClient, HttpClientError } from "effect/unstable/http"
 import {
   AuthenticationReason,
   ContentPolicyReason,

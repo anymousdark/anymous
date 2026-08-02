@@ -1,8 +1,8 @@
 import { afterEach, describe, expect } from "bun:test"
-import { SessionV1 } from "@anymous-ai/core/v1/session"
+import type { SessionV1 } from "@anymous-ai/core/v1/session"
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { Effect, Layer } from "effect"
-import { HttpClientResponse } from "effect/unstable/http"
+import type { HttpClientResponse } from "effect/unstable/http"
 import { Session as SessionNs } from "@/session/session"
 import { MessageV2 } from "../../src/session/message-v2"
 

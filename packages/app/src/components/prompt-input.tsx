@@ -1,9 +1,9 @@
 import { useFilteredList } from "@anymous-ai/ui/hooks"
 import { useSpring } from "@anymous-ai/ui/motion-spring"
+import type { Component } from "solid-js"
 import {
   createEffect,
   on,
-  Component,
   Show,
   onCleanup,
   createMemo,
@@ -14,17 +14,8 @@ import {
   type JSX,
 } from "solid-js"
 import { selectionFromLines, type SelectedLineRange, useFile } from "@/context/file"
-import {
-  ContentPart,
-  DEFAULT_PROMPT,
-  isCommentItem,
-  isPromptEqual,
-  Prompt,
-  usePrompt,
-  ImageAttachmentPart,
-  AgentPart,
-  FileAttachmentPart,
-} from "@/context/prompt"
+import type { ContentPart, Prompt, ImageAttachmentPart, AgentPart, FileAttachmentPart } from "@/context/prompt"
+import { DEFAULT_PROMPT, isCommentItem, isPromptEqual, usePrompt } from "@/context/prompt"
 import { useLayout } from "@/context/layout"
 import { useSDK } from "@/context/sdk"
 import { useSync } from "@/context/sync"

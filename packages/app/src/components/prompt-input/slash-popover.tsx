@@ -1,4 +1,5 @@
-import { Component, For, Match, Show, Switch } from "solid-js"
+import type { Component } from "solid-js"
+import { For, Match, Show, Switch } from "solid-js"
 import { FileIcon } from "@anymous-ai/ui/file-icon"
 import { Icon } from "@anymous-ai/ui/icon"
 import { Tag } from "@anymous-ai/ui/v2/badge-v2"

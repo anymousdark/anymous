@@ -1,5 +1,5 @@
+import type { Component } from "solid-js"
 import {
-  Component,
   createEffect,
   createMemo,
   createSignal,
@@ -16,7 +16,7 @@ import {
 import { createStore } from "solid-js/store"
 import stripAnsi from "strip-ansi"
 import { Dynamic } from "solid-js/web"
-import {
+import type {
   AgentPart,
   AssistantMessage,
   FilePart,
