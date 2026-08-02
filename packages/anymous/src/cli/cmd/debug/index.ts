@@ -1,5 +1,5 @@
 import { Global } from "@anymous-ai/core/global"
-import { InstallationVersion } from "@anymous-ai/core/installation/version"
+import { version } from "@/cli/version"
 import { Flag } from "@anymous-ai/core/flag/flag"
 import os from "os"
 import { Duration, Effect } from "effect"
@@ -58,7 +58,7 @@ const InfoCommand = effectCmd({
       : undefined
     const terminal = [termProgram, process.env.TERM].filter((item): item is string => Boolean(item)).join(" / ")
 
-    console.log(`anymous version: ${InstallationVersion}`)
+    console.log(`anymous version: ${version}`)
     console.log(`os: ${os.type()} ${os.release()} ${os.arch()}`)
     console.log(`terminal: ${terminal || "unknown"}`)
     console.log("plugins:")

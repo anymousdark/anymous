@@ -119,6 +119,19 @@ const npmPkg: Record<string, any> = {
   devDependencies: {},
 }
 
+// Inject version into bin/anymous.cjs for npm package
+const binPath = path.join(dist, "bin", "anymous.cjs")
+if (await fs.existsSync(binPath)) {
+  let binContent = await Bun.file(binPath).text()
+  // Replace the bun run command to include version define
+  binContent = binContent.replace(
+    'spawn(bun, ["run", "--conditions=browser", src, ...process.argv.slice(2)]',
+    `spawn(bun, ["run", "--conditions=browser", "--define", "ANYMOUS_VERSION='${npmPkg.version}'", src, ...process.argv.slice(2)]`
+  )
+  await Bun.write(binPath, binContent)
+  console.log("Injected version define into bin/anymous.cjs")
+}
+
 // Resolve workspace deps to actual versions (map @anymous-ai/* -> @opencode-ai/* for npm)
 const npmScope = "@opencode-ai"
 const workspaceDeps = [
@@ -164,3 +177,8 @@ console.log("  cd dist-npm")
 console.log("  npm publish --access public")
 console.log("\nOr test locally:")
 console.log("  cd dist-npm && bun link")
+
+// Sync site landing page badge with the published version
+await $`bun run script/sync-site-version.ts`.cwd(root).catch((error) => {
+  console.warn("Site version sync skipped:", error.message)
+})

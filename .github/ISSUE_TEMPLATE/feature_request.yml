@@ -1,0 +1,34 @@
+---
+name: Feature request
+about: Suggest a new feature or improvement
+title: "[Feature] "
+labels: enhancement
+assignees: ""
+---
+
+## Problem Statement
+
+What problem does this feature solve? Who benefits from it?
+
+## Proposed Solution
+
+A clear description of what you want to happen.
+
+## Alternative Solutions
+
+What alternatives have you considered?
+
+## Implementation Notes
+
+- Which package(s) would be affected? (e.g. `packages/anymous`, `packages/core`)
+- Any breaking changes?
+- Dependencies needed?
+
+## Acceptance Criteria
+
+- [ ] Criterion 1
+- [ ] Criterion 2
+
+## Additional Context
+
+Any other information, mockups, or examples.

@@ -1,6 +1,6 @@
 import { EOL } from "os"
 import { Schema } from "effect"
-import { InstallationVersion } from "@anymous-ai/core/installation/version"
+import { versionBanner, fullBanner } from "./version"
 import { logo as glyphs } from "./logo"
 
 const wordmark = [
@@ -55,7 +55,7 @@ export function logo(pad?: string) {
       result.push(row)
       result.push(EOL)
     }
-    result.push(`AI-Powered Reverse Engineering & Pentest Platform v${InstallationVersion}`)
+    result.push(fullBanner())
     return result.join("")
   }
 
@@ -104,7 +104,15 @@ export function logo(pad?: string) {
     result.push(EOL)
   })
   result.push(Style.TEXT_NORMAL, "─".repeat(45), EOL)
-  result.push(Style.TEXT_INFO, "▸", Style.TEXT_NORMAL, " AI-Powered Reverse Engineering & Pentest Platform  ", Style.TEXT_DIM, `v${InstallationVersion}`, EOL)
+  result.push(
+    Style.TEXT_INFO,
+    "▸",
+    Style.TEXT_NORMAL,
+    " AI-Powered Reverse Engineering & Pentest Platform  ",
+    Style.TEXT_DIM,
+    versionBanner(),
+    EOL,
+  )
   result.push(Style.TEXT_NORMAL, "─".repeat(45))
   return result.join("").trimEnd()
 }

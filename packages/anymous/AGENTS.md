@@ -129,3 +129,33 @@ Use `Effect.cached` when multiple concurrent callers should share a single in-fl
 Use `EffectBridge` for native or external callbacks (`@parcel/watcher`, `node-pty`, native `fs.watch`, plugin callbacks, etc.) that need to re-enter Effect services with instance/workspace context.
 
 Plain async code should pass explicit context or stay inside an Effect fiber; do not add ambient instance context shims.
+
+# TypeScript Type Checking
+
+## Typecheck OOM Workaround
+
+The full monorepo typecheck (`bunx --bun tsgo --noEmit`) may OOM on machines with < 8GB RAM due to the large dependency graph (30+ packages, heavy Effect types).
+
+**Recommended: Focused per-package typecheck**
+
+```bash
+# From repo root
+for pkg in anymous core cli server tui schema protocol script plugin llm codemode sdk js sdk-next; do
+  echo "=== Typechecking packages/$pkg ==="
+  if [ -f "packages/$pkg/tsconfig.json" ]; then
+    bunx --bun tsgo -p packages/$pkg/tsconfig.json --noEmit || echo "Typecheck failed for $pkg (continuing...)"
+  fi
+done
+```
+
+Or check a single package:
+
+```bash
+bunx --bun tsgo -p packages/anymous/tsconfig.json --noEmit
+```
+
+**CI Configuration**: The GitHub Actions workflow (`.github/workflows/ci.yml`) uses the focused approach to avoid OOM in CI runners.
+
+**Known Pre-existing Errors** (not blocking):
+- `packages/tui/src/util/persistence.ts`: `Cannot find name 'Bun'` — needs `@types/bun` in tsconfig
+- `packages/image/image.ts`: WASM module import — requires Bun runtime

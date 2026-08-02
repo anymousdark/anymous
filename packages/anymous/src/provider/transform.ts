@@ -95,7 +95,7 @@ function sdkKey(npm: string): string | undefined {
   return undefined
 }
 
-// TODO: fix this stupid inefficient dogshit function
+// TODO: optimize this function - currently iterates multiple times over messages
 function normalizeMessages(
   msgs: ModelMessage[],
   model: Provider.Model,
