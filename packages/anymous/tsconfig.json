@@ -13,5 +13,5 @@
       "@test/*": ["./test/*"]
     }
   },
-  "exclude": ["dist-npm", "node_modules"]
+  "exclude": ["dist-npm", "node_modules", "skills"]
 }

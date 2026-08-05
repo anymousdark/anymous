@@ -17,3 +17,4 @@ packages/web/src/pages/s/
 *.tsbuildinfo
 
 .anymous/skills/
+packages/anymous/skills/
