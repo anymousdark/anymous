@@ -164,21 +164,46 @@ function verifyBinary() {
   return result.status === 0
 }
 
+function copySkills() {
+  const source = path.join(path.dirname(__dirname), "skills")
+  if (!fs.existsSync(source)) return
+
+  const configRoot =
+    process.env.XDG_CONFIG_HOME || path.join(os.homedir(), ".config")
+  const target = path.join(configRoot, "anymous", "skills")
+  fs.mkdirSync(target, { recursive: true })
+  for (const entry of fs.readdirSync(source, { withFileTypes: true })) {
+    const s = path.join(source, entry.name)
+    const t = path.join(target, entry.name)
+    if (fs.existsSync(t)) fs.rmSync(t, { recursive: true, force: true })
+    fs.cpSync(s, t, { recursive: true })
+  }
+  return true
+}
+
 function main() {
   for (const name of packageNames()) {
     try {
       copyBinary(resolveBinary(name), targetBinary)
-      if (verifyBinary()) return
+      if (verifyBinary()) break
     } catch {
-      if (installPackage(name) && verifyBinary()) return
+      if (installPackage(name) && verifyBinary()) break
     }
   }
 
-  throw new Error(
-    `It seems your package manager failed to install the right anymous CLI package. Try manually installing ${packageNames()
-      .map((name) => JSON.stringify(name))
-      .join(" or ")}.`,
-  )
+  if (!fs.existsSync(targetBinary)) {
+    throw new Error(
+      `It seems your package manager failed to install the right anymous CLI package. Try manually installing ${packageNames()
+        .map((name) => JSON.stringify(name))
+        .join(" or ")}.`,
+    )
+  }
+
+  try {
+    copySkills()
+  } catch (error) {
+    console.error("anymous: could not install bundled skills:", error.message)
+  }
 }
 
 try {

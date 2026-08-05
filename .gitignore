@@ -15,3 +15,5 @@ packages/console/app/src/routes/s/
 packages/web/src/pages/s/
 */.turbo/
 *.tsbuildinfo
+
+.anymous/skills/

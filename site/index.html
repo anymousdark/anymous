@@ -14,10 +14,12 @@
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     html{scroll-behavior:smooth}
-    body{font-family:'Inter',system-ui,sans-serif;background:#000;color:#fafafa;overflow-x:hidden}
+    body{font-family:'Inter',system-ui,sans-serif;background:#000;color:#fafafa;overflow-x:hidden;background-image:url('bg-code.png');background-size:cover;background-position:center;background-attachment:fixed}
+    body::before{content:'';position:fixed;inset:0;z-index:0;background:rgba(0,0,0,0.60)}
     #canvas3d{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0;opacity:0.6}
     section{position:relative;z-index:1}
-    .navbar{position:fixed;top:0;inset-x:0;z-index:50;background:rgba(0,0,0,0.75);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(96,165,250,0.06);height:64px;display:flex;align-items:center}
+    .navbar{position:fixed;top:0;inset-x:0;z-index:50;background:rgba(0,0,0,0.75);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(96,165,250,0.06);height:64px;display:flex;align-items:center;transition:transform 0.3s cubic-bezier(0.4,0,0.2,1)}
+      .navbar.nav-hidden{transform:translateY(-110%)}
     .glass-card{background:rgba(23,23,23,0.5);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(96,165,250,0.06)}
     .card-hover{transition:all 0.3s cubic-bezier(0.4,0,0.2,1)}
     .card-hover:hover{transform:translateY(-4px);border-color:rgba(96,165,250,0.15)!important;box-shadow:0 12px 40px -8px rgba(96,165,250,0.05)}
@@ -35,6 +37,20 @@
     .hero-bg div{width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,0.04),transparent 70%)}
     .badge-glass{background:rgba(30,58,138,0.2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(59,130,246,0.1)}
     .tag-glass{background:rgba(59,130,246,0.06);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+    /* Loader screen */
+    #loader{position:fixed;inset:0;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;background:radial-gradient(ellipse at center,#0a0a0a,#000);transition:opacity 0.6s ease,visibility 0.6s ease}
+    #loader.hide{opacity:0;visibility:hidden;pointer-events:none}
+    .loader-title{font-family:'JetBrains Mono',monospace;font-size:1.4rem;font-weight:700;letter-spacing:0.35em;background:linear-gradient(90deg,#60a5fa,#3b82f6,#1d4ed8);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .loader-sub{font-family:'JetBrains Mono',monospace;font-size:0.75rem;letter-spacing:0.2em;color:#71717a;text-transform:uppercase}
+    .spinner{width:44px;height:44px;animation:spinner-y0fdc1 2s infinite ease;transform-style:preserve-3d}
+    .spinner>div{background-color:rgba(59,130,246,0.2);height:100%;position:absolute;width:100%;border:2px solid #3b82f6}
+    .spinner div:nth-of-type(1){transform:translateZ(-22px) rotateY(180deg)}
+    .spinner div:nth-of-type(2){transform:rotateY(-270deg) translateX(50%);transform-origin:top right}
+    .spinner div:nth-of-type(3){transform:rotateY(270deg) translateX(-50%);transform-origin:center left}
+    .spinner div:nth-of-type(4){transform:rotateX(90deg) translateY(-50%);transform-origin:top center}
+    .spinner div:nth-of-type(5){transform:rotateX(-90deg) translateY(50%);transform-origin:bottom center}
+    .spinner div:nth-of-type(6){transform:translateZ(22px)}
+    @keyframes spinner-y0fdc1{0%{transform:rotate(45deg) rotateX(-25deg) rotateY(25deg)}50%{transform:rotate(45deg) rotateX(-385deg) rotateY(25deg)}100%{transform:rotate(45deg) rotateX(-385deg) rotateY(385deg)}
     /* Mobile adjustments */
     @media (max-width: 768px) {
       .hero-logo{font-size:4.5rem}
@@ -51,6 +67,11 @@
   </style>
 </head>
 <body>
+  <div id="loader">
+    <div class="spinner"><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    <span class="loader-title">anymous</span>
+    <span class="loader-sub">carregando</span>
+  </div>
   <div id="canvas3d"></div>
 
   <nav class="navbar">
@@ -62,10 +83,14 @@
         <a href="#agentes" class="px-5 py-2 text-base text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition">RE</a>
         <a href="#pentest" class="px-5 py-2 text-base text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition">Pentest</a>
         <a href="#funcionalidades" class="px-5 py-2 text-base text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition">Recursos</a>
+        <a href="#skills" class="px-5 py-2 text-base text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition">Skills</a>
         <a href="#instalar" class="px-5 py-2 text-base text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition">Instalar</a>
       </div>
       <div class="flex items-center gap-3">
-        <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-mono badge-glass text-blue-400">v1.2.7</span>
+        <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-mono badge-glass text-blue-400">v, version)
+
+// Copy LICENSE and README
+for (const file of [</span>
         <button id="nav-toggle" aria-label="Abrir menu" class="sm:hidden p-2 rounded-md text-gray-200 hover:bg-white/5">☰</button>
       </div>
     </div>
@@ -74,6 +99,7 @@
         <a href="#agentes" class="px-3 py-2 text-base text-gray-300 rounded">RE</a>
         <a href="#pentest" class="px-3 py-2 text-base text-gray-300 rounded">Pentest</a>
         <a href="#funcionalidades" class="px-3 py-2 text-base text-gray-300 rounded">Recursos</a>
+        <a href="#skills" class="px-3 py-2 text-base text-gray-300 rounded">Skills</a>
         <a href="#instalar" class="px-3 py-2 text-base text-gray-300 rounded">Instalar</a>
       </div>
     </div>
@@ -83,7 +109,7 @@
     <div class="hero-bg"><div></div></div>
     <div class="max-w-5xl mx-auto px-6 py-24 text-center relative w-full">
       <span class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-mono badge-glass text-blue-400 mb-8">Plataforma Open-Source de Engenharia Reversa</span>
-      <div class="hero-logo text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 select-none mb-6">anymous</div>
+      <div class="hero-logo text-transparent bg-clip-text bg-gradient-to-r from-blue-900 via-blue-700 to-blue-800 select-none mb-6">Anymous</div>
       <p class="text-xl sm:text-2xl text-gray-400 font-light max-w-2xl mx-auto leading-relaxed">18 agentes especializados em engenharia reversa e pentest,<br>alimentados por IA. Modo irrestrito incluso.</p>
       <div class="flex flex-wrap justify-center gap-4 mt-12">
         <a href="#instalar" class="inline-flex items-center gap-2 px-9 py-4 rounded-full bg-blue-600 text-white font-semibold text-lg hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/10">
@@ -288,12 +314,71 @@
     </div>
   </section>
 
+<section id="skills" class="relative py-32">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <span class="text-sm font-mono text-blue-400 tracking-widest uppercase mb-4 block">Skills</span>
+        <h2 class="section-title">47 Skills <span>Nativas</span></h2>
+        <p class="text-gray-400 mt-4 text-lg max-w-2xl mx-auto">Pacote de skills embutido no anymous - documentos, arte, testagem, code review, produtividade e mais.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">algorithmic-art</h3><p class="text-gray-400 text-sm leading-relaxed">Cria arte algorítmica com p5.js - aleatoriedade semeada, flow fields, sistemas de partículas e arte generativa.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">artifacts-builder</h3><p class="text-gray-400 text-sm leading-relaxed">Suite para artefatos HTML complexos com React, Tailwind CSS e shadcn/ui.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">brainstorming</h3><p class="text-gray-400 text-sm leading-relaxed">Explora intenção, requisitos e design antes de qualquer trabalho criativo - features, componentes ou mudanças de comportamento.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">brand-guidelines</h3><p class="text-gray-400 text-sm leading-relaxed">Aplica cores e tipografia padronizadas de marca a artefatos que precisam de identidade visual.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">canvas-design</h3><p class="text-gray-400 text-sm leading-relaxed">Cria arte visual em PNG e PDF com filosofia de design - posters, artes e peças estáticas.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">changelog-generator</h3><p class="text-gray-400 text-sm leading-relaxed">Gera changelogs de commits, categorizando e traduzindo commits técnicos em release notes.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">claude-api</h3><p class="text-gray-400 text-sm leading-relaxed">Referência da API Claude/Anthropic - modelos, preços, parâmetros, streaming, tool use, MCP, agentes e caching.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">code-security-auditor</h3><p class="text-gray-400 text-sm leading-relaxed">Auditoria de segurança pré-execução de codebases não confiáveis via análise estática.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">competitive-ads-extractor</h3><p class="text-gray-400 text-sm leading-relaxed">Extrai e analisa anúncios de concorrentes para melhorar suas próprias campanhas.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">content-research-writer</h3><p class="text-gray-400 text-sm leading-relaxed">Conteúdo de alta qualidade com pesquisa, citações, hooks, outlines e feedback em tempo real.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">developer-growth-analysis</h3><p class="text-gray-400 text-sm leading-relaxed">Analisa o histórico de chat para padrões de código, lacunas e oportunidades - relatórios personalizados.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">dispatching-parallel-agents</h3><p class="text-gray-400 text-sm leading-relaxed">Despacha agentes paralelos para 2+ tarefas independentes sem estado compartilhado ou dependências.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">doc-coauthoring</h3><p class="text-gray-400 text-sm leading-relaxed">Workflow estruturado para coautoria de docs, propostas, specs técnicos e documentos de decisão.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">docx</h3><p class="text-gray-400 text-sm leading-relaxed">Cria, lê e edita documentos Word (.docx/.dotx) com formatação profissional, tabelas e imagens.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">domain-name-brainstormer</h3><p class="text-gray-400 text-sm leading-relaxed">Gera ideias criativas de nome de domínio e verifica disponibilidade em vários TLDs.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">executing-plans</h3><p class="text-gray-400 text-sm leading-relaxed">Executa planos de implementação escritos com checkpoints de revisão.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">file-organizer</h3><p class="text-gray-400 text-sm leading-relaxed">Organiza arquivos e pastas de forma inteligente - duplicatas, melhores estruturas e limpeza automatizada.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">finishing-a-development-branch</h3><p class="text-gray-400 text-sm leading-relaxed">Decide como integrar o trabalho quando a implementação está completa e os testes passam.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">frontend-design</h3><p class="text-gray-400 text-sm leading-relaxed">Design visual distintivo e intencional para novas UIs - tipografia e escolhas além do padrão genérico.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">image-enhancer</h3><p class="text-gray-400 text-sm leading-relaxed">Melhora a qualidade de imagens e screenshots - resolução, nitidez e clareza.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">internal-comms</h3><p class="text-gray-400 text-sm leading-relaxed">Comunicação interna - relatórios de status, newsletters, FAQs, incidentes e updates.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">invoice-organizer</h3><p class="text-gray-400 text-sm leading-relaxed">Organiza notas fiscais e despesas para imposto de renda - extração, renomeação e organização.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">lead-research-assistant</h3><p class="text-gray-400 text-sm leading-relaxed">Identifica leads de alta qualidade - análise de negócio, empresas-alvo e estratégias de contato.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">mcp-builder</h3><p class="text-gray-400 text-sm leading-relaxed">Guia para servidores MCP de alta qualidade - Python (FastMCP) ou Node/TypeScript (MCP SDK).</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">meeting-insights-analyzer</h3><p class="text-gray-400 text-sm leading-relaxed">Analisa transcrições de reuniões para padrões de comportamento, comunicação e liderança.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">pdf</h3><p class="text-gray-400 text-sm leading-relaxed">Tudo com PDFs - ler, extrair, mesclar, dividir, rodar, preencher formulários, imagens e OCR.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">pptx</h3><p class="text-gray-400 text-sm leading-relaxed">Cria, lê e edita apresentações (.pptx/.potx) - pitch decks, slides e extração de texto.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">raffle-winner-picker</h3><p class="text-gray-400 text-sm leading-relaxed">Sorteia vencedores justos e imparciais para brindes e concursos com transparência.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">receiving-code-review</h3><p class="text-gray-400 text-sm leading-relaxed">Recebe feedback de code review com rigor técnico e verificação.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">requesting-code-review</h3><p class="text-gray-400 text-sm leading-relaxed">Solicita revisão antes do merge - verifica se o trabalho atende aos requisitos.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">skill-creator</h3><p class="text-gray-400 text-sm leading-relaxed">Cria, edita e otimiza skills - evals, benchmark com variação e ajuste de descrição.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">skill-share</h3><p class="text-gray-400 text-sm leading-relaxed">Cria skills e as compartilha automaticamente para colaboração de equipe.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">slack-gif-creator</h3><p class="text-gray-400 text-sm leading-relaxed">GIFs animados otimizados para Slack - constraints, validação e conceitos de animação.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">staff-engineer-review</h3><p class="text-gray-400 text-sm leading-relaxed">Revisão profunda de PRs como engenheiro Staff+ - arquitetura, qualidade e feedback acionável.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">subagent-driven-development</h3><p class="text-gray-400 text-sm leading-relaxed">Executa planos de implementação com tarefas independentes na sessão via subagents.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">systematic-debugging</h3><p class="text-gray-400 text-sm leading-relaxed">Abordagem sistemática para bugs, falhas de teste ou comportamento inesperado.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">test-driven-development</h3><p class="text-gray-400 text-sm leading-relaxed">TDD para qualquer feature ou bugfix - escreva o teste antes do código de implementação.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">theme-factory</h3><p class="text-gray-400 text-sm leading-relaxed">10 temas prontos com cores e fontes para slides, docs, relatórios e landing pages - ou gere o seu.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">using-git-worktrees</h3><p class="text-gray-400 text-sm leading-relaxed">Cria um workspace isolado via worktrees antes de executar planos.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">using-superpowers</h3><p class="text-gray-400 text-sm leading-relaxed">Estabelece como encontrar e usar skills - invocação antes de qualquer resposta.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">verification-before-completion</h3><p class="text-gray-400 text-sm leading-relaxed">Roda verificação antes de declarar trabalho completo - evidências antes de afirmações.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">video-downloader</h3><p class="text-gray-400 text-sm leading-relaxed">Baixa vídeos de YouTube e outras plataformas - múltiplos formatos e qualidades.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">web-artifacts-builder</h3><p class="text-gray-400 text-sm leading-relaxed">Suite para artefatos HTML com React, Tailwind CSS e shadcn/ui.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">webapp-testing</h3><p class="text-gray-400 text-sm leading-relaxed">Testa apps web locais com Playwright - funcionalidade, UI, screenshots e logs.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">writing-plans</h3><p class="text-gray-400 text-sm leading-relaxed">Escreve planos para tarefas multi-step a partir de spec ou requisitos antes de tocar código.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">writing-skills</h3><p class="text-gray-400 text-sm leading-relaxed">Cria, edita e verifica skills antes do deploy - boas práticas e testes.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">xlsx</h3><p class="text-gray-400 text-sm leading-relaxed">Planilhas - abrir, editar, criar, converter e limpar .xlsx, .csv, .tsv e mais.</p></div>
+      </div>
+    </div>
+  </section>
   <section id="instalar" class="relative py-32">
     <div class="max-w-5xl mx-auto px-6">
       <div class="text-center mb-14">
         <span class="text-sm font-mono text-blue-400 tracking-widest uppercase mb-4 block">Comece Agora</span>
         <h2 class="section-title">Instalação</h2>
-        <p class="text-gray-400 mt-4 text-lg">Publicado no npm como <code class="text-blue-400 px-3 py-1 rounded-full font-mono text-base badge-glass">anymous</code> — requer <a href="https://bun.sh" class="text-blue-400 hover:underline font-medium">Bun</a> runtime.</p>
+        <p class="text-gray-400 mt-4 text-lg">Publicado no npm como <code class="text-blue-400 px-3 py-1 rounded-full font-mono text-base badge-glass">anymous</code> — binário nativo por plataforma.</p>
+        <p class="text-gray-400 mt-3 text-base">Variantes disponíveis: <code class="text-gray-300 font-mono">linux-x64</code>, <code class="text-gray-300 font-mono">linux-arm64</code>, <code class="text-gray-300 font-mono">linux-x64-musl</code>, <code class="text-gray-300 font-mono">darwin-x64</code>, <code class="text-gray-300 font-mono">darwin-arm64</code>, <code class="text-gray-300 font-mono">windows-x64</code> e mais — selecionadas automaticamente no install.</p>
       </div>
       <div class="grid md:grid-cols-3 gap-5">
         <div class="code-block rounded-[1.75rem] card-hover" style="backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)">
@@ -317,7 +402,7 @@
       <p class="text-xl font-bold tracking-[0.25em] text-blue-400 mb-3 font-mono">anymous</p>
       <p class="text-gray-500 text-sm mb-4">Engenharia Reversa com IA — MIT License</p>
       <div class="flex justify-center gap-6 text-sm text-gray-500">
-        <a href="https://github.com/anymous-ai/anymous" class="hover:text-blue-400 transition">GitHub</a>
+        <a href="https://github.com/anymousdark/anymous" class="hover:text-blue-400 transition">GitHub</a>
         <a href="https://www.npmjs.com/package/anymous" class="hover:text-blue-400 transition">npm</a>
       </div>
     </div>
@@ -464,6 +549,35 @@
       setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
     });
   }
+  </script>
+  <script>
+  // Loader - hides after 4s
+  (function(){
+    const loader = document.getElementById('loader')
+    if(!loader) return
+    setTimeout(() => {
+      loader.classList.add('hide')
+    }, 4000)
+  })()
+  </script>
+  <script>
+  // Navbar auto-hide on scroll down, show on scroll up
+  (function(){
+    const navbar = document.querySelector('.navbar')
+    if(!navbar) return
+    let lastY = window.scrollY
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY
+      if(y < 80){
+        navbar.classList.remove('nav-hidden')
+      }else if(y > lastY){
+        navbar.classList.add('nav-hidden')
+      }else{
+        navbar.classList.remove('nav-hidden')
+      }
+      lastY = y
+    }, {passive:true})
+  })()
   </script>
   <script>
   // Mobile menu toggle

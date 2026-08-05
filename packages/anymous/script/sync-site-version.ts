@@ -6,17 +6,12 @@ import path from "path"
 import fs from "fs"
 
 const root = path.resolve(import.meta.dir, "..")
-const preparePath = path.join(root, "script", "prepare-npm.ts")
 const sitePath = path.resolve(root, "../..", "site", "index.html")
 
-// Read version from prepare-npm.ts (single source of truth for npm version)
-const prepare = await Bun.file(preparePath).text()
-const match = prepare.match(/version:\s*"([^"]+)"/)
-if (!match) {
-  console.error("Could not find version in prepare-npm.ts")
-  process.exit(1)
-}
-const version = match[1]
+// Read version from the generated npm package (written by prepare-npm.ts)
+const distPkgPath = path.join(root, "dist-npm", "package.json")
+const distPkg = await Bun.file(distPkgPath).text()
+const version = JSON.parse(distPkg).version as string
 
 if (!(await Bun.file(sitePath).exists())) {
   console.warn(`site/index.html not found at ${sitePath} — skipping`)

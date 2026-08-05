@@ -1,0 +1,715 @@
+{
+    "skills":  [
+                   {
+                       "name":  "algorithmic-art",
+                       "files":  [
+                                     "LICENSE.txt",
+                                     "SKILL.md",
+                                     "templates/generator_template.js",
+                                     "templates/viewer.html"
+                                 ]
+                   },
+                   {
+                       "name":  "artifacts-builder",
+                       "files":  [
+                                     "LICENSE.txt",
+                                     "SKILL.md",
+                                     "scripts/bundle-artifact.sh",
+                                     "scripts/init-artifact.sh",
+                                     "scripts/shadcn-components.tar.gz"
+                                 ]
+                   },
+                   {
+                       "name":  "brainstorming",
+                       "files":  [
+                                     "SKILL.md",
+                                     "spec-document-reviewer-prompt.md",
+                                     "visual-companion.md",
+                                     "scripts/frame-template.html",
+                                     "scripts/helper.js",
+                                     "scripts/server.cjs",
+                                     "scripts/start-server.sh",
+                                     "scripts/stop-server.sh"
+                                 ]
+                   },
+                   {
+                       "name":  "brand-guidelines",
+                       "files":  [
+                                     "LICENSE.txt",
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "canvas-design",
+                       "files":  [
+                                     "LICENSE.txt",
+                                     "SKILL.md",
+                                     "canvas-fonts/ArsenalSC-OFL.txt",
+                                     "canvas-fonts/ArsenalSC-Regular.ttf",
+                                     "canvas-fonts/BigShoulders-Bold.ttf",
+                                     "canvas-fonts/BigShoulders-OFL.txt",
+                                     "canvas-fonts/BigShoulders-Regular.ttf",
+                                     "canvas-fonts/Boldonse-OFL.txt",
+                                     "canvas-fonts/Boldonse-Regular.ttf",
+                                     "canvas-fonts/BricolageGrotesque-Bold.ttf",
+                                     "canvas-fonts/BricolageGrotesque-OFL.txt",
+                                     "canvas-fonts/BricolageGrotesque-Regular.ttf",
+                                     "canvas-fonts/CrimsonPro-Bold.ttf",
+                                     "canvas-fonts/CrimsonPro-Italic.ttf",
+                                     "canvas-fonts/CrimsonPro-OFL.txt",
+                                     "canvas-fonts/CrimsonPro-Regular.ttf",
+                                     "canvas-fonts/DMMono-OFL.txt",
+                                     "canvas-fonts/DMMono-Regular.ttf",
+                                     "canvas-fonts/EricaOne-OFL.txt",
+                                     "canvas-fonts/EricaOne-Regular.ttf",
+                                     "canvas-fonts/GeistMono-Bold.ttf",
+                                     "canvas-fonts/GeistMono-OFL.txt",
+                                     "canvas-fonts/GeistMono-Regular.ttf",
+                                     "canvas-fonts/Gloock-OFL.txt",
+                                     "canvas-fonts/Gloock-Regular.ttf",
+                                     "canvas-fonts/IBMPlexMono-Bold.ttf",
+                                     "canvas-fonts/IBMPlexMono-OFL.txt",
+                                     "canvas-fonts/IBMPlexMono-Regular.ttf",
+                                     "canvas-fonts/IBMPlexSerif-Bold.ttf",
+                                     "canvas-fonts/IBMPlexSerif-BoldItalic.ttf",
+                                     "canvas-fonts/IBMPlexSerif-Italic.ttf",
+                                     "canvas-fonts/IBMPlexSerif-Regular.ttf",
+                                     "canvas-fonts/InstrumentSans-Bold.ttf",
+                                     "canvas-fonts/InstrumentSans-BoldItalic.ttf",
+                                     "canvas-fonts/InstrumentSans-Italic.ttf",
+                                     "canvas-fonts/InstrumentSans-OFL.txt",
+                                     "canvas-fonts/InstrumentSans-Regular.ttf",
+                                     "canvas-fonts/InstrumentSerif-Italic.ttf",
+                                     "canvas-fonts/InstrumentSerif-Regular.ttf",
+                                     "canvas-fonts/Italiana-OFL.txt",
+                                     "canvas-fonts/Italiana-Regular.ttf",
+                                     "canvas-fonts/JetBrainsMono-Bold.ttf",
+                                     "canvas-fonts/JetBrainsMono-OFL.txt",
+                                     "canvas-fonts/JetBrainsMono-Regular.ttf",
+                                     "canvas-fonts/Jura-Light.ttf",
+                                     "canvas-fonts/Jura-Medium.ttf",
+                                     "canvas-fonts/Jura-OFL.txt",
+                                     "canvas-fonts/LibreBaskerville-OFL.txt",
+                                     "canvas-fonts/LibreBaskerville-Regular.ttf",
+                                     "canvas-fonts/Lora-Bold.ttf",
+                                     "canvas-fonts/Lora-BoldItalic.ttf",
+                                     "canvas-fonts/Lora-Italic.ttf",
+                                     "canvas-fonts/Lora-OFL.txt",
+                                     "canvas-fonts/Lora-Regular.ttf",
+                                     "canvas-fonts/NationalPark-Bold.ttf",
+                                     "canvas-fonts/NationalPark-OFL.txt",
+                                     "canvas-fonts/NationalPark-Regular.ttf",
+                                     "canvas-fonts/NothingYouCouldDo-OFL.txt",
+                                     "canvas-fonts/NothingYouCouldDo-Regular.ttf",
+                                     "canvas-fonts/Outfit-Bold.ttf",
+                                     "canvas-fonts/Outfit-OFL.txt",
+                                     "canvas-fonts/Outfit-Regular.ttf",
+                                     "canvas-fonts/PixelifySans-Medium.ttf",
+                                     "canvas-fonts/PixelifySans-OFL.txt",
+                                     "canvas-fonts/PoiretOne-OFL.txt",
+                                     "canvas-fonts/PoiretOne-Regular.ttf",
+                                     "canvas-fonts/RedHatMono-Bold.ttf",
+                                     "canvas-fonts/RedHatMono-OFL.txt",
+                                     "canvas-fonts/RedHatMono-Regular.ttf",
+                                     "canvas-fonts/Silkscreen-OFL.txt",
+                                     "canvas-fonts/Silkscreen-Regular.ttf",
+                                     "canvas-fonts/SmoochSans-Medium.ttf",
+                                     "canvas-fonts/SmoochSans-OFL.txt",
+                                     "canvas-fonts/Tektur-Medium.ttf",
+                                     "canvas-fonts/Tektur-OFL.txt",
+                                     "canvas-fonts/Tektur-Regular.ttf",
+                                     "canvas-fonts/WorkSans-Bold.ttf",
+                                     "canvas-fonts/WorkSans-BoldItalic.ttf",
+                                     "canvas-fonts/WorkSans-Italic.ttf",
+                                     "canvas-fonts/WorkSans-OFL.txt",
+                                     "canvas-fonts/WorkSans-Regular.ttf",
+                                     "canvas-fonts/YoungSerif-OFL.txt",
+                                     "canvas-fonts/YoungSerif-Regular.ttf"
+                                 ]
+                   },
+                   {
+                       "name":  "changelog-generator",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "claude-api",
+                       "files":  [
+                                     "LICENSE.txt",
+                                     "SKILL.md",
+                                     "csharp/claude-api/batches.md",
+                                     "csharp/claude-api/files-api.md",
+                                     "csharp/claude-api/README.md",
+                                     "csharp/claude-api/streaming.md",
+                                     "csharp/claude-api/tool-use.md",
+                                     "curl/examples.md",
+                                     "curl/managed-agents.md",
+                                     "go/claude-api/files-api.md",
+                                     "go/claude-api/README.md",
+                                     "go/claude-api/streaming.md",
+                                     "go/claude-api/tool-use.md",
+                                     "go/managed-agents/README.md",
+                                     "java/claude-api/files-api.md",
+                                     "java/claude-api/README.md",
+                                     "java/claude-api/streaming.md",
+                                     "java/claude-api/tool-use.md",
+                                     "java/managed-agents/README.md",
+                                     "php/claude-api/batches.md",
+                                     "php/claude-api/files-api.md",
+                                     "php/claude-api/README.md",
+                                     "php/claude-api/streaming.md",
+                                     "php/claude-api/tool-use.md",
+                                     "php/managed-agents/README.md",
+                                     "python/claude-api/batches.md",
+                                     "python/claude-api/files-api.md",
+                                     "python/claude-api/README.md",
+                                     "python/claude-api/streaming.md",
+                                     "python/claude-api/tool-use.md",
+                                     "python/managed-agents/README.md",
+                                     "ruby/claude-api/README.md",
+                                     "ruby/claude-api/streaming.md",
+                                     "ruby/claude-api/tool-use.md",
+                                     "ruby/managed-agents/README.md",
+                                     "shared/agent-design.md",
+                                     "shared/anthropic-cli.md",
+                                     "shared/claude-platform-on-aws.md",
+                                     "shared/error-codes.md",
+                                     "shared/live-sources.md",
+                                     "shared/managed-agents-api-reference.md",
+                                     "shared/managed-agents-client-patterns.md",
+                                     "shared/managed-agents-core.md",
+                                     "shared/managed-agents-environments.md",
+                                     "shared/managed-agents-events.md",
+                                     "shared/managed-agents-memory.md",
+                                     "shared/managed-agents-multiagent.md",
+                                     "shared/managed-agents-onboarding.md",
+                                     "shared/managed-agents-outcomes.md",
+                                     "shared/managed-agents-overview.md",
+                                     "shared/managed-agents-scheduled-deployments.md",
+                                     "shared/managed-agents-self-hosted-sandboxes.md",
+                                     "shared/managed-agents-tools.md",
+                                     "shared/managed-agents-webhooks.md",
+                                     "shared/model-migration.md",
+                                     "shared/models.md",
+                                     "shared/platform-availability.md",
+                                     "shared/prompt-caching.md",
+                                     "shared/token-counting.md",
+                                     "shared/tool-use-concepts.md",
+                                     "typescript/claude-api/batches.md",
+                                     "typescript/claude-api/files-api.md",
+                                     "typescript/claude-api/README.md",
+                                     "typescript/claude-api/streaming.md",
+                                     "typescript/claude-api/tool-use.md",
+                                     "typescript/managed-agents/README.md"
+                                 ]
+                   },
+                   {
+                       "name":  "code-security-auditor",
+                       "files":  [
+                                     "SKILL.md",
+                                     "references/package_checks.md"
+                                 ]
+                   },
+                   {
+                       "name":  "competitive-ads-extractor",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "content-research-writer",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "developer-growth-analysis",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "dispatching-parallel-agents",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "doc-coauthoring",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "docx",
+                       "files":  [
+                                     "LICENSE.txt",
+                                     "SKILL.md",
+                                     "scripts/accept_changes.py",
+                                     "scripts/comment.py",
+                                     "scripts/merge_runs.py",
+                                     "scripts/__init__.py",
+                                     "scripts/office/soffice.py",
+                                     "scripts/office/validate.py",
+                                     "scripts/office/helpers/pptx_chart.py",
+                                     "scripts/office/helpers/pptx_slide.py",
+                                     "scripts/office/helpers/pptx_theme.py",
+                                     "scripts/office/helpers/__init__.py",
+                                     "scripts/office/schemas/ecma/fouth-edition/opc-contentTypes.xsd",
+                                     "scripts/office/schemas/ecma/fouth-edition/opc-coreProperties.xsd",
+                                     "scripts/office/schemas/ecma/fouth-edition/opc-digSig.xsd",
+                                     "scripts/office/schemas/ecma/fouth-edition/opc-relationships.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-chart.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-chartDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-diagram.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-lockedCanvas.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-main.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-picture.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-spreadsheetDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-wordprocessingDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/pml.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-additionalCharacteristics.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-bibliography.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-commonSimpleTypes.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlDataProperties.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlSchemaProperties.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesCustom.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesExtended.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesVariantTypes.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-math.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-relationshipReference.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/sml.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/vml-main.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/vml-officeDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/vml-presentationDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/vml-spreadsheetDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/vml-wordprocessingDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/wml.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/xml.xsd",
+                                     "scripts/office/schemas/mce/mc.xsd",
+                                     "scripts/office/schemas/microsoft/wml-2010.xsd",
+                                     "scripts/office/schemas/microsoft/wml-2012.xsd",
+                                     "scripts/office/schemas/microsoft/wml-2018.xsd",
+                                     "scripts/office/schemas/microsoft/wml-cex-2018.xsd",
+                                     "scripts/office/schemas/microsoft/wml-cid-2016.xsd",
+                                     "scripts/office/schemas/microsoft/wml-sdtdatahash-2020.xsd",
+                                     "scripts/office/schemas/microsoft/wml-symex-2015.xsd",
+                                     "scripts/office/validators/base.py",
+                                     "scripts/office/validators/docx.py",
+                                     "scripts/office/validators/pptx.py",
+                                     "scripts/office/validators/redlining.py",
+                                     "scripts/office/validators/__init__.py",
+                                     "scripts/templates/comments.xml",
+                                     "scripts/templates/commentsExtended.xml",
+                                     "scripts/templates/commentsExtensible.xml",
+                                     "scripts/templates/commentsIds.xml",
+                                     "scripts/templates/people.xml"
+                                 ]
+                   },
+                   {
+                       "name":  "domain-name-brainstormer",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "executing-plans",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "file-organizer",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "finishing-a-development-branch",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "frontend-design",
+                       "files":  [
+                                     "LICENSE.txt",
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "image-enhancer",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "internal-comms",
+                       "files":  [
+                                     "LICENSE.txt",
+                                     "SKILL.md",
+                                     "examples/3p-updates.md",
+                                     "examples/company-newsletter.md",
+                                     "examples/faq-answers.md",
+                                     "examples/general-comms.md"
+                                 ]
+                   },
+                   {
+                       "name":  "invoice-organizer",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "lead-research-assistant",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "mcp-builder",
+                       "files":  [
+                                     "LICENSE.txt",
+                                     "SKILL.md",
+                                     "reference/evaluation.md",
+                                     "reference/mcp_best_practices.md",
+                                     "reference/node_mcp_server.md",
+                                     "reference/python_mcp_server.md",
+                                     "scripts/connections.py",
+                                     "scripts/evaluation.py",
+                                     "scripts/example_evaluation.xml",
+                                     "scripts/requirements.txt"
+                                 ]
+                   },
+                   {
+                       "name":  "meeting-insights-analyzer",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "pdf",
+                       "files":  [
+                                     "forms.md",
+                                     "LICENSE.txt",
+                                     "reference.md",
+                                     "SKILL.md",
+                                     "scripts/check_bounding_boxes.py",
+                                     "scripts/check_fillable_fields.py",
+                                     "scripts/convert_pdf_to_images.py",
+                                     "scripts/create_validation_image.py",
+                                     "scripts/extract_form_field_info.py",
+                                     "scripts/extract_form_structure.py",
+                                     "scripts/fill_fillable_fields.py",
+                                     "scripts/fill_pdf_form_with_annotations.py"
+                                 ]
+                   },
+                   {
+                       "name":  "pptx",
+                       "files":  [
+                                     "LICENSE.txt",
+                                     "SKILL.md",
+                                     "scripts/add_slide.py",
+                                     "scripts/clean.py",
+                                     "scripts/thumbnail.py",
+                                     "scripts/__init__.py",
+                                     "scripts/office/soffice.py",
+                                     "scripts/office/validate.py",
+                                     "scripts/office/helpers/pptx_chart.py",
+                                     "scripts/office/helpers/pptx_slide.py",
+                                     "scripts/office/helpers/pptx_theme.py",
+                                     "scripts/office/helpers/__init__.py",
+                                     "scripts/office/schemas/ecma/fouth-edition/opc-contentTypes.xsd",
+                                     "scripts/office/schemas/ecma/fouth-edition/opc-coreProperties.xsd",
+                                     "scripts/office/schemas/ecma/fouth-edition/opc-digSig.xsd",
+                                     "scripts/office/schemas/ecma/fouth-edition/opc-relationships.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-chart.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-chartDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-diagram.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-lockedCanvas.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-main.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-picture.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-spreadsheetDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-wordprocessingDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/pml.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-additionalCharacteristics.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-bibliography.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-commonSimpleTypes.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlDataProperties.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlSchemaProperties.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesCustom.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesExtended.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesVariantTypes.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-math.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-relationshipReference.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/sml.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/vml-main.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/vml-officeDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/vml-presentationDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/vml-spreadsheetDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/vml-wordprocessingDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/wml.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/xml.xsd",
+                                     "scripts/office/schemas/mce/mc.xsd",
+                                     "scripts/office/schemas/microsoft/wml-2010.xsd",
+                                     "scripts/office/schemas/microsoft/wml-2012.xsd",
+                                     "scripts/office/schemas/microsoft/wml-2018.xsd",
+                                     "scripts/office/schemas/microsoft/wml-cex-2018.xsd",
+                                     "scripts/office/schemas/microsoft/wml-cid-2016.xsd",
+                                     "scripts/office/schemas/microsoft/wml-sdtdatahash-2020.xsd",
+                                     "scripts/office/schemas/microsoft/wml-symex-2015.xsd",
+                                     "scripts/office/validators/base.py",
+                                     "scripts/office/validators/docx.py",
+                                     "scripts/office/validators/pptx.py",
+                                     "scripts/office/validators/redlining.py",
+                                     "scripts/office/validators/__init__.py"
+                                 ]
+                   },
+                   {
+                       "name":  "raffle-winner-picker",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "receiving-code-review",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "requesting-code-review",
+                       "files":  [
+                                     "code-reviewer.md",
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "skill-creator",
+                       "files":  [
+                                     "LICENSE.txt",
+                                     "SKILL.md",
+                                     "agents/analyzer.md",
+                                     "agents/comparator.md",
+                                     "agents/grader.md",
+                                     "assets/eval_review.html",
+                                     "eval-viewer/generate_review.py",
+                                     "eval-viewer/viewer.html",
+                                     "references/schemas.md",
+                                     "scripts/aggregate_benchmark.py",
+                                     "scripts/generate_report.py",
+                                     "scripts/improve_description.py",
+                                     "scripts/package_skill.py",
+                                     "scripts/quick_validate.py",
+                                     "scripts/run_eval.py",
+                                     "scripts/run_loop.py",
+                                     "scripts/utils.py",
+                                     "scripts/__init__.py"
+                                 ]
+                   },
+                   {
+                       "name":  "skill-share",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "slack-gif-creator",
+                       "files":  [
+                                     "LICENSE.txt",
+                                     "requirements.txt",
+                                     "SKILL.md",
+                                     "core/easing.py",
+                                     "core/frame_composer.py",
+                                     "core/gif_builder.py",
+                                     "core/validators.py"
+                                 ]
+                   },
+                   {
+                       "name":  "staff-engineer-review",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "subagent-driven-development",
+                       "files":  [
+                                     "implementer-prompt.md",
+                                     "re-review-prompt.md",
+                                     "SKILL.md",
+                                     "task-reviewer-prompt.md",
+                                     "scripts/review-package",
+                                     "scripts/sdd-workspace",
+                                     "scripts/task-brief"
+                                 ]
+                   },
+                   {
+                       "name":  "systematic-debugging",
+                       "files":  [
+                                     "condition-based-waiting-example.ts",
+                                     "condition-based-waiting.md",
+                                     "CREATION-LOG.md",
+                                     "defense-in-depth.md",
+                                     "find-polluter.sh",
+                                     "root-cause-tracing.md",
+                                     "SKILL.md",
+                                     "test-academic.md",
+                                     "test-pressure-1.md",
+                                     "test-pressure-2.md",
+                                     "test-pressure-3.md"
+                                 ]
+                   },
+                   {
+                       "name":  "test-driven-development",
+                       "files":  [
+                                     "SKILL.md",
+                                     "writing-good-tests.md"
+                                 ]
+                   },
+                   {
+                       "name":  "theme-factory",
+                       "files":  [
+                                     "LICENSE.txt",
+                                     "SKILL.md",
+                                     "theme-showcase.pdf",
+                                     "themes/arctic-frost.md",
+                                     "themes/botanical-garden.md",
+                                     "themes/desert-rose.md",
+                                     "themes/forest-canopy.md",
+                                     "themes/golden-hour.md",
+                                     "themes/midnight-galaxy.md",
+                                     "themes/modern-minimalist.md",
+                                     "themes/ocean-depths.md",
+                                     "themes/sunset-boulevard.md",
+                                     "themes/tech-innovation.md"
+                                 ]
+                   },
+                   {
+                       "name":  "using-git-worktrees",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "using-superpowers",
+                       "files":  [
+                                     "SKILL.md",
+                                     "references/antigravity-tools.md",
+                                     "references/codex-tools.md",
+                                     "references/gemini-tools.md",
+                                     "references/pi-tools.md"
+                                 ]
+                   },
+                   {
+                       "name":  "verification-before-completion",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "video-downloader",
+                       "files":  [
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "web-artifacts-builder",
+                       "files":  [
+                                     "LICENSE.txt",
+                                     "SKILL.md",
+                                     "scripts/bundle-artifact.sh",
+                                     "scripts/init-artifact.sh",
+                                     "scripts/shadcn-components.tar.gz"
+                                 ]
+                   },
+                   {
+                       "name":  "webapp-testing",
+                       "files":  [
+                                     "LICENSE.txt",
+                                     "SKILL.md",
+                                     "examples/console_logging.py",
+                                     "examples/element_discovery.py",
+                                     "examples/static_html_automation.py",
+                                     "scripts/with_server.py"
+                                 ]
+                   },
+                   {
+                       "name":  "writing-plans",
+                       "files":  [
+                                     "plan-document-reviewer-prompt.md",
+                                     "SKILL.md"
+                                 ]
+                   },
+                   {
+                       "name":  "writing-skills",
+                       "files":  [
+                                     "anthropic-best-practices.md",
+                                     "graphviz-conventions.dot",
+                                     "persuasion-principles.md",
+                                     "render-graphs.js",
+                                     "SKILL.md",
+                                     "testing-skills-with-subagents.md",
+                                     "examples/CLAUDE_MD_TESTING.md"
+                                 ]
+                   },
+                   {
+                       "name":  "xlsx",
+                       "files":  [
+                                     "LICENSE.txt",
+                                     "SKILL.md",
+                                     "scripts/recalc.py",
+                                     "scripts/office/soffice.py",
+                                     "scripts/office/validate.py",
+                                     "scripts/office/helpers/pptx_chart.py",
+                                     "scripts/office/helpers/pptx_slide.py",
+                                     "scripts/office/helpers/pptx_theme.py",
+                                     "scripts/office/helpers/__init__.py",
+                                     "scripts/office/schemas/ecma/fouth-edition/opc-contentTypes.xsd",
+                                     "scripts/office/schemas/ecma/fouth-edition/opc-coreProperties.xsd",
+                                     "scripts/office/schemas/ecma/fouth-edition/opc-digSig.xsd",
+                                     "scripts/office/schemas/ecma/fouth-edition/opc-relationships.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-chart.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-chartDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-diagram.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-lockedCanvas.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-main.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-picture.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-spreadsheetDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/dml-wordprocessingDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/pml.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-additionalCharacteristics.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-bibliography.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-commonSimpleTypes.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlDataProperties.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlSchemaProperties.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesCustom.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesExtended.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesVariantTypes.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-math.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/shared-relationshipReference.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/sml.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/vml-main.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/vml-officeDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/vml-presentationDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/vml-spreadsheetDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/vml-wordprocessingDrawing.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/wml.xsd",
+                                     "scripts/office/schemas/ISO-IEC29500-4_2016/xml.xsd",
+                                     "scripts/office/schemas/mce/mc.xsd",
+                                     "scripts/office/schemas/microsoft/wml-2010.xsd",
+                                     "scripts/office/schemas/microsoft/wml-2012.xsd",
+                                     "scripts/office/schemas/microsoft/wml-2018.xsd",
+                                     "scripts/office/schemas/microsoft/wml-cex-2018.xsd",
+                                     "scripts/office/schemas/microsoft/wml-cid-2016.xsd",
+                                     "scripts/office/schemas/microsoft/wml-sdtdatahash-2020.xsd",
+                                     "scripts/office/schemas/microsoft/wml-symex-2015.xsd",
+                                     "scripts/office/validators/base.py",
+                                     "scripts/office/validators/docx.py",
+                                     "scripts/office/validators/pptx.py",
+                                     "scripts/office/validators/redlining.py",
+                                     "scripts/office/validators/__init__.py"
+                                 ]
+                   }
+               ]
+}
