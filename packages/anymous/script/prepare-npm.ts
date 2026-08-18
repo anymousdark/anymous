@@ -32,20 +32,44 @@ for (const file of ["LICENSE", "README.md"]) {
 const postinstallSrc = path.join(root, "script", "postinstall.mjs")
 await fs.copyFileSync(postinstallSrc, path.join(dist, "postinstall.mjs"))
 
-// Create bin/ dir with a placeholder shim. The postinstall script overwrites
-// this file with the real platform binary. If postinstall did not run (e.g.
-// --ignore-scripts), the placeholder prints a helpful error instead of a
-// cryptic "command not found".
-const shim = `#!/usr/bin/env bash
-echo "Error: anymous's postinstall script was not run." >&2
-echo "" >&2
-echo "This occurs when using --ignore-scripts during installation, or when using a" >&2
-echo "package manager like pnpm that does not run postinstall scripts by default." >&2
-echo "" >&2
-exit 1
+// Create bin/ with a node shim that runs the real binary (bin/anymous.exe).
+// The postinstall script overwrites the binary with the real platform binary.
+// If postinstall did not run (e.g. --ignore-scripts), the shim prints a
+// helpful error instead of a cryptic "command not found".
+const shim = `#!/usr/bin/env node
+
+import { spawnSync } from "child_process"
+import fs from "fs"
+import path from "path"
+import { fileURLToPath } from "url"
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const binaryPath = path.join(__dirname, "anymous.exe")
+
+if (!fs.existsSync(binaryPath)) {
+  console.error(
+    "Error: anymous binary not found at",
+    binaryPath,
+    "\\n\\nThis occurs when using --ignore-scripts during installation, or when using a",
+    "\\npackage manager like pnpm that does not run postinstall scripts by default.",
+  )
+  process.exit(1)
+}
+
+const result = spawnSync(binaryPath, process.argv.slice(2), {
+  stdio: "inherit",
+  windowsHide: true,
+})
+
+if (result.error) {
+  console.error("Error: failed to run anymous:", result.error.message)
+  process.exit(1)
+}
+
+process.exit(result.status ?? 0)
 `
 await fs.mkdirSync(path.join(dist, "bin"), { recursive: true })
-await Bun.write(path.join(dist, "bin", "anymous.exe"), shim)
+await Bun.write(path.join(dist, "bin", "anymous.js"), shim)
 
 // Optional platform binary packages, matching the targets in script/build.ts
 const platformPackages: Record<string, string> = {
@@ -65,7 +89,7 @@ const platformPackages: Record<string, string> = {
 
 const npmPkg = {
   name: "anymous",
-  bin: { anymous: "./bin/anymous.exe" },
+  bin: { anymous: "./bin/anymous.js" },
   scripts: { postinstall: "node ./postinstall.mjs" },
   version,
   description: "AI-powered reverse engineering platform",
