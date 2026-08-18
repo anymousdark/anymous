@@ -50,6 +50,10 @@ const createEmbeddedWebUIBundle = async () => {
 
 const embeddedFileMap = skipEmbedWebUi ? null : await createEmbeddedWebUIBundle()
 const treeSitterWorker = await Bun.file(fileURLToPath(import.meta.resolve("@opentui/core/parser.worker"))).text()
+const treeSitterWorkerPath = "opentui-tree-sitter-worker.js"
+// Bun.build `files` map virtual entrypoints are broken on Windows (ModuleNotFound resolving ... (entry point)),
+// see oven-sh/bun#38650. Write the worker to a real file and bundle it as an entrypoint instead.
+await Bun.write(path.join(dir, treeSitterWorkerPath), treeSitterWorker)
 
 const allTargets: {
   os: string
@@ -171,7 +175,6 @@ for (const item of targets) {
   await $`mkdir -p dist/${name}/bin`
 
   const workerPath = "./src/cli/tui/worker.ts"
-  const treeSitterWorkerPath = "opentui-tree-sitter-worker.js"
   const bunfsRoot = item.os === "win32" ? "B:/~BUN/root/" : "/$bunfs/root/"
 
   await Bun.build({
@@ -194,13 +197,12 @@ for (const item of targets) {
       windows: {},
     },
     files: {
-      [treeSitterWorkerPath]: treeSitterWorker,
       ...(embeddedFileMap ? { "anymous-web-ui.gen.ts": embeddedFileMap } : {}),
     },
     entrypoints: [
       "./src/index.ts",
       workerPath,
-      treeSitterWorkerPath,
+      `./${treeSitterWorkerPath}`,
       ...(embeddedFileMap ? ["anymous-web-ui.gen.ts"] : []),
     ],
     define: {
@@ -245,6 +247,8 @@ for (const item of targets) {
   )
   binaries[name] = Script.version
 }
+
+await $`rm -f ${treeSitterWorkerPath}`
 
 if (Script.release) {
   for (const key of Object.keys(binaries)) {
