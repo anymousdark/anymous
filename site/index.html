@@ -354,6 +354,10 @@
         <button class="skill-tab" data-cat="media" role="tab" aria-selected="false">Mídia</button>
         <button class="skill-tab" data-cat="skills" role="tab" aria-selected="false">Skills & Agentes</button>
         <button class="skill-tab" data-cat="ref" role="tab" aria-selected="false">Referência & Segurança</button>
+        <button class="skill-tab" data-cat="re-agents" role="tab" aria-selected="false">Agentes RE</button>
+        <button class="skill-tab" data-cat="pentest-agents" role="tab" aria-selected="false">Agentes Pentest</button>
+        <button class="skill-tab" data-cat="re-skills" role="tab" aria-selected="false">Skills RE</button>
+        <button class="skill-tab" data-cat="pentest-skills" role="tab" aria-selected="false">Skills Pentest</button>
       </div>
       <div class="skill-panel active" data-cat="docs" role="tabpanel">
         <p class="skill-count">5 skills — Documentos</p>
@@ -452,6 +456,56 @@
         <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">code-security-auditor</h3><p class="text-gray-400 text-sm leading-relaxed">Auditoria de segurança pré-execução de codebases não confiáveis via análise estática.</p></div>
         </div>
       </div>
+      <div class="skill-panel" data-cat="re-agents" role="tabpanel">
+        <p class="skill-count">6 agents — Engenharia Reversa</p>
+        <div class="skill-grid">
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">ghidra-static</h3><p class="text-gray-400 text-sm leading-relaxed">Análise estática de binários com Ghidra headless - descompilação, detecção de packers, pipelines multi-fase P0-P4.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">ghidra-dynamic</h3><p class="text-gray-400 text-sm leading-relaxed">Análise dinâmica com Ghidra + Frida - correlação estático-dinâmico, memory dumping, bypass anti-debug, unpacking.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">ida-pro</h3><p class="text-gray-400 text-sm leading-relaxed">Engenharia reversa com IDA Pro/Hex-Rays - IDAPython, MCP, microcode, FLIRT, Lumina, diffing binário.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">binary-ninja</h3><p class="text-gray-400 text-sm leading-relaxed">BNIL (LLIL/MLIL/HLIL) headless - deobfuscação avançada: CFG flattening, opaque predicates, MBA expressions.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">frida-dynamic</h3><p class="text-gray-400 text-sm leading-relaxed">Instrumentação runtime com Frida - API hooking, memory manipulation, anti-analysis bypass, rexd MCP.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">malware-analyst</h3><p class="text-gray-400 text-sm leading-relaxed">Análise completa de malware - static/dynamic/behavioral, IOCs, ATT&CK mapping, YARA, classificação família.</p></div>
+        </div>
+      </div>
+      <div class="skill-panel" data-cat="pentest-agents" role="tabpanel">
+        <p class="skill-count">9 agents — Penetration Testing</p>
+        <div class="skill-grid">
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">cloud-pentest</h3><p class="text-gray-400 text-sm leading-relaxed">Pentest cloud AWS/GCP/Azure - IAM privilege escalation, IMDS exploitation, container escape, serverless abuse.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">mobile-pentest</h3><p class="text-gray-400 text-sm leading-relaxed">Pentest mobile iOS/Android - static (jadx, apktool), dynamic (Frida, Objection), network interception.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">api-security</h3><p class="text-gray-400 text-sm leading-relaxed">Teste de APIs REST/GraphQL/gRPC/WebSocket - BOLA/IDOR, JWT attacks, batching, business logic flaws.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">ad-attacker</h3><p class="text-gray-400 text-sm leading-relaxed">Active Directory & Entra ID - Kerberoasting, AS-REP, DCSync, delegation abuse, AD CS, Azure AD pivot.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">evasion-specialist</h3><p class="text-gray-400 text-sm leading-relaxed">Evasão EDR/AV/WAF - direct syscalls, sleep obfuscation, domain fronting, traffic obfuscation, OPSEC hygiene.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">persistence-planner</h3><p class="text-gray-400 text-sm leading-relaxed">Persistência cross-platform - Windows registry/WMI, Linux systemd/cron, cloud IAM/Lambda, survival validation.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">scada-attacker</h3><p class="text-gray-400 text-sm leading-relaxed">SCADA/ICS/OT - Modbus/DNP3/IEC104/OPC UA, PLC/HMI firmware, Purdue model, safety-first protocolos.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">iot-pentester</h3><p class="text-gray-400 text-sm leading-relaxed">IoT/embedded - firmware analysis, hardware interfaces (UART/JTAG/SPI), wireless (BLE/Zigbee/LoRa), cloud APIs.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">llm-redteam</h3><p class="text-gray-400 text-sm leading-relaxed">LLM/AI security - OWASP LLM Top 10, prompt injection, RAG poisoning, tool/plugin abuse, model extraction.</p></div>
+        </div>
+      </div>
+      <div class="skill-panel" data-cat="re-skills" role="tabpanel">
+        <p class="skill-count">5 skills — Engenharia Reversa</p>
+        <div class="skill-grid">
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">ghidra-headless</h3><p class="text-gray-400 text-sm leading-relaxed">Pipeline 8 fases: PE Triage → FLOSS → YARA → CAPA → Ghidra decompile → IOC extract → Classify. Auto-fallback.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">malware-unpacker</h3><p class="text-gray-400 text-sm leading-relaxed">Unpacking estático/dinâmico - PEiD, manual, memory dumping (memdump-racer, TinyTracer, x64dbg), shellcode emulation.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">ioc-extractor</h3><p class="text-gray-400 text-sm leading-relaxed">Extração IOCs defensivos - IPs, domains, URLs, hashes, mutexes, registry, file paths. Evidence-first, no invented indicators.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">binary-patcher</h3><p class="text-gray-400 text-sm leading-relaxed">Patch binário anti-VM - VMware drivers, CPUID, MAC prefixes. Re-encryption .enc.gz quarantine format.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">ollvm-deobfuscation</h3><p class="text-gray-400 text-sm leading-relaxed">Desobfuscação OLLVM - control flow flattening, bogus control flow, instruction substitution via LLVM IR lifting.</p></div>
+        </div>
+      </div>
+      <div class="skill-panel" data-cat="pentest-skills" role="tabpanel">
+        <p class="skill-count">10 skills — Penetration Testing</p>
+        <div class="skill-grid">
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">ssrf-hunter</h3><p class="text-gray-400 text-sm leading-relaxed">SSRF discovery - filter bypasses, cloud metadata (AWS/GCP/Azure IMDS), internal services, protocol smuggling.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">ssti-hunter</h3><p class="text-gray-400 text-sm leading-relaxed">SSTI fingerprinting + escalation - Jinja2, Twig, FreeMarker, ERB, Mako, Smarty, EL. RCE proof.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">jwt-cracker</h3><p class="text-gray-400 text-sm leading-relaxed">JWT/OIDC attacks - alg:none, kid/jku abuse, weak HMAC, key confusion, token entropy, logout invalidation.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">graphql-hunter</h3><p class="text-gray-400 text-sm leading-relaxed">GraphQL security - introspection, authz gaps, batching attacks, depth complexity, alias overloading.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">race-condition</h3><p class="text-gray-400 text-sm leading-relaxed">TOCTOU/double-spend - concurrent request racing, verification logic, limit bypasses.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">takeover</h3><p class="text-gray-400 text-sm leading-relaxed">Subdomain takeover & dangling DNS - unclaimed cloud resources, validation automation.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">supabase-security</h3><p class="text-gray-400 text-sm leading-relaxed">Supabase/PostgREST/RLS - anonymous access, policy bypass, storage exposure, realtime authz.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">deserialize</h3><p class="text-gray-400 text-sm leading-relaxed">Unsafe deserialization - Java, PHP, Python pickle, .NET ViewState, gadget chain testing.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">container-escape</h3><p class="text-gray-400 text-sm leading-relaxed">Docker/K8s breakout - pod-to-node-to-cluster, runc/CVE exploits, host path mounts, privileged containers.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">cicd-redteam</h3><p class="text-gray-400 text-sm leading-relaxed">CI/CD supply chain - pipeline-driven SAST/DAST, secret scans, artifact poisoning, dependency confusion.</p></div>
+        </div>
+      </div>
     </div>
   </section>
   <section id="instalar" class="relative py-32">
@@ -460,7 +514,7 @@
         <span class="text-sm font-mono text-blue-400 tracking-widest uppercase mb-4 block">Comece Agora</span>
         <h2 class="section-title">Instalação</h2>
         <p class="text-gray-400 mt-4 text-lg">Publicado no npm como <code class="text-blue-400 px-3 py-1 rounded-full font-mono text-base badge-glass">anymous</code> — binário nativo por plataforma.</p>
-        <p class="text-gray-400 mt-3 text-base">Variantes disponíveis: <code class="text-gray-300 font-mono">linux-x64</code>, <code class="text-gray-300 font-mono">linux-arm64</code>, <code class="text-gray-300 font-mono">linux-x64-musl</code>, <code class="text-gray-300 font-mono">darwin-x64</code>, <code class="text-gray-300 font-mono">darwin-arm64</code>, <code class="text-gray-300 font-mono">windows-x64</code> e mais — selecionadas automaticamente no install.</p>
+        <p class="text-gray-400 mt-3 text-base">Versão <strong>v1.3.5</strong> — 30+ novos agentes RE/Pentest, 15 skills especializadas, modo irrestrito por padrão. Variantes: <code class="text-gray-300 font-mono">linux-x64</code>, <code class="text-gray-300 font-mono">linux-arm64</code>, <code class="text-gray-300 font-mono">linux-x64-musl</code>, <code class="text-gray-300 font-mono">darwin-x64</code>, <code class="text-gray-300 font-mono">darwin-arm64</code>, <code class="text-gray-300 font-mono">windows-x64</code> — selecionadas automaticamente.</p>
       </div>
       <div class="grid md:grid-cols-3 gap-5">
         <div class="code-block rounded-[1.75rem] card-hover" style="backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)">
@@ -482,7 +536,7 @@
   <footer class="border-t border-gray-800 py-12 text-center relative">
     <div class="max-w-3xl mx-auto px-6">
       <p class="text-xl font-bold tracking-[0.25em] text-blue-400 mb-3 font-mono">anymous</p>
-      <p class="text-gray-500 text-sm mb-4">Engenharia Reversa com IA — MIT License — v1.3.4</p>
+      <p class="text-gray-500 text-sm mb-4">Engenharia Reversa com IA — MIT License — v1.3.5</p>
       <div class="flex justify-center gap-6 text-sm text-gray-500">
         <a href="https://github.com/anymousdark/anymous" class="hover:text-blue-400 transition">GitHub</a>
         <a href="https://www.npmjs.com/package/anymous" class="hover:text-blue-400 transition">npm</a>
