@@ -87,8 +87,25 @@ const platformPackages: Record<string, string> = {
   "anymous-linux-x64-musl": version,
 }
 
+// Provide a valid CommonJS entry point so analyzers (npmjs/BundlePhobia)
+// can resolve the package even though this is a binary-distribution wrapper.
+const indexJs = `"use strict";
+// anymous is distributed as native platform binaries selected at install time
+// via optionalDependencies + postinstall. This entry point exists so package
+// analyzers can resolve the module; consumers should use the "anymous" bin.
+module.exports = {
+  name: "anymous",
+  version: ${JSON.stringify(version)},
+  description: "AI-powered reverse engineering platform",
+  bin: "bin/anymous.js",
+};
+`
+await Bun.write(path.join(dist, "index.js"), indexJs)
+
 const npmPkg = {
   name: "anymous",
+  main: "index.js",
+  type: "commonjs",
   bin: { anymous: "./bin/anymous.js" },
   scripts: { postinstall: "node ./postinstall.mjs" },
   version,
