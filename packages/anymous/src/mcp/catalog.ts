@@ -3,6 +3,7 @@ import {
   CallToolResultSchema,
   ListToolsResultSchema,
   ToolSchema,
+  type CallToolResult,
   type Tool as MCPToolDef,
 } from "@modelcontextprotocol/sdk/types.js"
 import { dynamicTool, jsonSchema, type JSONSchema7, type Tool } from "ai"
@@ -51,7 +52,8 @@ export function convertTool(mcpTool: MCPToolDef, client: Client, timeout?: numbe
     description: mcpTool.description ?? "",
     inputSchema: jsonSchema(inputSchema),
     execute: async (args: unknown, options) => {
-      const result = await client.callTool(
+      // SDK 1.29 returns `CallToolResult | { toolResult }` (task execution); the passed schema guarantees the former.
+      const result = (await client.callTool(
         {
           name: mcpTool.name,
           arguments: (args || {}) as Record<string, unknown>,
@@ -64,7 +66,7 @@ export function convertTool(mcpTool: MCPToolDef, client: Client, timeout?: numbe
           // The MCP SDK only sends a progress token when this hook is present, enabling timeout resets.
           onprogress: () => {},
         },
-      )
+      )) as CallToolResult
       if (result.isError)
         throw new Error(
           result.content
@@ -144,19 +146,31 @@ export function resourceTemplates(client: Client, timeout?: number) {
 
 function listTools(client: Client, timeout: number) {
   return Effect.tryPromise({
-    try: () =>
-      paginate(
+    try: async () => {
+      let tolerant = false
+      const tools = await paginate(
         async (cursor) => {
           const params = cursor === undefined ? undefined : { cursor }
           try {
             return await client.listTools(params, { timeout })
           } catch (error) {
             if (!(error instanceof Error) || !isOutputSchemaValidationError(error)) throw error
+            tolerant = true
             return client.request({ method: "tools/list", params }, TolerantListToolsResultSchema, { timeout })
           }
         },
         (result) => result.tools,
-      ),
+      )
+      // The SDK keeps only the LAST page's output-schema validators after
+      // paginated discovery (every listTools() call clears its internal
+      // cache first). Re-arm it with the full union so callTool validates
+      // every discovered tool. Skipped on the tolerant path because that
+      // schema deliberately strips outputSchema.
+      if (!tolerant && tools.length > 0) {
+        ;(client as unknown as { cacheToolMetadata?: (tools: MCPToolDef[]) => void }).cacheToolMetadata?.(tools)
+      }
+      return tools
+    },
     catch: (error) => (error instanceof Error ? error : new Error(String(error))),
   })
 }

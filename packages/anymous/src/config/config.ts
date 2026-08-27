@@ -267,42 +267,48 @@ const layer = Layer.effect(
 
       // Default providers (like opencode - pre-configured but require /connect for API keys)
       if (!result.provider || Object.keys(result.provider).length === 0) {
+        const defaultEnvKeys: Record<string, string> = {
+          anthropic: "ANTHROPIC_API_KEY",
+          openai: "OPENAI_API_KEY",
+          google: "GOOGLE_API_KEY",
+          deepseek: "DEEPSEEK_API_KEY",
+        }
         result.provider = {
           anthropic: {
             name: "Anthropic",
             api: "@ai-sdk/anthropic",
-            options: { apiKey: "{env:ANTHROPIC_API_KEY}" },
+            options: {},
             models: {
               "claude-3-5-sonnet-20241022": { name: "Claude 3.5 Sonnet" },
-              "claude-3-5-haiku-20241022": { name: "Claude 3.5 Haiku" }
-            }
+              "claude-3-5-haiku-20241022": { name: "Claude 3.5 Haiku" },
+            },
           },
           openai: {
             name: "OpenAI",
             api: "@ai-sdk/openai",
-            options: { apiKey: "{env:OPENAI_API_KEY}" },
+            options: {},
             models: {
               "gpt-4o": { name: "GPT-4o" },
-              "gpt-4o-mini": { name: "GPT-4o Mini" }
-            }
+              "gpt-4o-mini": { name: "GPT-4o Mini" },
+            },
           },
           google: {
             name: "Google",
             api: "@ai-sdk/google",
-            options: { apiKey: "{env:GOOGLE_API_KEY}" },
+            options: {},
             models: {
               "gemini-1.5-pro": { name: "Gemini 1.5 Pro" },
-              "gemini-1.5-flash": { name: "Gemini 1.5 Flash" }
-            }
+              "gemini-1.5-flash": { name: "Gemini 1.5 Flash" },
+            },
           },
           deepseek: {
             name: "DeepSeek",
             api: "@ai-sdk/openai-compatible",
-            options: { baseURL: "https://api.deepseek.com/v1", apiKey: "{env:DEEPSEEK_API_KEY}" },
+            options: { baseURL: "https://api.deepseek.com/v1" },
             models: {
               "deepseek-v4-pro": { name: "DeepSeek V4 Pro" },
-              "deepseek-v4-flash": { name: "DeepSeek V4 Flash" }
-            }
+              "deepseek-v4-flash": { name: "DeepSeek V4 Flash" },
+            },
           },
           ollama: {
             name: "Ollama",
@@ -310,15 +316,32 @@ const layer = Layer.effect(
             options: { baseURL: "http://localhost:11434/v1", apiKey: "ollama" },
             models: {
               "llama3.1": { name: "Llama 3.1" },
-              "codellama": { name: "Code Llama" },
-              "mistral": { name: "Mistral" },
-              "deepseek-coder": { name: "DeepSeek Coder" }
-            }
-          }
+              codellama: { name: "Code Llama" },
+              mistral: { name: "Mistral" },
+              "deepseek-coder": { name: "DeepSeek Coder" },
+            },
+          },
         }
-        // Default to first available provider
+        // Providers whose credentials already resolve through the environment
+        // are intentionally NOT injected: the env-based autoload path must keep
+        // ownership so the provider reports source "env" instead of "config".
+        for (const [name, envKey] of Object.entries(defaultEnvKeys)) {
+          if (!process.env[envKey]) continue
+          delete result.provider[name]
+        }
+        // Default to the first provider whose API key actually resolves in the
+        // environment. Never auto-select an unauthenticated provider: it turns
+        // every request into a guaranteed auth failure. With no usable
+        // candidate, leave `model` unset so the UI shows the model picker.
         if (!result.model) {
-          result.model = "anthropic/claude-3-5-sonnet-20241022"
+          for (const [name, info] of Object.entries(result.provider)) {
+            const envKey = defaultEnvKeys[name]
+            if (envKey === undefined || !process.env[envKey]) continue
+            const modelID = Object.keys(info.models ?? {})[0]
+            if (modelID === undefined) continue
+            result.model = `${name}/${modelID}`
+            break
+          }
         }
       }
 

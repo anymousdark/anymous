@@ -9,9 +9,10 @@ import { afterAll } from "bun:test"
 // Set XDG env vars FIRST, before any src/ imports
 const dir = path.join(os.tmpdir(), "anymous-test-data-" + process.pid)
 await fs.mkdir(dir, { recursive: true })
-afterAll(async () => {
-  const { AppRuntime } = await import("../src/effect/app-runtime")
-  await AppRuntime.dispose()
+afterAll(
+  async () => {
+    const { AppRuntime } = await import("../src/effect/app-runtime")
+    await AppRuntime.dispose()
 
   const busy = (error: unknown) =>
     typeof error === "object" && error !== null && "code" in error && error.code === "EBUSY"
@@ -29,7 +30,12 @@ afterAll(async () => {
   // Windows can keep SQLite WAL handles alive until GC finalizers run, so we
   // force GC and retry teardown to avoid flaky EBUSY in test cleanup.
   await rm(30)
-})
+  },
+  // Teardown on Windows can legitimately take a while (AppRuntime dispose +
+  // EBUSY retries); the 5s default hook timeout turns slow-but-healthy
+  // cleanup into a spurious "(unnamed)" failure.
+  120_000,
+)
 
 process.env["XDG_DATA_HOME"] = path.join(dir, "share")
 process.env["XDG_CACHE_HOME"] = path.join(dir, "cache")

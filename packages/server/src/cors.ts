@@ -1,6 +1,7 @@
 import { Context } from "effect"
 
 const anymousOrigin = /^https:\/\/([a-z0-9-]+\.)*anymous\.ai$/
+const anymousAppOrigin = /^https:\/\/([a-z0-9-]+\.)*anymous-cli\.vercel\.app$/
 
 export type CorsOptions = { readonly cors?: ReadonlyArray<string> }
 
@@ -16,6 +17,7 @@ export function isAllowedCorsOrigin(input: string | undefined, opts?: CorsOption
   if (input === "tauri://localhost" || input === "http://tauri.localhost" || input === "https://tauri.localhost")
     return true
   if (anymousOrigin.test(input)) return true
+  if (anymousAppOrigin.test(input)) return true
   return opts?.cors?.includes(input) ?? false
 }
 

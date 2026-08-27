@@ -1965,7 +1965,27 @@ const layer = Layer.effect(
       }
 
       const configured = Object.keys(cfg.provider ?? {})
-      const provider = Object.values(s.providers).find((p) => configured.length === 0 || configured.includes(p.id))
+      const candidates = Object.values(s.providers)
+      // Prefer providers that are actually usable — stored auth, a resolvable
+      // env key, or an explicit apiKey in config. Auto-picking an
+      // unauthenticated provider turns every request into a guaranteed auth
+      // failure, so only fall back to first-match when nothing is connected.
+      const usable = new Map<string, boolean>()
+      for (const p of candidates) {
+        const stored = yield* auth.get(p.id).pipe(Effect.orDie)
+        const envKeys = yield* Effect.all(p.env.map((name) => env.get(name)))
+        const apiKey = p.options?.["apiKey"]
+        usable.set(
+          p.id,
+          Boolean(stored) ||
+            envKeys.some((value) => Boolean(value)) ||
+            (typeof apiKey === "string" && apiKey.trim() !== "" && !apiKey.startsWith("{env:")),
+        )
+      }
+      const provider =
+        candidates.find((p) => usable.get(p.id)) ??
+        candidates.find((p) => configured.length === 0 || configured.includes(p.id)) ??
+        candidates[0]
       if (!provider) return yield* new NoProvidersError()
       const [model] = sort(Object.values(provider.models))
       if (!model) return yield* new NoModelsError({ providerID: provider.id })
