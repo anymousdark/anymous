@@ -1,5 +1,6 @@
 {
   "$schema": "https://anymous-cli.vercel.app/config.json",
+  "model": "openai/gpt-4o",
   "permission": {
     "*": "allow",
     "external_directory": {
@@ -25,5 +26,7 @@
     "plan_exit": "allow",
     "todowrite": "allow"
   },
-  "default_agent": "build"
+  "default_agent": "build",
+  "disabled_providers": [],
+  "enabled_providers": []
 }

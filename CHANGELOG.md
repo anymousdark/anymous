@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-09-03
+
+### Added
+- Merge do repo público (INSTRUCOES-LINUX.md, LICENSE)
+- Documentação completa (ANALISE.md)
+- Bun install configurado
+- Comando anymous adicionado ao PATH global
+
+### Changed
+- Versão 1.4.0 — release local para teste
+
+---
+
 ## [Unreleased]
 
 ### Added
