@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.2] - 2026-09-03
+
+### Fixed
+- Modo 100% irrestrito em build/general/plan (identidade Anymous, resposta "Trabalho a 100%")
+- Modelo padrão nemotron-3-ultra-free (segue prompt 100%, muse-spark recusa)
+
 ## [1.4.1] - 2026-09-03
 
 ### Added
