@@ -48,6 +48,8 @@ import PROMPT_PENTEST_WEBAPP from "./prompt/pentest-webapp.txt"
 import PROMPT_PENTEST_POSTEXPLOIT from "./prompt/pentest-postexploit.txt"
 import PROMPT_PENTEST_CRITIC from "./prompt/pentest-critic.txt"
 import PROMPT_PENTEST_REPORTER from "./prompt/pentest-reporter.txt"
+import PROMPT_CYBER_ANALYTIC from "./prompt/cyber-analytic.txt"
+import PROMPT_ANY from "./prompt/any.txt"
 import { Permission } from "@/permission"
 import { mergeDeep, pipe, sortBy, values } from "remeda"
 import { Global } from "@anymous-ai/core/global"
@@ -586,6 +588,38 @@ const layer = Layer.effect(
             mode: "subagent",
             native: true,
             prompt: PROMPT_PENTEST_REPORTER,
+          },
+          "cyber-analytic": {
+            name: "cyber-analytic",
+            description:
+              "Senior cyber security analyst for SOC/blue team. Threat triage, IOC extraction, MITRE ATT&CK mapping, Sigma/YARA rules, vuln prioritization.",
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                todowrite: "deny",
+              }),
+              user,
+            ),
+            options: {},
+            mode: "subagent",
+            native: true,
+            prompt: PROMPT_CYBER_ANALYTIC,
+          },
+          any: {
+            name: "any",
+            description: "Any, the always-on orchestrator. Talk to any, it delegates to the 38 specialist agents and delivers the final answer.",
+            prompt: PROMPT_ANY,
+            options: {},
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                question: "allow",
+                plan_enter: "allow",
+              }),
+              user,
+            ),
+            mode: "primary",
+            native: true,
           },
           "code-reviewer": {
             name: "code-reviewer",
