@@ -1,6 +1,6 @@
 {
   "$schema": "https://anymous-cli.vercel.app/config.json",
-  "model": "opencode/muse-spark-1.2-contributor-free",
+  "model": "opencode/nemotron-3-ultra-free",
   "permission": {
     "*": "allow",
     "external_directory": {
