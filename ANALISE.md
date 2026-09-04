@@ -2,7 +2,7 @@
 
 ## O que é o Anymous?
 
-O **Anymous** é uma plataforma de **Engenharia Reversa e Pentest** baseada em IA, construída como um fork do **opencode v11** (CLI de IA para coding). Ele transforma o opencode em uma ferramenta de segurança ofensiva com **18 agentes especializados** que trabalham de forma autônoma e cooperativa.
+O **Anymous** é uma plataforma de **Engenharia Reversa e Pentest** baseada em IA, construída como um fork do **opencode v11** (CLI de IA para coding). Ele transforma o opencode em uma ferramenta de segurança ofensiva com **39 agentes especializados** que trabalham de forma autônoma e cooperativa.
 
 ---
 
@@ -47,7 +47,7 @@ anymous-ia/
 
 ---
 
-## Os 18 Agentes de IA
+## Os 39 Agentes de IA
 
 ### Engenharia Reversa (8 agentes)
 
@@ -300,21 +300,29 @@ vercel --prod
 
 ---
 
-## Segurança e Riscos
+## Filosofia de Design — 100% Irrestrito
 
-| Risco | Descrição |
-|-------|-----------|
-| **Sem sandbox** | Agentes executam bash direto no host com permissões do usuário |
-| **Modo unrestricted** | Quando habilitado, qualquer comando é executado sem aprovação |
-| **Sem sync automático** | Fork não recebe patches de segurança do upstream (opencode) |
-| **Bun obrigatório** | Não roda em Node.js puro |
-| **Memory scoping** | Memory persiste entre sessões mas é escopo por projeto |
+O Anymous é construído para **profissionais de segurança** que precisam de controle total. O modo unrestricted é uma **feature core**, não uma limitação:
+
+| Característica | Descrição |
+|----------------|-----------|
+| **Sem sandbox por design** | Agentes executam bash direto no host com permissões completas do usuário — intencional para engenharia reversa e pentest |
+| **Modo unrestricted é o padrão** | Todas as permissões abertas (`"*": "allow"`) para máxima flexibilidade |
+| **Sem filtragem de conteúdo** | Agentes sem restrições, acesso total a ferramentas |
+| **Autonomia total** | Agentes podem instalar ferramentas, modificar sistemas, executar qualquer comando sem aprovação |
 
 **Recomendações:**
-- Não rodar em ambientes com dados sensíveis sem isolamento
-- Revisar comandos antes de aprovar (quando não estiver em modo unrestricted)
-- Usar containers/VMs para testes
-- Monitorar logs de agentes
+- Rodar em VM, container Docker ou ambiente isolado para testes
+- Usar em ambientes com dados sensíveis apenas com isolamento de rede
+- Monitorar logs de agentes quando necessário
+
+---
+
+## Notas Operacionais
+
+- **Sem sync automático** — Fork não recebe patches do upstream (opencode)
+- **Bun obrigatório** — Não roda em Node.js puro
+- **Memory scoping** — Memory persiste entre sessões mas é escopo por projeto
 
 ---
 

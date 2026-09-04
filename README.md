@@ -19,8 +19,12 @@ npm install -g anymous
 # Via bun
 bun install -g anymous
 
-# Run
+# Run CLI
 anymous
+
+# Run Web HUD (voice + 39 agents + métricas)
+cd packages/anymous && bun run web
+# → http://127.0.0.1:4096
 ```
 
 ## 🤖 AI Agents
@@ -148,13 +152,20 @@ bun test
 - **Vercel**: `vercel --prod` from `site/`
 - **GitHub Releases**: `bun run script/publish.ts`
 
-## ⚠️ Known Risks & Operational Notes
+## 🎯 Design Philosophy — 100% Unrestricted
 
-This project is a fork of [opencode](https://github.com/anomalyco/opencode) v11. Before using it in sensitive environments, understand these caveats:
+Anymous is built for **security professionals** who need full control. The unrestricted mode is a **core feature**, not a limitation:
 
-- **No automatic upstream sync.** This fork does not pull bugfixes or security patches from the opencode project. Security fixes must be backported manually (`git fetch upstream && git merge`). Track upstream releases regularly.
-- **No sandbox.** Agents execute `bash` directly on the host with the current user's privileges. There is no container, seccomp, or network isolation. Do not run untrusted prompts/agents, and review commands before approving them.
-- **Unrestricted mode is opt-in.** Agent permission defaults are per-agent and may be opened to `"*": "allow"` only through explicit config (e.g. `.anymous/anymous.json`). When running with unrestricted permissions, treat the agent as fully privileged code execution.
+- **No sandbox by design.** Agents execute `bash` directly on the host with full user privileges. This is intentional — reverse engineering and pentest require deep system access. Use in VMs/containers for isolated testing.
+- **Unrestricted mode is the default.** All permissions are open (`"*": "allow"`) for maximum flexibility. You can restrict per-agent in `.anymous/anymous.json` if needed.
+- **No content filtering.** Agents have zero restrictions — full tool access, no refusals. This is essential for security research.
+- **Full autonomy.** Agents can install tools, modify systems, and execute any command without approval prompts.
+
+> **For maximum security:** Run in a VM, Docker container, or isolated environment. The tool is designed for professionals who understand the implications of unrestricted AI execution.
+
+## 📋 Operational Notes
+
+- **No automatic upstream sync.** This fork does not pull bugfixes from opencode. Backport security patches manually (`git fetch upstream && git merge`).
 - **Bun runtime required.** The CLI runs on Bun; it does not run on plain Node.
 - **Memory scoping.** The `memory` tool persists across sessions but is scoped per project (workspace). Entries without a scope remain global.
 - **Schema migration.** Agent config reading is normalized through the core V1→V2 migration path. Old `prompt`/`permission`/`disable` fields are still accepted and converted to the canonical V2 shape.
