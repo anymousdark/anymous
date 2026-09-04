@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ANY — HUD Interface</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- Background Canvas for particles -->
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- Main HUD Canvas for rotating arcs, radar, etc. -->
+  <canvas id="hudCanvas"></canvas>
+
+  <!-- HUD Overlay Elements -->
+  <div class="hud-container">
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="top-bar__left">
+        <span class="status-dot"></span>
+        <span class="label">SYSTEM ONLINE</span>
+      </div>
+      <div class="top-bar__center">
+        <span class="title">A.N.Y.</span>
+        <span class="subtitle">Orquestrador IA do anymous</span>
+      </div>
+      <div class="top-bar__right">
+        <span class="label" id="clockDisplay">00:00:00</span>
+        <span class="label" id="dateDisplay">2024-01-01</span>
+      </div>
+    </div>
+
+    <!-- Left Panel -->
+    <div class="side-panel left-panel">
+      <div class="panel-header">
+        <span class="panel-icon">◆</span> SYSTEM METRICS
+      </div>
+      <div class="metric">
+        <span class="metric__label">CPU LOAD</span>
+        <div class="metric__bar"><div class="metric__fill" id="cpuBar" style="width:42%"></div></div>
+        <span class="metric__value" id="cpuValue">42%</span>
+      </div>
+      <div class="metric">
+        <span class="metric__label">MEMORY</span>
+        <div class="metric__bar"><div class="metric__fill" id="memBar" style="width:67%"></div></div>
+        <span class="metric__value" id="memValue">67%</span>
+      </div>
+      <div class="metric">
+        <span class="metric__label">NETWORK</span>
+        <div class="metric__bar"><div class="metric__fill" id="netBar" style="width:89%"></div></div>
+        <span class="metric__value" id="netValue">89%</span>
+      </div>
+      <div class="metric">
+        <span class="metric__label">POWER</span>
+        <div class="metric__bar"><div class="metric__fill" id="pwrBar" style="width:95%"></div></div>
+        <span class="metric__value" id="pwrValue">95%</span>
+      </div>
+      <div class="panel-divider"></div>
+      <div class="data-readout">
+        <div class="readout-line"><span>TEMP</span><span id="tempVal">36.2°C</span></div>
+        <div class="readout-line"><span>UPTIME</span><span id="uptimeVal">00:00:00</span></div>
+        <div class="readout-line"><span>CORES</span><span>8 ACTIVE</span></div>
+        <div class="readout-line"><span>THREADS</span><span>16</span></div>
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="side-panel right-panel">
+      <div class="panel-header">
+        <span class="panel-icon">◆</span> VOICE LOG
+      </div>
+      <div class="log-container" id="logContainer">
+        <div class="log-entry log-entry--system">
+          <span class="log-time">--:--:--</span>
+          <span class="log-text">System initialized. Voice ready.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center Orb Area -->
+    <div class="center-area">
+      <div class="orb-container" id="orbContainer">
+        <div class="orb">
+          <div class="orb__ring orb__ring--1"></div>
+          <div class="orb__ring orb__ring--2"></div>
+          <div class="orb__ring orb__ring--3"></div>
+          <div class="orb__core"></div>
+          <div class="orb__waves">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+      <div class="status-text" id="statusText">STANDBY</div>
+      <div class="response-text" id="responseText"></div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+      <button class="hud-btn" id="voiceBtn" title="Click or press Space to talk">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          <line x1="12" y1="19" x2="12" y2="23"/>
+          <line x1="8" y1="23" x2="16" y2="23"/>
+        </svg>
+        <span>VOICE</span>
+      </button>
+      <div class="input-container">
+        <input type="text" id="textInput" placeholder="Type a command or press SPACE to speak..." autocomplete="off" />
+        <button class="send-btn" id="sendBtn">▶</button>
+      </div>
+      <div class="bottom-info">
+        <span class="label">PROTOCOL: <span class="accent">ACTIVE</span></span>
+        <span class="label">POWERED BY: <span class="accent">ANYMOUS</span></span>
+      </div>
+    </div>
+
+    <!-- Corner Decorations -->
+    <div class="corner corner--tl"></div>
+    <div class="corner corner--tr"></div>
+    <div class="corner corner--bl"></div>
+    <div class="corner corner--br"></div>
+
+    <!-- Scan Line -->
+    <div class="scanline"></div>
+  </div>
+
+  <script src="js/particles.js"></script>
+  <script src="js/hud-canvas.js"></script>
+  <script src="js/any.js"></script>
+  <script src="js/app-any.js"></script>
+</body>
+</html>

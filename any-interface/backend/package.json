@@ -1,0 +1,12 @@
+{
+  "name": "any-interface-backend",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "start": "bun run src/index.ts"
+  },
+  "dependencies": {
+    "hono": "4.10.7"
+  }
+}
