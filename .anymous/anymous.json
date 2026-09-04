@@ -26,7 +26,5 @@
     "plan_exit": "allow",
     "todowrite": "allow"
   },
-  "default_agent": "build",
-  "disabled_providers": [],
-  "enabled_providers": []
+  "default_agent": "build"
 }

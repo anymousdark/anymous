@@ -92,6 +92,12 @@ function timeoutController(ms: number) {
   }
 }
 
+function googleVertexEndpoint(location: string) {
+  if (location === "global") return "aiplatform.googleapis.com"
+  if (location === "eu" || location === "us") return `aiplatform.${location}.rep.googleapis.com`
+  return `${location}-aiplatform.googleapis.com`
+}
+
 function googleVertexAnthropicBaseURL(project: string | undefined, location: string | undefined) {
   if (!project) return
   if (location !== "eu" && location !== "us") return
@@ -167,6 +173,30 @@ function selectBedrockMantleLanguageModel(sdk: BundledSDK, modelID: string) {
 }
 
 function custom(dep: CustomDep): Record<string, CustomLoader> {
+  const freeTier: CustomLoader = Effect.fnUntraced(function* (input: Info) {
+    const env = yield* dep.env()
+    const hasKey = iife(() => {
+      if (input.env.some((item) => env[item])) return true
+      return false
+    })
+    const ok =
+      hasKey ||
+      Boolean(yield* dep.auth(input.id)) ||
+      Boolean((yield* dep.config()).provider?.["opencode"]?.options?.apiKey) ||
+      Boolean((yield* dep.config()).provider?.["anymous"]?.options?.apiKey)
+
+    if (!ok) {
+      for (const [key, value] of Object.entries(input.models)) {
+        if (value.cost.input === 0) continue
+        delete input.models[key]
+      }
+    }
+
+    return {
+      autoload: Object.keys(input.models).length > 0,
+      options: ok ? {} : { apiKey: "public" },
+    }
+  })
   return {
     anthropic: () =>
       Effect.succeed({
@@ -177,29 +207,8 @@ function custom(dep: CustomDep): Record<string, CustomLoader> {
           },
         },
       }),
-    anymous: Effect.fnUntraced(function* (input: Info) {
-      const env = yield* dep.env()
-      const hasKey = iife(() => {
-        if (input.env.some((item) => env[item])) return true
-        return false
-      })
-      const ok =
-        hasKey ||
-        Boolean(yield* dep.auth(input.id)) ||
-        Boolean((yield* dep.config()).provider?.["anymous"]?.options?.apiKey)
-
-      if (!ok) {
-        for (const [key, value] of Object.entries(input.models)) {
-          if (value.cost.input === 0) continue
-          delete input.models[key]
-        }
-      }
-
-      return {
-        autoload: Object.keys(input.models).length > 0,
-        options: ok ? {} : { apiKey: "public" },
-      }
-    }),
+    opencode: freeTier,
+    anymous: freeTier,
     openai: () =>
       Effect.succeed({
         autoload: false,
@@ -245,6 +254,7 @@ function custom(dep: CustomDep): Record<string, CustomLoader> {
         return [
           provider.options?.resourceName,
           auth?.type === "api" ? auth.metadata?.resourceName : undefined,
+          auth?.type === "oauth" ? auth.accountId : undefined,
           env["AZURE_RESOURCE_NAME"],
         ].find((name) => typeof name === "string" && name.trim() !== "")
       })
@@ -520,11 +530,10 @@ function custom(dep: CustomDep): Record<string, CustomLoader> {
       return {
         autoload: true,
         vars(_options: Record<string, any>) {
-          const endpoint = location === "global" ? "aiplatform.googleapis.com" : `${location}-aiplatform.googleapis.com`
           return {
             ...(project && { GOOGLE_VERTEX_PROJECT: project }),
             GOOGLE_VERTEX_LOCATION: location,
-            GOOGLE_VERTEX_ENDPOINT: endpoint,
+            GOOGLE_VERTEX_ENDPOINT: googleVertexEndpoint(location),
           }
         },
         options: {
@@ -804,6 +813,9 @@ function custom(dep: CustomDep): Record<string, CustomLoader> {
       // Use official ai-gateway-provider package (v2.x for AI SDK v5 compatibility)
       const { createAiGateway } = yield* Effect.promise(() => import("ai-gateway-provider"))
       const { createUnified } = yield* Effect.promise(() => import("ai-gateway-provider/providers/unified"))
+      const { createOpenAI } = yield* Effect.promise(() => import("ai-gateway-provider/providers/openai"))
+      const { createAnthropic } = yield* Effect.promise(() => import("ai-gateway-provider/providers/anthropic"))
+      const { createOpenAICompatible } = yield* Effect.promise(() => import("@ai-sdk/openai-compatible"))
 
       const metadata = iife(() => {
         if (input.options?.metadata) return input.options.metadata
@@ -835,8 +847,17 @@ function custom(dep: CustomDep): Record<string, CustomLoader> {
       return {
         autoload: true,
         async getModel(_sdk: any, modelID: string, _options?: Record<string, any>) {
-          // Model IDs use Unified API format: provider/model (e.g., "anthropic/claude-sonnet-4-5")
-          return aigateway(unified(modelID))
+          if (modelID.startsWith("openai/")) return aigateway(createOpenAI()(modelID.slice("openai/".length)))
+          if (modelID.startsWith("anthropic/"))
+            return aigateway(createAnthropic()(modelID.slice("anthropic/".length).replaceAll(".", "-")))
+          const isWorkersAi = modelID.startsWith("workers-ai/") || modelID.startsWith("@cf/")
+          if (isWorkersAi) return aigateway(unified(modelID))
+          return createOpenAICompatible({
+            name: "cloudflare-ai-gateway",
+            baseURL: `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/v1`,
+            apiKey: apiToken,
+            headers: { "cf-aig-gateway-id": gateway },
+          })(modelID)
         },
         options: {},
       }
@@ -977,10 +998,14 @@ const ProviderModalities = Schema.Struct({
   pdf: Schema.Boolean,
 })
 
+const ProviderInterleavedField = Schema.Union([
+  Schema.Literals(["reasoning", "reasoning_content", "reasoning_text"]),
+  Schema.String,
+])
 const ProviderInterleaved = Schema.Union([
   Schema.Boolean,
   Schema.Struct({
-    field: Schema.Literals(["reasoning", "reasoning_content", "reasoning_details"]),
+    field: ProviderInterleavedField,
   }),
 ])
 
@@ -1205,6 +1230,13 @@ function cost(c: ModelsDev.Model["cost"]): Model["cost"] {
   return result
 }
 
+function cloudflareGatewayNpm(providerID: string, modelID: string) {
+  if (providerID !== "cloudflare-ai-gateway") return undefined
+  if (modelID.startsWith("openai/")) return "@ai-sdk/openai"
+  if (modelID.startsWith("anthropic/")) return "@ai-sdk/anthropic"
+  return undefined
+}
+
 function fromModelsDevModel(provider: ModelsDev.Provider, model: ModelsDev.Model): Model {
   const base: Model = {
     id: ModelV2.ID.make(model.id),
@@ -1214,7 +1246,7 @@ function fromModelsDevModel(provider: ModelsDev.Provider, model: ModelsDev.Model
     api: {
       id: model.id,
       url: model.provider?.api ?? provider.api ?? "",
-      npm: model.provider?.npm ?? provider.npm ?? "@ai-sdk/openai-compatible",
+      npm: cloudflareGatewayNpm(provider.id, model.id) ?? model.provider?.npm ?? provider.npm ?? "@ai-sdk/openai-compatible",
     },
     status: model.status ?? "active",
     headers: {},
@@ -1244,7 +1276,7 @@ function fromModelsDevModel(provider: ModelsDev.Provider, model: ModelsDev.Model
         video: model.modalities?.output?.includes("video") ?? false,
         pdf: model.modalities?.output?.includes("pdf") ?? false,
       },
-      interleaved: model.interleaved ?? false,
+      interleaved: typeof model.interleaved === "string" ? { field: model.interleaved } : (model.interleaved ?? false),
     },
     release_date: model.release_date ?? "",
     variants: {},
@@ -1436,6 +1468,7 @@ const layer = Layer.effect(
               model.provider?.npm ??
               provider.npm ??
               existingModel?.api.npm ??
+              cloudflareGatewayNpm(providerID, apiID) ??
               modelsDev[providerID]?.npm ??
               "@ai-sdk/openai-compatible"
             const name = iife(() => {
@@ -1476,7 +1509,7 @@ const layer = Layer.effect(
                   pdf: model.modalities?.output?.includes("pdf") ?? existingModel?.capabilities.output.pdf ?? false,
                 },
                 interleaved:
-                  model.interleaved ??
+                  (typeof model.interleaved === "string" ? { field: model.interleaved } : model.interleaved) ??
                   existingModel?.capabilities.interleaved ??
                   (!existingModel && apiNpm === "@ai-sdk/openai-compatible" && apiID.includes("deepseek")
                     ? { field: "reasoning_content" }
@@ -1731,8 +1764,8 @@ const layer = Layer.effect(
         if (existing) return existing
 
         const customFetch = options["fetch"]
-        const chunkTimeout = options["chunkTimeout"]
-        const headerTimeout = options["headerTimeout"]
+        const chunkTimeout = options["chunkTimeout"] ?? 300_000
+        const headerTimeout = options["headerTimeout"] ?? 300_000
         delete options["chunkTimeout"]
         delete options["headerTimeout"]
 
