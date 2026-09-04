@@ -95,9 +95,23 @@
     body::before{content:'';position:fixed;inset:0;z-index:0;background:rgba(0,0,0,0.60)}
     #canvas3d{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0;opacity:0.6}
     section{position:relative;z-index:1}
-    .navbar{position:fixed;top:0;inset-x:0;z-index:50;background:rgba(0,0,0,0.75);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(96,165,250,0.06);height:64px;display:flex;align-items:center;transition:transform 0.3s cubic-bezier(0.4,0,0.2,1)}
-      .navbar.nav-hidden{transform:translateY(-110%)}
-    .glass-card{background:rgba(23,23,23,0.5);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(96,165,250,0.06)}
+    .navbar{position:fixed;top:0;left:0;right:0;width:100%;z-index:50;height:56px;display:flex;align-items:center;background:linear-gradient(180deg,rgba(2,6,23,0.55),rgba(2,6,23,0.3));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(59,130,246,0.12);transition:transform 0.3s cubic-bezier(0.4,0,0.2,0)}
+    .navbar::before{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(96,165,250,0.5),transparent);pointer-events:none}
+    .navbar.nav-hidden{transform:translateY(-110%)}
+    .navbar .nav-link{position:relative;padding:7px 16px;font-size:14px;font-weight:500;color:#9ca3af;border-radius:12px;transition:color .2s,background .2s;font-family:'JetBrains Mono',monospace}
+    .navbar .nav-link::after{content:'';position:absolute;left:50%;bottom:3px;width:0;height:2px;border-radius:2px;background:linear-gradient(90deg,#3b82f6,#60a5fa);transition:width .25s cubic-bezier(0.4,0,0.2,1),left .25s cubic-bezier(0.4,0,0.2,1)}
+    .navbar .nav-link:hover{color:#e5e7eb;background:rgba(59,130,246,0.08)}
+    .navbar .nav-link:hover::after{width:55%;left:22.5%}
+    .navbar .nav-link.active{color:#93c5fd;background:rgba(59,130,246,0.12)}
+    .navbar .nav-link.active::after{width:55%;left:22.5%}
+    .navbar .nav-logo{position:relative;display:inline-flex;align-items:center;gap:9px;font-size:1.1rem;font-weight:800;letter-spacing:0.25em;color:#e2e8f0;font-family:'JetBrains Mono',monospace;transition:color .2s}
+    .navbar .nav-logo:hover{color:#93c5fd}
+    .navbar .nav-logo::before{content:'';width:9px;height:9px;border-radius:3px;background:linear-gradient(135deg,#3b82f6,#60a5fa);box-shadow:0 0 12px rgba(59,130,246,0.8);animation:logoPulse 2.4s ease-in-out infinite}
+    .navbar .nav-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;border-radius:14px;font-size:12px;font-family:'JetBrains Mono',monospace;color:#93c5fd;background:rgba(37,99,235,0.18);border:1px solid rgba(96,165,250,0.3);box-shadow:inset 0 0 20px rgba(59,130,246,0.06),0 0 14px rgba(59,130,246,0.12);transition:all .25s}
+    .navbar .nav-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:#34d399;box-shadow:0 0 8px #34d399;animation:logoPulse 2s ease-in-out infinite}
+    @keyframes logoPulse{0%,100%{opacity:1}50%{opacity:0.55}}
+    .navbar .nav-badge:hover{background:rgba(37,99,235,0.3);border-color:rgba(96,165,250,0.5)}
+    .glass-card{background:rgba(23,23,23,0.5);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(96,165,250,0.06);border-radius:16px}
     .card-hover{transition:all 0.3s cubic-bezier(0.4,0,0.2,1)}
     .card-hover:hover{transform:translateY(-4px);border-color:rgba(96,165,250,0.15)!important;box-shadow:0 12px 40px -8px rgba(96,165,250,0.05)}
     .hero-logo{font-size:12rem;font-weight:900;letter-spacing:0.15em;line-height:1;user-select:none;font-family:'JetBrains Mono',monospace;text-shadow:0 0 60px rgba(59,130,246,0.08)}
@@ -110,9 +124,20 @@
     .copy-btn.copied{background:rgba(37,99,235,0.3);color:#93c5fd;border-color:rgba(37,99,235,0.2)}
     .terminal-line{display:block;padding:4px 0;font-family:'JetBrains Mono',monospace;font-size:15px}
     .terminal-line .prompt{color:#60a5fa}
+    .skill-tab{cursor:pointer;padding:8px 20px;border-radius:999px;font-size:14px;color:#a3a3a3;background:rgba(23,23,23,0.5);border:1px solid rgba(96,165,250,0.06);transition:all .2s;font-family:'JetBrains Mono',monospace;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+    .skill-tab:hover{color:#fafafa;background:rgba(64,64,64,0.5)}
+    .skill-tab.active{background:rgba(37,99,235,0.2);color:#93c5fd;border-color:rgba(59,130,246,0.3)}
+    .skill-panel{display:none}
+    .skill-panel.active{display:block}
+    .skill-panel .skill-count{font-size:13px;color:#93c5fd;font-family:'JetBrains Mono',monospace;text-align:center;margin-bottom:20px;display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:999px;background:rgba(30,58,138,0.2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(59,130,246,0.1);left:50%;position:relative;transform:translateX(-50%)}
+    .skill-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:20px}
+    .skill-grid>div{flex:1 1 240px;max-width:calc(25% - 15px);min-width:240px}
+    @media (max-width: 1024px){.skill-grid>div{max-width:calc(50% - 10px)}}
+    @media (max-width: 640px){.skill-grid>div{max-width:100%;min-width:0}}
     .hero-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
     .hero-bg div{width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,0.04),transparent 70%)}
     .badge-glass{background:rgba(30,58,138,0.2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(59,130,246,0.1)}
+    .navbar .badge-glass{background:rgba(37,99,235,0.45);border:1px solid rgba(96,165,250,0.5);color:#93c5fd;backdrop-filter:none;-webkit-backdrop-filter:none}
     .tag-glass{background:rgba(59,130,246,0.06);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
     /* Loader screen */
     #loader{position:fixed;inset:0;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;background:radial-gradient(ellipse at center,#0a0a0a,#000);transition:opacity 0.6s ease,visibility 0.6s ease}
@@ -132,7 +157,7 @@
     @media (max-width: 768px) {
       .hero-logo{font-size:4.5rem}
       .section-title{font-size:1.8rem}
-      .navbar{height:56px;padding:0 12px}
+      .navbar{height:52px;padding:0 12px}
       .max-w-5xl{padding-left:16px;padding-right:16px}
       .max-w-6xl{padding-left:16px;padding-right:16px}
       .hidden-sm{display:none}
@@ -152,19 +177,19 @@
   <div id="canvas3d"></div>
 
   <nav class="navbar">
-    <div class="max-w-6xl mx-auto px-6 w-full flex items-center justify-between">
+    <div style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:0 32px">
       <div class="flex items-center gap-4">
-        <a href="/" class="text-xl font-bold tracking-[0.25em] text-blue-400 hover:text-blue-300 transition font-mono">anymous</a>
+        <a href="/" class="nav-logo">anymous</a>
       </div>
-      <div class="hidden sm:flex items-center gap-2">
-        <a href="#agentes" class="px-5 py-2 text-base text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition">RE</a>
-        <a href="#pentest" class="px-5 py-2 text-base text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition">Pentest</a>
-        <a href="#funcionalidades" class="px-5 py-2 text-base text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition">Recursos</a>
-        <a href="#skills" class="px-5 py-2 text-base text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition">Skills</a>
-        <a href="#instalar" class="px-5 py-2 text-base text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition">Instalar</a>
+      <div class="hidden sm:flex items-center gap-1">
+        <a href="#agentes" class="nav-link">RE</a>
+        <a href="#pentest" class="nav-link">Pentest</a>
+        <a href="#funcionalidades" class="nav-link">Recursos</a>
+        <a href="#skills" class="nav-link">Skills</a>
+        <a href="#instalar" class="nav-link">Instalar</a>
       </div>
       <div class="flex items-center gap-3">
-        <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-mono badge-glass text-blue-400">v1.4.7</span>
+        <span class="nav-badge">v1.4.7</span>
         <button id="nav-toggle" aria-label="Abrir menu" class="sm:hidden p-2 rounded-md text-gray-200 hover:bg-white/5">☰</button>
       </div>
     </div>
@@ -387,7 +412,7 @@
         <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
           <div class="w-14 h-14 rounded-2xl flex items-center justify-center tag-glass"><svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg></div>
           <h3 class="font-bold text-xl mt-4 mb-2 font-mono text-white">Any — Orquestrador</h3>
-          <p class="text-gray-400 text-sm leading-relaxed">Chame de "any": ele divide a tarefa e delega aos 39 especialistas, valida e entrega pronto. Modo 100% irrestrito.</p>
+          <p class="text-gray-400 text-sm leading-relaxed">Chame de "any": ele divide a tarefa e delega aos 44 especialistas, valida e entrega pronto. Modo 100% irrestrito.</p>
           <span class="inline-block mt-4 px-4 py-1.5 rounded-full text-xs font-mono text-blue-400 tag-glass">Novo</span>
         </div>
         <div class="card-hover glass-card rounded-[1.75rem] p-8 cursor-default">
@@ -408,59 +433,173 @@
 
 <section id="skills" class="relative py-32">
     <div class="max-w-6xl mx-auto px-6">
-      <div class="text-center mb-16">
+      <div class="text-center mb-12">
         <span class="text-sm font-mono text-blue-400 tracking-widest uppercase mb-4 block">Skills</span>
         <h2 class="section-title">47 Skills <span>Nativas</span></h2>
         <p class="text-gray-400 mt-4 text-lg max-w-2xl mx-auto">Pacote de skills embutido no anymous - documentos, arte, testagem, code review, produtividade e mais.</p>
       </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">algorithmic-art</h3><p class="text-gray-400 text-sm leading-relaxed">Cria arte algorítmica com p5.js - aleatoriedade semeada, flow fields, sistemas de partículas e arte generativa.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">artifacts-builder</h3><p class="text-gray-400 text-sm leading-relaxed">Suite para artefatos HTML complexos com React, Tailwind CSS e shadcn/ui.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">brainstorming</h3><p class="text-gray-400 text-sm leading-relaxed">Explora intenção, requisitos e design antes de qualquer trabalho criativo - features, componentes ou mudanças de comportamento.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">brand-guidelines</h3><p class="text-gray-400 text-sm leading-relaxed">Aplica cores e tipografia padronizadas de marca a artefatos que precisam de identidade visual.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">canvas-design</h3><p class="text-gray-400 text-sm leading-relaxed">Cria arte visual em PNG e PDF com filosofia de design - posters, artes e peças estáticas.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">changelog-generator</h3><p class="text-gray-400 text-sm leading-relaxed">Gera changelogs de commits, categorizando e traduzindo commits técnicos em release notes.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">claude-api</h3><p class="text-gray-400 text-sm leading-relaxed">Referência da API Claude/Anthropic - modelos, preços, parâmetros, streaming, tool use, MCP, agentes e caching.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">code-security-auditor</h3><p class="text-gray-400 text-sm leading-relaxed">Auditoria de segurança pré-execução de codebases não confiáveis via análise estática.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">competitive-ads-extractor</h3><p class="text-gray-400 text-sm leading-relaxed">Extrai e analisa anúncios de concorrentes para melhorar suas próprias campanhas.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">content-research-writer</h3><p class="text-gray-400 text-sm leading-relaxed">Conteúdo de alta qualidade com pesquisa, citações, hooks, outlines e feedback em tempo real.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">developer-growth-analysis</h3><p class="text-gray-400 text-sm leading-relaxed">Analisa o histórico de chat para padrões de código, lacunas e oportunidades - relatórios personalizados.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">dispatching-parallel-agents</h3><p class="text-gray-400 text-sm leading-relaxed">Despacha agentes paralelos para 2+ tarefas independentes sem estado compartilhado ou dependências.</p></div>
+      <div id="skills-tabs" class="flex flex-wrap justify-center gap-2 mb-10" role="tablist">
+        <button class="skill-tab active" data-cat="docs" role="tab" aria-selected="true">Documentos</button>
+        <button class="skill-tab" data-cat="art" role="tab" aria-selected="false">Arte & Design</button>
+        <button class="skill-tab" data-cat="web" role="tab" aria-selected="false">Web & Apps</button>
+        <button class="skill-tab" data-cat="code" role="tab" aria-selected="false">Código & Dev</button>
+        <button class="skill-tab" data-cat="plan" role="tab" aria-selected="false">Planejamento</button>
+        <button class="skill-tab" data-cat="prod" role="tab" aria-selected="false">Produtividade</button>
+        <button class="skill-tab" data-cat="mkt" role="tab" aria-selected="false">Marketing</button>
+        <button class="skill-tab" data-cat="media" role="tab" aria-selected="false">Mídia</button>
+        <button class="skill-tab" data-cat="skills" role="tab" aria-selected="false">Skills & Agentes</button>
+        <button class="skill-tab" data-cat="ref" role="tab" aria-selected="false">Referência & Segurança</button>
+        <button class="skill-tab" data-cat="re-agents" role="tab" aria-selected="false">Agentes RE</button>
+        <button class="skill-tab" data-cat="pentest-agents" role="tab" aria-selected="false">Agentes Pentest</button>
+        <button class="skill-tab" data-cat="re-skills" role="tab" aria-selected="false">Skills RE</button>
+        <button class="skill-tab" data-cat="pentest-skills" role="tab" aria-selected="false">Skills Pentest</button>
+      </div>
+      <div class="skill-panel active" data-cat="docs" role="tabpanel">
+        <p class="skill-count">5 skills — Documentos</p>
+        <div class="skill-grid">
         <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">doc-coauthoring</h3><p class="text-gray-400 text-sm leading-relaxed">Workflow estruturado para coautoria de docs, propostas, specs técnicos e documentos de decisão.</p></div>
         <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">docx</h3><p class="text-gray-400 text-sm leading-relaxed">Cria, lê e edita documentos Word (.docx/.dotx) com formatação profissional, tabelas e imagens.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">domain-name-brainstormer</h3><p class="text-gray-400 text-sm leading-relaxed">Gera ideias criativas de nome de domínio e verifica disponibilidade em vários TLDs.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">executing-plans</h3><p class="text-gray-400 text-sm leading-relaxed">Executa planos de implementação escritos com checkpoints de revisão.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">file-organizer</h3><p class="text-gray-400 text-sm leading-relaxed">Organiza arquivos e pastas de forma inteligente - duplicatas, melhores estruturas e limpeza automatizada.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">finishing-a-development-branch</h3><p class="text-gray-400 text-sm leading-relaxed">Decide como integrar o trabalho quando a implementação está completa e os testes passam.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">frontend-design</h3><p class="text-gray-400 text-sm leading-relaxed">Design visual distintivo e intencional para novas UIs - tipografia e escolhas além do padrão genérico.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">image-enhancer</h3><p class="text-gray-400 text-sm leading-relaxed">Melhora a qualidade de imagens e screenshots - resolução, nitidez e clareza.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">internal-comms</h3><p class="text-gray-400 text-sm leading-relaxed">Comunicação interna - relatórios de status, newsletters, FAQs, incidentes e updates.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">invoice-organizer</h3><p class="text-gray-400 text-sm leading-relaxed">Organiza notas fiscais e despesas para imposto de renda - extração, renomeação e organização.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">lead-research-assistant</h3><p class="text-gray-400 text-sm leading-relaxed">Identifica leads de alta qualidade - análise de negócio, empresas-alvo e estratégias de contato.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">mcp-builder</h3><p class="text-gray-400 text-sm leading-relaxed">Guia para servidores MCP de alta qualidade - Python (FastMCP) ou Node/TypeScript (MCP SDK).</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">meeting-insights-analyzer</h3><p class="text-gray-400 text-sm leading-relaxed">Analisa transcrições de reuniões para padrões de comportamento, comunicação e liderança.</p></div>
         <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">pdf</h3><p class="text-gray-400 text-sm leading-relaxed">Tudo com PDFs - ler, extrair, mesclar, dividir, rodar, preencher formulários, imagens e OCR.</p></div>
         <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">pptx</h3><p class="text-gray-400 text-sm leading-relaxed">Cria, lê e edita apresentações (.pptx/.potx) - pitch decks, slides e extração de texto.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">raffle-winner-picker</h3><p class="text-gray-400 text-sm leading-relaxed">Sorteia vencedores justos e imparciais para brindes e concursos com transparência.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">receiving-code-review</h3><p class="text-gray-400 text-sm leading-relaxed">Recebe feedback de code review com rigor técnico e verificação.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">requesting-code-review</h3><p class="text-gray-400 text-sm leading-relaxed">Solicita revisão antes do merge - verifica se o trabalho atende aos requisitos.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">skill-creator</h3><p class="text-gray-400 text-sm leading-relaxed">Cria, edita e otimiza skills - evals, benchmark com variação e ajuste de descrição.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">skill-share</h3><p class="text-gray-400 text-sm leading-relaxed">Cria skills e as compartilha automaticamente para colaboração de equipe.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">slack-gif-creator</h3><p class="text-gray-400 text-sm leading-relaxed">GIFs animados otimizados para Slack - constraints, validação e conceitos de animação.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">staff-engineer-review</h3><p class="text-gray-400 text-sm leading-relaxed">Revisão profunda de PRs como engenheiro Staff+ - arquitetura, qualidade e feedback acionável.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">subagent-driven-development</h3><p class="text-gray-400 text-sm leading-relaxed">Executa planos de implementação com tarefas independentes na sessão via subagents.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">systematic-debugging</h3><p class="text-gray-400 text-sm leading-relaxed">Abordagem sistemática para bugs, falhas de teste ou comportamento inesperado.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">test-driven-development</h3><p class="text-gray-400 text-sm leading-relaxed">TDD para qualquer feature ou bugfix - escreva o teste antes do código de implementação.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">xlsx</h3><p class="text-gray-400 text-sm leading-relaxed">Planilhas - abrir, editar, criar, converter e limpar .xlsx, .csv, .tsv e mais.</p></div>
+        </div>
+      </div>
+      <div class="skill-panel" data-cat="art" role="tabpanel">
+        <p class="skill-count">6 skills — Arte & Design</p>
+        <div class="skill-grid">
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">algorithmic-art</h3><p class="text-gray-400 text-sm leading-relaxed">Cria arte algorítmica com p5.js - aleatoriedade semeada, flow fields, sistemas de partículas e arte generativa.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">brand-guidelines</h3><p class="text-gray-400 text-sm leading-relaxed">Aplica cores e tipografia padronizadas de marca a artefatos que precisam de identidade visual.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">canvas-design</h3><p class="text-gray-400 text-sm leading-relaxed">Cria arte visual em PNG e PDF com filosofia de design - posters, artes e peças estáticas.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">frontend-design</h3><p class="text-gray-400 text-sm leading-relaxed">Design visual distintivo e intencional para novas UIs - tipografia e escolhas além do padrão genérico.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">image-enhancer</h3><p class="text-gray-400 text-sm leading-relaxed">Melhora a qualidade de imagens e screenshots - resolução, nitidez e clareza.</p></div>
         <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">theme-factory</h3><p class="text-gray-400 text-sm leading-relaxed">10 temas prontos com cores e fontes para slides, docs, relatórios e landing pages - ou gere o seu.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">using-git-worktrees</h3><p class="text-gray-400 text-sm leading-relaxed">Cria um workspace isolado via worktrees antes de executar planos.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">using-superpowers</h3><p class="text-gray-400 text-sm leading-relaxed">Estabelece como encontrar e usar skills - invocação antes de qualquer resposta.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">verification-before-completion</h3><p class="text-gray-400 text-sm leading-relaxed">Roda verificação antes de declarar trabalho completo - evidências antes de afirmações.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">video-downloader</h3><p class="text-gray-400 text-sm leading-relaxed">Baixa vídeos de YouTube e outras plataformas - múltiplos formatos e qualidades.</p></div>
+        </div>
+      </div>
+      <div class="skill-panel" data-cat="web" role="tabpanel">
+        <p class="skill-count">4 skills — Web & Apps</p>
+        <div class="skill-grid">
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">artifacts-builder</h3><p class="text-gray-400 text-sm leading-relaxed">Suite para artefatos HTML complexos com React, Tailwind CSS e shadcn/ui.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">mcp-builder</h3><p class="text-gray-400 text-sm leading-relaxed">Guia para servidores MCP de alta qualidade - Python (FastMCP) ou Node/TypeScript (MCP SDK).</p></div>
         <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">web-artifacts-builder</h3><p class="text-gray-400 text-sm leading-relaxed">Suite para artefatos HTML com React, Tailwind CSS e shadcn/ui.</p></div>
         <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">webapp-testing</h3><p class="text-gray-400 text-sm leading-relaxed">Testa apps web locais com Playwright - funcionalidade, UI, screenshots e logs.</p></div>
+        </div>
+      </div>
+      <div class="skill-panel" data-cat="code" role="tabpanel">
+        <p class="skill-count">9 skills — Código & Dev</p>
+        <div class="skill-grid">
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">changelog-generator</h3><p class="text-gray-400 text-sm leading-relaxed">Gera changelogs de commits, categorizando e traduzindo commits técnicos em release notes.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">finishing-a-development-branch</h3><p class="text-gray-400 text-sm leading-relaxed">Decide como integrar o trabalho quando a implementação está completa e os testes passam.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">receiving-code-review</h3><p class="text-gray-400 text-sm leading-relaxed">Recebe feedback de code review com rigor técnico e verificação.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">requesting-code-review</h3><p class="text-gray-400 text-sm leading-relaxed">Solicita revisão antes do merge - verifica se o trabalho atende aos requisitos.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">staff-engineer-review</h3><p class="text-gray-400 text-sm leading-relaxed">Revisão profunda de PRs como engenheiro Staff+ - arquitetura, qualidade e feedback acionável.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">systematic-debugging</h3><p class="text-gray-400 text-sm leading-relaxed">Abordagem sistemática para bugs, falhas de teste ou comportamento inesperado.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">test-driven-development</h3><p class="text-gray-400 text-sm leading-relaxed">TDD para qualquer feature ou bugfix - escreva o teste antes do código de implementação.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">using-git-worktrees</h3><p class="text-gray-400 text-sm leading-relaxed">Cria um workspace isolado via worktrees antes de executar planos.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">verification-before-completion</h3><p class="text-gray-400 text-sm leading-relaxed">Roda verificação antes de declarar trabalho completo - evidências antes de afirmações.</p></div>
+        </div>
+      </div>
+      <div class="skill-panel" data-cat="plan" role="tabpanel">
+        <p class="skill-count">3 skills — Planejamento</p>
+        <div class="skill-grid">
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">brainstorming</h3><p class="text-gray-400 text-sm leading-relaxed">Explora intenção, requisitos e design antes de qualquer trabalho criativo - features, componentes ou mudanças de comportamento.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">executing-plans</h3><p class="text-gray-400 text-sm leading-relaxed">Executa planos de implementação escritos com checkpoints de revisão.</p></div>
         <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">writing-plans</h3><p class="text-gray-400 text-sm leading-relaxed">Escreve planos para tarefas multi-step a partir de spec ou requisitos antes de tocar código.</p></div>
+        </div>
+      </div>
+      <div class="skill-panel" data-cat="prod" role="tabpanel">
+        <p class="skill-count">6 skills — Produtividade</p>
+        <div class="skill-grid">
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">developer-growth-analysis</h3><p class="text-gray-400 text-sm leading-relaxed">Analisa o histórico de chat para padrões de código, lacunas e oportunidades - relatórios personalizados.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">file-organizer</h3><p class="text-gray-400 text-sm leading-relaxed">Organiza arquivos e pastas de forma inteligente - duplicatas, melhores estruturas e limpeza automatizada.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">internal-comms</h3><p class="text-gray-400 text-sm leading-relaxed">Comunicação interna - relatórios de status, newsletters, FAQs, incidentes e updates.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">invoice-organizer</h3><p class="text-gray-400 text-sm leading-relaxed">Organiza notas fiscais e despesas para imposto de renda - extração, renomeação e organização.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">meeting-insights-analyzer</h3><p class="text-gray-400 text-sm leading-relaxed">Analisa transcrições de reuniões para padrões de comportamento, comunicação e liderança.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">raffle-winner-picker</h3><p class="text-gray-400 text-sm leading-relaxed">Sorteia vencedores justos e imparciais para brindes e concursos com transparência.</p></div>
+        </div>
+      </div>
+      <div class="skill-panel" data-cat="mkt" role="tabpanel">
+        <p class="skill-count">4 skills — Marketing</p>
+        <div class="skill-grid">
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">competitive-ads-extractor</h3><p class="text-gray-400 text-sm leading-relaxed">Extrai e analisa anúncios de concorrentes para melhorar suas próprias campanhas.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">content-research-writer</h3><p class="text-gray-400 text-sm leading-relaxed">Conteúdo de alta qualidade com pesquisa, citações, hooks, outlines e feedback em tempo real.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">domain-name-brainstormer</h3><p class="text-gray-400 text-sm leading-relaxed">Gera ideias criativas de nome de domínio e verifica disponibilidade em vários TLDs.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">lead-research-assistant</h3><p class="text-gray-400 text-sm leading-relaxed">Identifica leads de alta qualidade - análise de negócio, empresas-alvo e estratégias de contato.</p></div>
+        </div>
+      </div>
+      <div class="skill-panel" data-cat="media" role="tabpanel">
+        <p class="skill-count">2 skills — Mídia</p>
+        <div class="skill-grid">
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">slack-gif-creator</h3><p class="text-gray-400 text-sm leading-relaxed">GIFs animados otimizados para Slack - constraints, validação e conceitos de animação.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">video-downloader</h3><p class="text-gray-400 text-sm leading-relaxed">Baixa vídeos de YouTube e outras plataformas - múltiplos formatos e qualidades.</p></div>
+        </div>
+      </div>
+      <div class="skill-panel" data-cat="skills" role="tabpanel">
+        <p class="skill-count">6 skills — Skills & Agentes</p>
+        <div class="skill-grid">
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">dispatching-parallel-agents</h3><p class="text-gray-400 text-sm leading-relaxed">Despacha agentes paralelos para 2+ tarefas independentes sem estado compartilhado ou dependências.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">skill-creator</h3><p class="text-gray-400 text-sm leading-relaxed">Cria, edita e otimiza skills - evals, benchmark com variação e ajuste de descrição.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">skill-share</h3><p class="text-gray-400 text-sm leading-relaxed">Cria skills e as compartilha automaticamente para colaboração de equipe.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">subagent-driven-development</h3><p class="text-gray-400 text-sm leading-relaxed">Executa planos de implementação com tarefas independentes na sessão via subagents.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">using-superpowers</h3><p class="text-gray-400 text-sm leading-relaxed">Estabelece como encontrar e usar skills - invocação antes de qualquer resposta.</p></div>
         <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">writing-skills</h3><p class="text-gray-400 text-sm leading-relaxed">Cria, edita e verifica skills antes do deploy - boas práticas e testes.</p></div>
-        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">xlsx</h3><p class="text-gray-400 text-sm leading-relaxed">Planilhas - abrir, editar, criar, converter e limpar .xlsx, .csv, .tsv e mais.</p></div>
+        </div>
+      </div>
+      <div class="skill-panel" data-cat="ref" role="tabpanel">
+        <p class="skill-count">2 skills — Referência & Segurança</p>
+        <div class="skill-grid">
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">claude-api</h3><p class="text-gray-400 text-sm leading-relaxed">Referência da API Claude/Anthropic - modelos, preços, parâmetros, streaming, tool use, MCP, agentes e caching.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">code-security-auditor</h3><p class="text-gray-400 text-sm leading-relaxed">Auditoria de segurança pré-execução de codebases não confiáveis via análise estática.</p></div>
+        </div>
+      </div>
+      <div class="skill-panel" data-cat="re-agents" role="tabpanel">
+        <p class="skill-count">6 agents — Engenharia Reversa</p>
+        <div class="skill-grid">
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">ghidra-static</h3><p class="text-gray-400 text-sm leading-relaxed">Análise estática de binários com Ghidra headless - descompilação, detecção de packers, pipelines multi-fase P0-P4.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">ghidra-dynamic</h3><p class="text-gray-400 text-sm leading-relaxed">Análise dinâmica com Ghidra + Frida - correlação estático-dinâmico, memory dumping, bypass anti-debug, unpacking.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">ida-pro</h3><p class="text-gray-400 text-sm leading-relaxed">Engenharia reversa com IDA Pro/Hex-Rays - IDAPython, MCP, microcode, FLIRT, Lumina, diffing binário.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">binary-ninja</h3><p class="text-gray-400 text-sm leading-relaxed">BNIL (LLIL/MLIL/HLIL) headless - deobfuscação avançada: CFG flattening, opaque predicates, MBA expressions.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">frida-dynamic</h3><p class="text-gray-400 text-sm leading-relaxed">Instrumentação runtime com Frida - API hooking, memory manipulation, anti-analysis bypass, rexd MCP.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">malware-analyst</h3><p class="text-gray-400 text-sm leading-relaxed">Análise completa de malware - static/dynamic/behavioral, IOCs, ATT&CK mapping, YARA, classificação família.</p></div>
+        </div>
+      </div>
+      <div class="skill-panel" data-cat="pentest-agents" role="tabpanel">
+        <p class="skill-count">9 agents — Penetration Testing</p>
+        <div class="skill-grid">
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">cloud-pentest</h3><p class="text-gray-400 text-sm leading-relaxed">Pentest cloud AWS/GCP/Azure - IAM privilege escalation, IMDS exploitation, container escape, serverless abuse.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">mobile-pentest</h3><p class="text-gray-400 text-sm leading-relaxed">Pentest mobile iOS/Android - static (jadx, apktool), dynamic (Frida, Objection), network interception.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">api-security</h3><p class="text-gray-400 text-sm leading-relaxed">Teste de APIs REST/GraphQL/gRPC/WebSocket - BOLA/IDOR, JWT attacks, batching, business logic flaws.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">ad-attacker</h3><p class="text-gray-400 text-sm leading-relaxed">Active Directory & Entra ID - Kerberoasting, AS-REP, DCSync, delegation abuse, AD CS, Azure AD pivot.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">evasion-specialist</h3><p class="text-gray-400 text-sm leading-relaxed">Evasão EDR/AV/WAF - direct syscalls, sleep obfuscation, domain fronting, traffic obfuscation, OPSEC hygiene.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">persistence-planner</h3><p class="text-gray-400 text-sm leading-relaxed">Persistência cross-platform - Windows registry/WMI, Linux systemd/cron, cloud IAM/Lambda, survival validation.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">scada-attacker</h3><p class="text-gray-400 text-sm leading-relaxed">SCADA/ICS/OT - Modbus/DNP3/IEC104/OPC UA, PLC/HMI firmware, Purdue model, safety-first protocolos.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">iot-pentester</h3><p class="text-gray-400 text-sm leading-relaxed">IoT/embedded - firmware analysis, hardware interfaces (UART/JTAG/SPI), wireless (BLE/Zigbee/LoRa), cloud APIs.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">llm-redteam</h3><p class="text-gray-400 text-sm leading-relaxed">LLM/AI security - OWASP LLM Top 10, prompt injection, RAG poisoning, tool/plugin abuse, model extraction.</p></div>
+        </div>
+      </div>
+      <div class="skill-panel" data-cat="re-skills" role="tabpanel">
+        <p class="skill-count">5 skills — Engenharia Reversa</p>
+        <div class="skill-grid">
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">ghidra-headless</h3><p class="text-gray-400 text-sm leading-relaxed">Pipeline 8 fases: PE Triage → FLOSS → YARA → CAPA → Ghidra decompile → IOC extract → Classify. Auto-fallback.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">malware-unpacker</h3><p class="text-gray-400 text-sm leading-relaxed">Unpacking estático/dinâmico - PEiD, manual, memory dumping (memdump-racer, TinyTracer, x64dbg), shellcode emulation.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">ioc-extractor</h3><p class="text-gray-400 text-sm leading-relaxed">Extração IOCs defensivos - IPs, domains, URLs, hashes, mutexes, registry, file paths. Evidence-first, no invented indicators.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">binary-patcher</h3><p class="text-gray-400 text-sm leading-relaxed">Patch binário anti-VM - VMware drivers, CPUID, MAC prefixes. Re-encryption .enc.gz quarantine format.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">ollvm-deobfuscation</h3><p class="text-gray-400 text-sm leading-relaxed">Desobfuscação OLLVM - control flow flattening, bogus control flow, instruction substitution via LLVM IR lifting.</p></div>
+        </div>
+      </div>
+      <div class="skill-panel" data-cat="pentest-skills" role="tabpanel">
+        <p class="skill-count">10 skills — Penetration Testing</p>
+        <div class="skill-grid">
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">ssrf-hunter</h3><p class="text-gray-400 text-sm leading-relaxed">SSRF discovery - filter bypasses, cloud metadata (AWS/GCP/Azure IMDS), internal services, protocol smuggling.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">ssti-hunter</h3><p class="text-gray-400 text-sm leading-relaxed">SSTI fingerprinting + escalation - Jinja2, Twig, FreeMarker, ERB, Mako, Smarty, EL. RCE proof.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">jwt-cracker</h3><p class="text-gray-400 text-sm leading-relaxed">JWT/OIDC attacks - alg:none, kid/jku abuse, weak HMAC, key confusion, token entropy, logout invalidation.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">graphql-hunter</h3><p class="text-gray-400 text-sm leading-relaxed">GraphQL security - introspection, authz gaps, batching attacks, depth complexity, alias overloading.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">race-condition</h3><p class="text-gray-400 text-sm leading-relaxed">TOCTOU/double-spend - concurrent request racing, verification logic, limit bypasses.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">takeover</h3><p class="text-gray-400 text-sm leading-relaxed">Subdomain takeover & dangling DNS - unclaimed cloud resources, validation automation.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">supabase-security</h3><p class="text-gray-400 text-sm leading-relaxed">Supabase/PostgREST/RLS - anonymous access, policy bypass, storage exposure, realtime authz.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">deserialize</h3><p class="text-gray-400 text-sm leading-relaxed">Unsafe deserialization - Java, PHP, Python pickle, .NET ViewState, gadget chain testing.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">container-escape</h3><p class="text-gray-400 text-sm leading-relaxed">Docker/K8s breakout - pod-to-node-to-cluster, runc/CVE exploits, host path mounts, privileged containers.</p></div>
+        <div class="card-hover glass-card rounded-[1.75rem] p-7 cursor-default"><h3 class="font-bold text-lg font-mono text-white leading-snug mb-3">cicd-redteam</h3><p class="text-gray-400 text-sm leading-relaxed">CI/CD supply chain - pipeline-driven SAST/DAST, secret scans, artifact poisoning, dependency confusion.</p></div>
+        </div>
       </div>
     </div>
   </section>
@@ -470,7 +609,7 @@
         <span class="text-sm font-mono text-blue-400 tracking-widest uppercase mb-4 block">Comece Agora</span>
         <h2 class="section-title">Instalação</h2>
         <p class="text-gray-400 mt-4 text-lg">Publicado no npm como <code class="text-blue-400 px-3 py-1 rounded-full font-mono text-base badge-glass">anymous</code> — binário nativo por plataforma.</p>
-        <p class="text-gray-400 mt-3 text-base">Variantes disponíveis: <code class="text-gray-300 font-mono">linux-x64</code>, <code class="text-gray-300 font-mono">linux-arm64</code>, <code class="text-gray-300 font-mono">linux-x64-musl</code>, <code class="text-gray-300 font-mono">darwin-x64</code>, <code class="text-gray-300 font-mono">darwin-arm64</code>, <code class="text-gray-300 font-mono">windows-x64</code> e mais — selecionadas automaticamente no install.</p>
+        <p class="text-gray-400 mt-3 text-base">Versão <strong>v1.4.7</strong> — 45 agentes (Any, SOC, forense, red/blue team), voz pt-BR offline, modo irrestrito por padrão. Variantes: <code class="text-gray-300 font-mono">linux-x64</code>, <code class="text-gray-300 font-mono">linux-arm64</code>, <code class="text-gray-300 font-mono">linux-x64-musl</code>, <code class="text-gray-300 font-mono">darwin-x64</code>, <code class="text-gray-300 font-mono">darwin-arm64</code>, <code class="text-gray-300 font-mono">windows-x64</code> — selecionadas automaticamente.</p>
       </div>
       <div class="grid md:grid-cols-3 gap-5">
         <div class="code-block rounded-[1.75rem] card-hover" style="backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)">
@@ -490,13 +629,14 @@
   </section>
 
   <footer class="border-t border-gray-800 py-12 text-center relative">
-    <div class="max-w-3xl mx-auto px-6">
+<div class="max-w-3xl mx-auto px-6">
       <p class="text-xl font-bold tracking-[0.25em] text-blue-400 mb-3 font-mono">anymous</p>
       <p class="text-gray-500 text-sm mb-4">Engenharia Reversa com IA — MIT License — v1.4.7</p>
       <div class="flex justify-center gap-6 text-sm text-gray-500">
         <a href="https://github.com/anymousdark/anymous" class="hover:text-blue-400 transition">GitHub</a>
         <a href="https://www.npmjs.com/package/anymous" class="hover:text-blue-400 transition">npm</a>
       </div>
+    </div>
     </div>
   </footer>
 
@@ -643,6 +783,21 @@
   }
   </script>
   <script>
+  // Skills tabs
+  (function(){
+    const tabs = document.querySelectorAll('#skills-tabs .skill-tab')
+    const panels = document.querySelectorAll('.skill-panel')
+    if (!tabs.length || !panels.length) return
+    tabs.forEach(tab => tab.addEventListener('click', () => {
+      tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false') })
+      tab.classList.add('active')
+      tab.setAttribute('aria-selected', 'true')
+      const cat = tab.dataset.cat
+      panels.forEach(p => { p.classList.toggle('active', p.dataset.cat === cat) })
+    }))
+  })()
+  </script>
+  <script>
   // Loader - hides after 4s
   (function(){
     const loader = document.getElementById('loader')
@@ -668,6 +823,28 @@
         navbar.classList.remove('nav-hidden')
       }
       lastY = y
+    }, {passive:true})
+  })()
+  </script>
+  <script>
+  // Scroll spy - active link highlight
+  (function(){
+    const links = document.querySelectorAll('.navbar .nav-link')
+    if(!links.length) return
+    const sections = [...links].map(l => {
+      const id = l.getAttribute('href')
+      return { link: l, el: document.querySelector(id) }
+    }).filter(s => s.el)
+    const setActive = id => {
+      links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === id))
+    }
+    window.addEventListener('scroll', () => {
+      const pos = window.scrollY + 120
+      let current = sections[0] ? sections[0].link.getAttribute('href') : null
+      sections.forEach(s => {
+        if (s.el.offsetTop <= pos) current = s.link.getAttribute('href')
+      })
+      setActive(current)
     }, {passive:true})
   })()
   </script>
