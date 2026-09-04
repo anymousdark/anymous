@@ -15,12 +15,16 @@ const VOICE = path.join(os.homedir(), ".local", "share", "anymous", "voice")
 app.post("/api/ask", async (c) => {
   const { text, agent } = await c.req.json<{ text: string; agent?: string }>()
   if (!text?.trim()) return c.json({ error: "empty" }, 400)
-  const proc =
-    await $`${ANYMOUS} run --agent ${agent ?? "any"} ${text}`
-      .cwd(ANYMOUS_DIR)
-      .quiet()
-      .nothrow()
-  return c.json({ answer: proc.text().trim() })
+  const proc = await $`${ANYMOUS} run --agent ${agent ?? "any"} ${text}`
+    .cwd(ANYMOUS_DIR)
+    .quiet()
+    .nothrow()
+  const answer = proc.text().trim()
+  if (proc.exitCode !== 0 || !answer) {
+    const err = proc.text().trim() || "provedor instável — tenta de novo em 1 min"
+    return c.json({ answer: "", error: err.slice(0, 300) }, 502)
+  }
+  return c.json({ answer })
 })
 
 // --- agentes disponíveis ---

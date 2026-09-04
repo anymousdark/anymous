@@ -98,7 +98,9 @@
       setState("speaking");
       await window.AnyBackend.speak(answer);
     } catch (e) {
-      addLog("system", "Erro: " + e.message);
+      const msg = "Erro no provedor (instável). Tenta de novo em 1 min.";
+      addLog("system", msg);
+      displayResponse(msg);
     }
     setState("idle");
   };

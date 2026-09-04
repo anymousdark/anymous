@@ -46,8 +46,10 @@
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ text, agent }),
     });
-    const { answer } = await r.json();
-    return answer || "(sem resposta)";
+    if (!r.ok) throw new Error("provider " + r.status);
+    const { answer, error } = await r.json();
+    if (error || !answer) throw new Error(error || "empty");
+    return answer;
   }
 
   // expõe hook usado pelo app.js adaptado
