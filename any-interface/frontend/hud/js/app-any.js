@@ -91,9 +91,12 @@
   window.__anyOnUserText = async function (text) {
     addLog("user", text);
     setState("processing");
+    const t0 = Date.now();
     try {
       const answer = await window.AnyBackend.ask(text);
+      const secs = ((Date.now() - t0) / 1000).toFixed(1);
       addLog("any", answer);
+      addLog("system", `resposta em ${secs}s`);
       displayResponse(answer);
       setState("speaking");
       await window.AnyBackend.speak(answer);
@@ -103,6 +106,17 @@
       displayResponse(msg);
     }
     setState("idle");
+  };
+  window.__anyReset = async function () {
+    try {
+      await fetch("/api/reset", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: "{}",
+      });
+    } catch {}
+    responseText.textContent = "";
+    addLog("system", "Nova conversa iniciada.");
   };
 
   addLog("system", "Any online. Escreve ou prime SPACE para falar.");

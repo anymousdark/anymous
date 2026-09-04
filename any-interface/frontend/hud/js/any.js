@@ -9,6 +9,29 @@
   let recorder = null;
   let chunks = [];
 
+  // projetos existentes do CLI na top bar
+  async function loadProjects() {
+    try {
+      const r = await fetch("/api/projects");
+      if (!r.ok) return;
+      const projects = await r.json();
+      if (!Array.isArray(projects) || !projects.length) return;
+      const bar = document.querySelector(".top-bar__right");
+      const sel = document.createElement("select");
+      sel.id = "projectSel";
+      sel.title = "Projeto";
+      sel.style.cssText =
+        "background:#0a0a0a;color:#7dd3fc;border:1px solid #1e3a8a88;border-radius:8px;padding:4px 8px;font:inherit;font-size:12px;max-width:220px";
+      sel.innerHTML = projects
+        .map((p) => {
+          const label = (p.worktree || p.id || "").split("/").slice(-2).join("/");
+          return `<option value="${p.worktree || ""}">${label || p.id}</option>`;
+        })
+        .join("");
+      bar.prepend(sel);
+    } catch {}
+  }
+
   // seletor de agente na top bar
   async function loadAgents() {
     try {
@@ -105,4 +128,5 @@
   });
 
   loadAgents();
+  loadProjects();
 })();

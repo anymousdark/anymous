@@ -3,45 +3,52 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Any — Interface</title>
+<title>Any</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'JetBrains Mono', monospace; background: #000; color: #e5e5e5; height: 100vh; display: flex; flex-direction: column; }
-  header { padding: 14px 20px; border-bottom: 1px solid #1e3a8a33; display: flex; align-items: center; gap: 12px; }
-  header h1 { font-size: 1.2rem; letter-spacing: .3em; color: #60a5fa; }
-  #status { margin-left: auto; font-size: .75rem; color: #71717a; }
-  #status.ok { color: #4ade80; }
-  #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
-  .msg { max-width: 75%; padding: 12px 16px; border-radius: 14px; white-space: pre-wrap; font-size: .9rem; line-height: 1.5; }
+  body { font-family: system-ui, sans-serif; background: #09090b; color: #e4e4e7; height: 100vh; display: flex; flex-direction: column; }
+  header { padding: 12px 18px; border-bottom: 1px solid #27272a; display: flex; align-items: center; gap: 10px; }
+  header h1 { font-size: 1.1rem; letter-spacing: .25em; color: #60a5fa; }
+  header select { background: #18181b; color: #93c5fd; border: 1px solid #3f3f46; border-radius: 8px; padding: 6px 10px; font-size: .8rem; max-width: 180px; }
+  #dot { width: 9px; height: 9px; border-radius: 50%; background: #52525b; margin-left: auto; }
+  #dot.ok { background: #4ade80; }
+  #dot.err { background: #f87171; }
+  #chat { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 80%; padding: 10px 14px; border-radius: 12px; white-space: pre-wrap; font-size: .92rem; line-height: 1.5; }
   .user { align-self: flex-end; background: #1d4ed8; color: #fff; }
-  .any { align-self: flex-start; background: #171717; border: 1px solid #1e3a8a33; }
-  footer { padding: 14px 20px; border-top: 1px solid #1e3a8a33; display: flex; gap: 10px; align-items: center; }
-  #input { flex: 1; background: #0a0a0a; border: 1px solid #1e3a8a55; color: #fff; border-radius: 999px; padding: 12px 20px; font-size: 1rem; outline: none; }
-  button { background: #1d4ed8; color: #fff; border: none; border-radius: 999px; padding: 12px 22px; font-size: 1rem; cursor: pointer; }
+  .any { align-self: flex-start; background: #18181b; border: 1px solid #27272a; }
+  .sys { align-self: center; color: #71717a; font-size: .78rem; }
+  footer { padding: 12px 18px; border-top: 1px solid #27272a; display: flex; gap: 8px; }
+  #input { flex: 1; background: #18181b; border: 1px solid #3f3f46; color: #fff; border-radius: 10px; padding: 11px 14px; font-size: 1rem; outline: none; }
+  #input:focus { border-color: #3b82f6; }
+  button { background: #1d4ed8; color: #fff; border: none; border-radius: 10px; padding: 11px 18px; font-size: 1rem; cursor: pointer; }
   button:hover { background: #2563eb; }
-  #mic.rec { background: #dc2626; animation: pulse 1s infinite; }
-  @keyframes pulse { 50% { opacity: .5; } }
-  #agent { background: #0a0a0a; color: #93c5fd; border: 1px solid #1e3a8a55; border-radius: 999px; padding: 12px; }
+  button:disabled { opacity: .4; cursor: default; }
+  #mic.rec { background: #dc2626; }
 </style>
 </head>
 <body>
 <header>
   <h1>ANY</h1>
   <select id="agent"><option value="any">any</option></select>
-  <span id="status">● a ligar...</span>
+  <select id="project"><option value="">projeto…</option></select>
+  <span id="dot" title="estado"></span>
 </header>
 <div id="chat"></div>
 <footer>
-  <button id="mic" title="Falar (segurar)">🎤</button>
-  <input id="input" placeholder="Fala com o Any..." autocomplete="off" />
+  <button id="mic" title="segurar para falar">🎤</button>
+  <input id="input" placeholder="Escreve ao Any..." autocomplete="off" />
   <button id="send">➤</button>
 </footer>
 <script>
 const chat = document.getElementById('chat');
 const input = document.getElementById('input');
 const micBtn = document.getElementById('mic');
+const sendBtn = document.getElementById('send');
 const agentSel = document.getElementById('agent');
-const status = document.getElementById('status');
+const projectSel = document.getElementById('project');
+const dot = document.getElementById('dot');
+let busy = false, curAudio = null;
 
 function addMsg(text, cls) {
   const d = document.createElement('div');
@@ -50,71 +57,108 @@ function addMsg(text, cls) {
   chat.appendChild(d);
   chat.scrollTop = chat.scrollHeight;
 }
-
-async function ask(text) {
-  addMsg(text, 'user');
-  input.value = '';
-  const r = await fetch('/api/ask', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ text, agent: agentSel.value })
-  });
-  const { answer } = await r.json();
-  addMsg(answer || '(sem resposta)', 'any');
-  // fala a resposta
+function setBusy(b) {
+  busy = b;
+  sendBtn.disabled = b;
+  input.disabled = b;
+}
+async function speak(text) {
   try {
-    const s = await fetch('/api/speak', {
+    if (curAudio) { curAudio.pause(); curAudio = null; }
+    const r = await fetch('/api/speak', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ text: answer })
+      body: JSON.stringify({ text: text.slice(0, 500) })
     });
-    const blob = await s.blob();
-    new Audio(URL.createObjectURL(blob)).play();
+    if (!r.ok) return;
+    const blob = await r.blob();
+    if (!blob.type.startsWith('audio')) return;
+    curAudio = new Audio(URL.createObjectURL(blob));
+    await curAudio.play().catch(() => {});
   } catch {}
 }
-
-document.getElementById('send').onclick = () => input.value.trim() && ask(input.value.trim());
+async function ask(text) {
+  if (busy) return;
+  setBusy(true);
+  addMsg(text, 'user');
+  input.value = '';
+  const t0 = Date.now();
+  try {
+    const r = await fetch('/api/ask', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ text, agent: agentSel.value })
+    });
+    const data = await r.json();
+    if (!r.ok || !data.answer) throw new Error(data.error || ('http ' + r.status));
+    addMsg(data.answer, 'any');
+    addMsg(`resposta em ${((Date.now() - t0) / 1000).toFixed(1)}s`, 'sys');
+    dot.className = 'ok';
+    speak(data.answer);
+  } catch (e) {
+    addMsg('Erro no provedor. Tenta de novo em 1 min. (' + String(e.message || e).slice(0, 100) + ')', 'any');
+    dot.className = 'err';
+  }
+  setBusy(false);
+}
+sendBtn.onclick = () => input.value.trim() && ask(input.value.trim());
 input.onkeydown = (e) => { if (e.key === 'Enter' && input.value.trim()) ask(input.value.trim()); };
 
-// mic: grava enquanto prime (push-to-talk)
-let recorder, chunks;
-async function micStart(e) {
+// mic push-to-talk (pointer único, sem duplicar)
+let recorder = null;
+async function micDown(e) {
   e.preventDefault();
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  chunks = [];
-  recorder = new MediaRecorder(stream);
-  recorder.ondataavailable = (ev) => chunks.push(ev.data);
-  recorder.onstop = async () => {
-    stream.getTracks().forEach(t => t.stop());
-    const blob = new Blob(chunks, { type: 'audio/webm' });
-    const fd = new FormData();
-    fd.append('audio', blob);
-    const r = await fetch('/api/listen', { method: 'POST', body: fd });
-    const { text } = await r.json();
-    if (text) ask(text);
-    else addMsg('(nada ouvido)', 'any');
-  };
-  recorder.start();
-  micBtn.classList.add('rec');
+  if (recorder && recorder.state === 'recording') return;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const chunks = [];
+    recorder = new MediaRecorder(stream);
+    recorder.ondataavailable = (ev) => chunks.push(ev.data);
+    recorder.onstop = async () => {
+      stream.getTracks().forEach(t => t.stop());
+      micBtn.classList.remove('rec');
+      try {
+        const fd = new FormData();
+        fd.append('audio', new Blob(chunks, { type: 'audio/webm' }));
+        const r = await fetch('/api/listen', { method: 'POST', body: fd });
+        const data = await r.json();
+        if (data.text) ask(data.text);
+        else addMsg('(nada ouvido)', 'sys');
+      } catch { addMsg('(falha no mic)', 'sys'); }
+    };
+    recorder.start();
+    micBtn.classList.add('rec');
+  } catch { addMsg('(mic negado)', 'sys'); }
 }
-function micStop() { recorder && recorder.state !== 'inactive' && recorder.stop(); micBtn.classList.remove('rec'); }
-micBtn.onmousedown = micStart;
-micBtn.onmouseup = micStop;
-micBtn.ontouchstart = micStart;
-micBtn.ontouchend = micStop;
+function micUp() {
+  if (recorder && recorder.state === 'recording') recorder.stop();
+  micBtn.classList.remove('rec');
+}
+micBtn.style.touchAction = 'none';
+micBtn.onpointerdown = micDown;
+window.onpointerup = micUp;
 
-// boot
 (async () => {
   try {
     const h = await (await fetch('/api/health')).json();
-    status.textContent = h.anymous ? '● anymous ligado' : '● anymous desligado';
-    status.className = h.anymous ? 'ok' : '';
-  } catch { status.textContent = '● sem backend'; }
+    dot.className = h.anymous ? 'ok' : 'err';
+  } catch { dot.className = 'err'; }
   try {
     const { agents } = await (await fetch('/api/agents')).json();
-    agentSel.innerHTML = agents.map(a => `<option value="${a.name}"${a.name === 'any' ? ' selected' : ''}>${a.name}</option>`).join('');
+    agentSel.innerHTML = agents.map(a =>
+      `<option value="${a.name}"${a.name === 'any' ? ' selected' : ''}>${a.name}</option>`).join('');
   } catch {}
-  addMsg('Sou o Any. Escreve ou prime o micro para falar.', 'any');
+  try {
+    const r = await fetch('/api/projects');
+    const projects = await r.json();
+    if (Array.isArray(projects)) {
+      projectSel.innerHTML = '<option value="">todos</option>' + projects.map(p => {
+        const label = (p.worktree || p.id || '').split('/').slice(-2).join('/');
+        return `<option value="${p.worktree || ''}">${label || p.id}</option>`;
+      }).join('');
+    }
+  } catch {}
+  addMsg('Sou o Any. Escreve ou segura o micro.', 'any');
 })();
 </script>
 </body>

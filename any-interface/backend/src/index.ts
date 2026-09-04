@@ -11,20 +11,64 @@ const ANYMOUS_DIR =
   process.env.ANYMOUS_DIR ?? "/home/aycher/Documentos/Default Project/anymous-ia"
 const VOICE = path.join(os.homedir(), ".local", "share", "anymous", "voice")
 
-// --- CLI bridge: corre o anymous e devolve a resposta ---
+// --- Servidor anymous persistente (sem cold start por turno) ---
+const sessions = new Map<string, string>()
+async function api(path: string, init?: RequestInit) {
+  const sep = path.includes("?") ? "&" : "?"
+  const r = await fetch(`${ANYMOUS_API}${path}${sep}directory=${encodeURIComponent(ANYMOUS_DIR)}`, {
+    ...init,
+    headers: { "content-type": "application/json", ...(init?.headers ?? {}) },
+    signal: AbortSignal.timeout(180_000),
+  })
+  if (!r.ok) throw new Error(`anymous ${r.status}: ${(await r.text()).slice(0, 200)}`)
+  return r.json()
+}
+async function sessionFor(agent: string): Promise<string> {
+  const hit = sessions.get(agent)
+  if (hit) return hit
+  const s = (await api(`/session`, { method: "POST", body: JSON.stringify({ title: `Any HUD (${agent})` }) })) as {
+    id: string
+  }
+  sessions.set(agent, s.id)
+  return s.id
+}
+function textOf(msg: any): string {
+  const parts = msg?.parts ?? []
+  return parts
+    .filter((p: any) => p?.type === "text" && p.text)
+    .map((p: any) => p.text)
+    .join("\n")
+    .trim()
+}
+
+// --- pergunta ao Any (sessão reutilizada, rápido) ---
 app.post("/api/ask", async (c) => {
   const { text, agent } = await c.req.json<{ text: string; agent?: string }>()
   if (!text?.trim()) return c.json({ error: "empty" }, 400)
-  const proc = await $`${ANYMOUS} run --agent ${agent ?? "any"} ${text}`
-    .cwd(ANYMOUS_DIR)
-    .quiet()
-    .nothrow()
-  const answer = proc.text().trim()
-  if (proc.exitCode !== 0 || !answer) {
-    const err = proc.text().trim() || "provedor instável — tenta de novo em 1 min"
-    return c.json({ answer: "", error: err.slice(0, 300) }, 502)
+  const name = /^[\w-]+$/.test(agent ?? "") ? agent! : "any"
+  try {
+    const id = await sessionFor(name)
+    const msg = (await api(`/session/${id}/message`, {
+      method: "POST",
+      body: JSON.stringify({
+        agent: name,
+        model: { providerID: "opencode", modelID: "nemotron-3-ultra-free" },
+        parts: [{ type: "text", text: text.slice(0, 2000) }],
+      }),
+    })) as any
+    const answer = textOf(msg)
+    if (!answer) return c.json({ answer: "", error: "resposta vazia — tenta de novo" }, 502)
+    return c.json({ answer })
+  } catch (e) {
+    return c.json({ answer: "", error: String((e as Error)?.message ?? e).slice(0, 300) }, 502)
   }
-  return c.json({ answer })
+})
+
+// --- nova conversa (limpa sessão do agente) ---
+app.post("/api/reset", async (c) => {
+  const { agent } = await c.req.json<{ agent?: string }>().catch(() => ({} as any))
+  sessions.delete(agent ?? "any")
+  return c.json({ ok: true })
 })
 
 // --- agentes disponíveis ---
@@ -61,6 +105,28 @@ app.post("/api/listen", async (c) => {
       .quiet()
       .nothrow()
   return c.json({ text: out.text().trim() })
+})
+
+// --- projetos e sessões existentes do CLI ---
+app.get("/api/projects", async (c) => {
+  try {
+    return c.json(await api(`/project`))
+  } catch (e) {
+    return c.json({ error: String((e as Error)?.message ?? e).slice(0, 200) }, 502)
+  }
+})
+app.get("/api/sessions", async (c) => {
+  const dir = c.req.query("directory") ?? ANYMOUS_DIR
+  try {
+    const r = await fetch(
+      `${ANYMOUS_API}/session?directory=${encodeURIComponent(dir)}&limit=50`,
+      { signal: AbortSignal.timeout(30_000) },
+    )
+    if (!r.ok) throw new Error(`anymous ${r.status}`)
+    return c.json(await r.json())
+  } catch (e) {
+    return c.json({ error: String((e as Error)?.message ?? e).slice(0, 200) }, 502)
+  }
 })
 
 // --- métricas reais do sistema ---
