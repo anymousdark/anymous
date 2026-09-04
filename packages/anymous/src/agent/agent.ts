@@ -619,6 +619,12 @@ const layer = Layer.effect(
               Permission.fromConfig({
                 question: "allow",
                 plan_enter: "allow",
+                task: {
+                  any: "deny",
+                  build: "deny",
+                  plan: "deny",
+                  general: "deny",
+                },
               }),
               user,
             ),
