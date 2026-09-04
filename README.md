@@ -1,6 +1,6 @@
 # anymous — AI-Powered Reverse Engineering & Pentest Platform
 
-**18 specialized AI agents** for reverse engineering, penetration testing, and software analysis. Built on a fork of opencode v11, fully rebranded and enhanced with unrestricted mode.
+**39 specialized AI agents** for reverse engineering, penetration testing, cyber analysis, and software engineering. Orchestrated by **Any** — call it by name and it delegates to the right specialists. Voice in pt-BR (offline), unrestricted mode. Built on a fork of opencode v11, fully rebranded and enhanced.
 
 ```
  █████  ███   ██ ███   ██ ██████  ██████  █████   ██████
@@ -52,6 +52,28 @@ anymous
 | **pentest-postexploit** | Post-exploitation & lateral movement — privilege escalation, credential dumping, persistence |
 | **pentest-critic** | False positive validator — verifies every finding, exploit, and credential before reporting |
 | **pentest-reporter** | Professional report generation — CVSS scoring, executive summary, risk analysis, remediation plan |
+
+### Orchestrator + Cyber/SOC (2 agents)
+
+| Agent | Role |
+|-------|------|
+| **any** | Always-on orchestrator — talk to Any, it splits the task and dispatches the 38 specialists via Task, validates and delivers. 100% unrestricted mode |
+| **cyber-analytic** | Senior SOC/blue-team analyst — threat triage, IOC extraction, MITRE ATT&CK mapping, Sigma/YARA rules, CVSS/EPSS prioritization |
+
+### Voice (pt-BR, 100% offline, no API)
+
+```bash
+anymous voice "Olá, esta é a voz do Any"  # speak (Piper TTS, voz faber)
+anymous voice --listen 5                   # record 5s mic + transcribe (faster-whisper)
+anymous voice --loop                       # loop: listen → Any answers → speak
+```
+
+Voice scripts live in `packages/anymous/voice/` (`speak.sh`, `listen.sh`, `listen.py`). Requires: Piper binary + `pt_BR-faber-medium` voice, Python venv with `faster-whisper`, mic via PipeWire.
+
+### Web HUD + Desktop
+
+- **any-interface/** (separate folder): Bun/Hono backend bridging the CLI (`/api/ask`, `/api/agents`, `/api/speak`, `/api/listen`) + Iron-Man style HUD frontend (MIT: jarvis-hud skin, voice orb). Run: `bun run src/index.ts` in `any-interface/backend` → http://127.0.0.1:4123
+- **Desktop app** (Electron, Linux `.deb` + Windows): see `INSTRUCOES-LINUX.md`
 
 ## 🧠 System Prompts
 
