@@ -1,43 +1,45 @@
 # anymous — AI-Powered Reverse Engineering & Pentest Platform
 
-**39 specialized AI agents**, orchestrated by **Any**. Voice in pt-BR (offline). Unrestricted mode.
+**45 AI agents** orchestrated by **Any**, offline pt-BR voice, Iron-Man HUD.
+64 free models, no API key required. Unrestricted mode for professionals.
 
 ```bash
 npm install -g anymous
 anymous
 ```
 
-## Quick start
+## Talk to Any
 
 ```bash
-# Talk to the orchestrator (it delegates to the 38 specialists)
 anymous run --agent any "faz pentest neste host"
+anymous run --agent soc "analisa este alerta"
+anymous run --agent redteam "alvo lab 10.10.10.0/24"
+anymous run --agent blueteam "hardening deste servidor"
+anymous run --agent forensics "analisa este dump"
+```
 
-# Voice (pt-BR, 100% offline — Piper TTS + faster-whisper STT)
+## Voice (pt-BR, offline)
+
+```bash
 anymous voice "Olá, esta é a voz do Any"
 anymous voice --loop
-
-# Web UI
-anymous web
 ```
 
 ## Agents
 
-- **any** — always-on orchestrator, 100% unrestricted
+- **Orchestrators**: any, soc, forensics, redteam, blueteam, build, plan
 - **RE (8)**: reverser-static, reverser-dynamic, reverser-binary, reverser-source,
   reverser-automator, memory-dump, exe-extractor, debug-tools
 - **Pentest (10)**: pentest-lead, pentest-recon, pentest-scanner, pentest-enumerator,
   pentest-exploiter, pentest-identity, pentest-webapp, pentest-postexploit,
   pentest-critic, pentest-reporter
-- **cyber-analytic** — SOC/blue-team analyst (triage, MITRE ATT&CK, Sigma/YARA)
-- **Engineering (20)**: build, plan, frontend, backend, docs, security, debug, etc.
+- **cyber-analytic** (SOC), **engineering (20)**
 
 ## Providers
 
-Works with any opencode-compatible provider (OpenAI, Anthropic, Google, OpenRouter…).
-Free models available via the `opencode` provider (e.g. `opencode/nemotron-3-ultra-free`)
-with `OPENCODE_API_KEY` — no per-model key needed per session.
+64 free `opencode/*` models out of the box, plus any opencode-compatible
+provider (OpenAI, Anthropic, Google, OpenRouter…).
 
-See full docs at https://anymous-cli.vercel.app and https://github.com/anymousdark/anymous.
+Docs: https://anymous-cli.vercel.app · Code: https://github.com/anymousdark/anymous
 
 MIT License.

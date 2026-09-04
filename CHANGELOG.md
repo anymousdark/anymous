@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.4.7] - 2026-09-04
 
+### Added
+- 4 agentes primários cyber com subagentes+skills: soc, forensics, redteam, blueteam (45 agentes total)
+- README novo completo (GitHub + npm)
+
 ### Fixed
 - Providers opencode free sem API (loader opencode: reposto, apiKey public, 64 modelos)
 - Backport opencode 1.18.27: timeouts 5min, Anthropic blockBinding, Bedrock reasoning, temp/topP/topK, Azure, Cloudflare gateway, session headers, arquivo imediato na Home
