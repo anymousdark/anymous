@@ -14,6 +14,36 @@
     if (dateDisplay) dateDisplay.textContent = now.toISOString().split("T")[0];
   }, 1000);
 
+  // métricas reais do backend (CPU/RAM/uptime)
+  const bars = {
+    cpu: [document.getElementById("cpuBar"), document.getElementById("cpuValue")],
+    mem: [document.getElementById("memBar"), document.getElementById("memValue")],
+  };
+  const uptimeEl = document.getElementById("uptimeVal");
+  async function refreshMetrics() {
+    try {
+      const r = await fetch("/api/system");
+      if (!r.ok) return;
+      const s = await r.json();
+      if (bars.cpu[0]) {
+        bars.cpu[0].style.width = s.cpu + "%";
+        bars.cpu[1].textContent = s.cpu + "%";
+      }
+      if (bars.mem[0]) {
+        bars.mem[0].style.width = s.mem + "%";
+        bars.mem[1].textContent = s.mem + "%";
+      }
+      if (uptimeEl) {
+        const h = String(Math.floor(s.uptime / 3600)).padStart(2, "0");
+        const m = String(Math.floor((s.uptime % 3600) / 60)).padStart(2, "0");
+        const ss = String(s.uptime % 60).padStart(2, "0");
+        uptimeEl.textContent = `${h}:${m}:${ss}`;
+      }
+    } catch {}
+  }
+  setInterval(refreshMetrics, 3000);
+  refreshMetrics();
+
   function setState(state) {
     orbContainer.classList.remove("listening", "speaking");
     statusText.classList.remove("listening", "speaking");

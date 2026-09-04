@@ -568,11 +568,41 @@ body {
   font-size: 16px;
   color: var(--text);
   margin-top: 12px;
-  max-width: 400px;
-  text-align: center;
-  line-height: 1.5;
+  max-width: 460px;
+  max-height: 22vh;
+  overflow-y: auto;
+  text-align: left;
+  line-height: 1.55;
   min-height: 24px;
+  padding: 10px 16px;
+  background: rgba(0, 15, 25, 0.6);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  backdrop-filter: blur(6px);
   text-shadow: 0 0 8px rgba(0, 246, 255, 0.3);
+  white-space: pre-wrap;
+}
+.response-text:empty { display: none; }
+
+/* Any — seletor de agente e versão */
+#agentSel {
+  background: var(--dark-panel);
+  color: var(--cyan);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  outline: none;
+  cursor: pointer;
+}
+#agentSel:hover { border-color: var(--cyan-glow); }
+.hud-version {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
 }
 
 /* ----------------------------------------------------------------- *

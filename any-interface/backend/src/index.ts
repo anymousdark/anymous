@@ -59,6 +59,20 @@ app.post("/api/listen", async (c) => {
   return c.json({ text: out.text().trim() })
 })
 
+// --- métricas reais do sistema ---
+app.get("/api/system", (c) => {
+  const load = os.loadavg()[0] ?? 0
+  const cores = os.cpus().length || 1
+  const total = os.totalmem()
+  const free = os.freemem()
+  return c.json({
+    cpu: Math.min(100, Math.round((load / cores) * 100)),
+    mem: Math.round(((total - free) / total) * 100),
+    uptime: Math.round(os.uptime()),
+    time: new Date().toLocaleTimeString("en-GB", { hour12: false }),
+  })
+})
+
 // --- estado do backend anymous ---
 app.get("/api/health", async (c) => {
   try {
