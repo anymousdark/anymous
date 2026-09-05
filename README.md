@@ -1,7 +1,7 @@
 # anymous — AI-Powered Reverse Engineering & Pentest Platform
 
-**45 AI agents** for reverse engineering, penetration testing, SOC operations, and software
-engineering — orchestrated by **Any**, with offline pt-BR voice and an Iron-Man style HUD.
+**44 AI agents** for reverse engineering, penetration testing, SOC operations, and software
+engineering — with offline pt-BR voice and an Iron-Man style HUD.
 Free models with no API key. Unrestricted mode for professionals. Fork of opencode (upstream
 1.18.27 backported), fully rebranded.
 
@@ -27,10 +27,9 @@ No API key needed to start: 64 free `opencode/*` models work out of the box
 export OPENCODE_API_KEY="sua-key"   # opcional, libera tudo
 ```
 
-## 🗣️ Talk to Any
+## 🗣️ Quick Tasks
 
 ```bash
-anymous run --agent any "faz pentest neste host"
 anymous run --agent soc "analisa este alerta"
 anymous run --agent redteam "alvo 10.10.10.0/24, escopo lab"
 anymous run --agent blueteam "hardening deste servidor"
@@ -94,7 +93,7 @@ security, code-reviewer, debug, test-writer, explore, general, web-designer + sy
 ```bash
 anymous voice "Olá, esta é a voz do Any"  # speak — Piper TTS, voz faber
 anymous voice --listen 5                   # mic 5s + transcribe — faster-whisper
-anymous voice --loop                       # loop: listen → Any → speak
+anymous voice --loop                       # loop: listen → answer → speak
 ```
 
 Scripts in `packages/anymous/voice/`. Needs: Piper binary + `pt_BR-faber-medium`

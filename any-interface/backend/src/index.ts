@@ -63,7 +63,7 @@ app.get("/api/models", async (c) => {
 app.post("/api/ask", async (c) => {
   const { text, agent, model } = await c.req.json<{ text: string; agent?: string; model?: string }>()
   if (!text?.trim()) return c.json({ error: "empty" }, 400)
-  const name = /^[\w-]+$/.test(agent ?? "") ? agent! : "any"
+  const name = /^[\w-]+$/.test(agent ?? "") ? agent! : "build"
   const [providerID, ...rest] = String(model || DEFAULT_MODEL).split("/")
   const modelID = rest.join("/")
   if (!providerID || !modelID) return c.json({ answer: "", error: "modelo inválido" }, 400)
@@ -88,7 +88,7 @@ app.post("/api/ask", async (c) => {
 // --- nova conversa (limpa sessão do agente) ---
 app.post("/api/reset", async (c) => {
   const { agent } = await c.req.json<{ agent?: string }>().catch(() => ({} as any))
-  sessions.delete(agent ?? "any")
+  sessions.delete(agent ?? "build")
   return c.json({ ok: true })
 })
 

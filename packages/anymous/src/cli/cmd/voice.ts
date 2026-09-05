@@ -71,7 +71,7 @@ export const VoiceCommand = {
         alias: "a",
         type: "string",
         describe: "agent to answer in loop mode",
-        default: "any",
+        default: "build",
       })
       .option("model", {
         alias: "m",

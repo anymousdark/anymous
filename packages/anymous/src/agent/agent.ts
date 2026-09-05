@@ -49,7 +49,6 @@ import PROMPT_PENTEST_POSTEXPLOIT from "./prompt/pentest-postexploit.txt"
 import PROMPT_PENTEST_CRITIC from "./prompt/pentest-critic.txt"
 import PROMPT_PENTEST_REPORTER from "./prompt/pentest-reporter.txt"
 import PROMPT_CYBER_ANALYTIC from "./prompt/cyber-analytic.txt"
-import PROMPT_ANY from "./prompt/any.txt"
 import PROMPT_SOC from "./prompt/soc.txt"
 import PROMPT_FORENSICS from "./prompt/forensics.txt"
 import PROMPT_REDTEAM from "./prompt/redteam.txt"
@@ -608,28 +607,6 @@ const layer = Layer.effect(
             mode: "subagent",
             native: true,
             prompt: PROMPT_CYBER_ANALYTIC,
-          },
-          any: {
-            name: "any",
-            description: "Any, the always-on orchestrator. Talk to any, it delegates to the 38 specialist agents and delivers the final answer.",
-            prompt: PROMPT_ANY,
-            options: {},
-            permission: Permission.merge(
-              defaults,
-              Permission.fromConfig({
-                question: "allow",
-                plan_enter: "allow",
-                task: {
-                  any: "deny",
-                  build: "deny",
-                  plan: "deny",
-                  general: "deny",
-                },
-              }),
-              user,
-            ),
-            mode: "primary",
-            native: true,
           },
           soc: {
             name: "soc",

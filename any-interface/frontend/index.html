@@ -30,7 +30,7 @@
 <body>
 <header>
   <h1>ANY</h1>
-  <select id="agent"><option value="any">any</option></select>
+  <select id="agent"><option value="build">build</option></select>
   <select id="model"><option value="">modelo…</option></select>
   <select id="project"><option value="">projeto…</option></select>
   <span id="dot" title="estado"></span>
@@ -148,7 +148,7 @@ window.onpointerup = micUp;
   try {
     const { agents } = await (await fetch('/api/agents')).json();
     agentSel.innerHTML = agents.map(a =>
-      `<option value="${a.name}"${a.name === 'any' ? ' selected' : ''}>${a.name}</option>`).join('');
+      `<option value="${a.name}"${a.name === 'build' ? ' selected' : ''}>${a.name}</option>`).join('');
   } catch {}
   try {
     const { models, default: def } = await (await fetch('/api/models')).json();
@@ -165,7 +165,7 @@ window.onpointerup = micUp;
       }).join('');
     }
   } catch {}
-  addMsg('Sou o Any. Escreve ou segura o micro.', 'any');
+  addMsg('Escreve ou segura o micro.', 'any');
 })();
 </script>
 </body>

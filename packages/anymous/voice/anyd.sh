@@ -22,7 +22,7 @@ case "${1:-start}" in
     while true; do
       wake_once 2>/dev/null || break
       echo "🔔 acordou! fala agora"
-      "$ANYMOUS_BIN" voice --listen 8 --agent any 2>/dev/null || true
+      "$ANYMOUS_BIN" voice --listen 8 --agent build 2>/dev/null || true
       sleep 1
     done
     rm -f "$PIDFILE"

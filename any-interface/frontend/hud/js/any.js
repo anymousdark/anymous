@@ -5,7 +5,7 @@
   const textInput = document.getElementById("textInput");
   const sendBtn = document.getElementById("sendBtn");
 
-  let agent = "any";
+  let agent = "build";
   let recorder = null;
   let chunks = [];
 
@@ -43,7 +43,7 @@
       sel.style.cssText =
         "background:#0a0a0a;color:#7dd3fc;border:1px solid #1e3a8a88;border-radius:8px;padding:4px 8px;font:inherit;font-size:12px";
       sel.innerHTML = agents
-        .map((a) => `<option value="${a.name}"${a.name === "any" ? " selected" : ""}>${a.name}</option>`)
+        .map((a) => `<option value="${a.name}"${a.name === "build" ? " selected" : ""}>${a.name}</option>`)
         .join("");
       sel.onchange = () => (agent = sel.value);
       bar.prepend(sel);
