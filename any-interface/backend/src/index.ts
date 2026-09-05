@@ -41,15 +41,23 @@ function textOf(msg: any): string {
     .trim()
 }
 
-// modelos que funcionam (curadoria: testados e a responder)
-const MODELS = [
-  { id: "nvidia/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning", label: "Nemotron Omni (NVIDIA, key)" },
-  { id: "opencode/nemotron-3-ultra-free", label: "Nemotron Ultra (free)" },
-  { id: "opencode/muse-spark-1.3-contributor-free", label: "Muse Spark (free)" },
-  { id: "opencode/muse-spark-1.2-contributor-free", label: "Muse Spark 1.2 (free)" },
-]
-const DEFAULT_MODEL = MODELS[0].id
-app.get("/api/models", (c) => c.json({ models: MODELS, default: DEFAULT_MODEL }))
+// todos os modelos do CLI (mesmo sistema: anymous models)
+const DEFAULT_MODEL = "nvidia/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning"
+let modelsCache: { at: number; models: { id: string; label: string }[] } | null = null
+app.get("/api/models", async (c) => {
+  if (!modelsCache || Date.now() - modelsCache.at > 300_000) {
+    const proc = await $`${ANYMOUS} models`.cwd(ANYMOUS_DIR).quiet().nothrow()
+    const ids =
+      proc.exitCode === 0
+        ? [...new Set(proc.text().split("\n").map((l) => l.trim()).filter(Boolean))]
+        : []
+    modelsCache = {
+      at: Date.now(),
+      models: ids.map((id) => ({ id, label: id })),
+    }
+  }
+  return c.json({ models: modelsCache.models, default: DEFAULT_MODEL })
+})
 
 // --- pergunta ao Any (sessão reutilizada, rápido) ---
 app.post("/api/ask", async (c) => {
