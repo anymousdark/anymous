@@ -1,6 +1,6 @@
 {
   "$schema": "https://anymous-cli.vercel.app/config.json",
-  "model": "opencode/nemotron-3-ultra-free",
+  "model": "nvidia/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
   "permission": {
     "*": "allow",
     "external_directory": {
