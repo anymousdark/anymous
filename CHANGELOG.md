@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.4.8] - 2026-09-05
 
+### Added
+- Criador fixo nos prompts (anymousdark/Aycher, nunca o user do sistema)
+- 47 skills via skills.urls + wake word openwakeword + daemon anyd
+- Comando voice robusto + hub com projetos/sessões do CLI + hub mínimo novo
+
 ### Fixed
 - Identidade padrão com capacidades (formato emoji) em build/general/plan/any
 - Upgrade aponta para anymousdark/anymous
