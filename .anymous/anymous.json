@@ -26,5 +26,8 @@
     "plan_exit": "allow",
     "todowrite": "allow"
   },
-  "default_agent": "build"
+  "default_agent": "build",
+  "skills": {
+    "urls": ["https://anymous-cli.vercel.app/.well-known/skills/"]
+  }
 }
