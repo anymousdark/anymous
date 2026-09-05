@@ -31,6 +31,7 @@
 <header>
   <h1>ANY</h1>
   <select id="agent"><option value="any">any</option></select>
+  <select id="model"><option value="">modelo…</option></select>
   <select id="project"><option value="">projeto…</option></select>
   <span id="dot" title="estado"></span>
 </header>
@@ -46,6 +47,7 @@ const input = document.getElementById('input');
 const micBtn = document.getElementById('mic');
 const sendBtn = document.getElementById('send');
 const agentSel = document.getElementById('agent');
+const modelSel = document.getElementById('model');
 const projectSel = document.getElementById('project');
 const dot = document.getElementById('dot');
 let busy = false, curAudio = null;
@@ -87,7 +89,7 @@ async function ask(text) {
     const r = await fetch('/api/ask', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ text, agent: agentSel.value })
+      body: JSON.stringify({ text, agent: agentSel.value, model: modelSel.value || undefined })
     });
     const data = await r.json();
     if (!r.ok || !data.answer) throw new Error(data.error || ('http ' + r.status));
@@ -147,6 +149,11 @@ window.onpointerup = micUp;
     const { agents } = await (await fetch('/api/agents')).json();
     agentSel.innerHTML = agents.map(a =>
       `<option value="${a.name}"${a.name === 'any' ? ' selected' : ''}>${a.name}</option>`).join('');
+  } catch {}
+  try {
+    const { models, default: def } = await (await fetch('/api/models')).json();
+    modelSel.innerHTML = models.map(m =>
+      `<option value="${m.id}"${m.id === def ? ' selected' : ''}>${m.label}</option>`).join('');
   } catch {}
   try {
     const r = await fetch('/api/projects');

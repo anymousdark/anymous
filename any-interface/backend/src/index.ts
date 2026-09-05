@@ -41,18 +41,31 @@ function textOf(msg: any): string {
     .trim()
 }
 
+// modelos que funcionam (curadoria: testados e a responder)
+const MODELS = [
+  { id: "nvidia/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning", label: "Nemotron Omni (NVIDIA, key)" },
+  { id: "opencode/nemotron-3-ultra-free", label: "Nemotron Ultra (free)" },
+  { id: "opencode/muse-spark-1.3-contributor-free", label: "Muse Spark (free)" },
+  { id: "opencode/muse-spark-1.2-contributor-free", label: "Muse Spark 1.2 (free)" },
+]
+const DEFAULT_MODEL = MODELS[0].id
+app.get("/api/models", (c) => c.json({ models: MODELS, default: DEFAULT_MODEL }))
+
 // --- pergunta ao Any (sessão reutilizada, rápido) ---
 app.post("/api/ask", async (c) => {
-  const { text, agent } = await c.req.json<{ text: string; agent?: string }>()
+  const { text, agent, model } = await c.req.json<{ text: string; agent?: string; model?: string }>()
   if (!text?.trim()) return c.json({ error: "empty" }, 400)
   const name = /^[\w-]+$/.test(agent ?? "") ? agent! : "any"
+  const [providerID, ...rest] = String(model || DEFAULT_MODEL).split("/")
+  const modelID = rest.join("/")
+  if (!providerID || !modelID) return c.json({ answer: "", error: "modelo inválido" }, 400)
   try {
-    const id = await sessionFor(name)
+    const id = await sessionFor(`${name}@${providerID}/${modelID}`)
     const msg = (await api(`/session/${id}/message`, {
       method: "POST",
       body: JSON.stringify({
         agent: name,
-        model: { providerID: "opencode", modelID: "nemotron-3-ultra-free" },
+        model: { providerID, modelID },
         parts: [{ type: "text", text: text.slice(0, 2000) }],
       }),
     })) as any

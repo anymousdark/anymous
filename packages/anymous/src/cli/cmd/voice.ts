@@ -10,6 +10,7 @@ interface VoiceArgs {
   listen?: number
   loop?: boolean
   agent: string
+  model: string
 }
 
 const voiceDir = path.join(os.homedir(), ".local", "share", "anymous", "voice")
@@ -71,6 +72,12 @@ export const VoiceCommand = {
         type: "string",
         describe: "agent to answer in loop mode",
         default: "any",
+      })
+      .option("model", {
+        alias: "m",
+        type: "string",
+        describe: "model in provider/model format",
+        default: "nvidia/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
       }),
   handler: async (args: VoiceArgs) => {
     const missing = checkVoiceDeps()
@@ -103,7 +110,7 @@ export const VoiceCommand = {
         return true
       }
       UI.println(`👂 ouviste: ${heard.text}`)
-      const r = await $`${anymousBin} run --agent ${args.agent} -- ${heard.text}`
+      const r = await $`${anymousBin} run --agent ${args.agent} --model ${args.model} -- ${heard.text}`
         .quiet()
         .nothrow()
         .timeout(120_000)
