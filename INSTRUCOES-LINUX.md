@@ -59,7 +59,7 @@ cd ../..
 cd packages/anymous
 
 # Build para linux-x64 (esta máquina)
-ANYMOUS_VERSION=1.3.11 ANYMOUS_CHANNEL=latest \
+ANYMOUS_VERSION=1.4.9 ANYMOUS_CHANNEL=latest \
   bun run script/build.ts --single --skip-install
 
 # O binário fica em: dist/anymous-linux-x64/bin/anymous
@@ -69,7 +69,7 @@ cd ../..
 **Verificar o binário:**
 ```bash
 ./packages/anymous/dist/anymous-linux-x64/bin/anymous --version
-# Deve imprimir: 1.3.11
+# Deve imprimir: 1.4.9
 ```
 
 ---
@@ -128,13 +128,13 @@ ai.anymous.desktop
 
 ```bash
 # Criar release (se ainda não existe)
-gh release create v1.3.11 \
+gh release create v1.4.9 \
   --repo anymousdark/anymous \
-  --title "v1.3.11 — Desktop Linux" \
-  --notes "anymous Desktop v1.3.11 para Linux (GUI Electron)"
+  --title "v1.4.9 — Desktop Linux" \
+  --notes "anymous Desktop v1.4.9 para Linux (GUI Electron)"
 
 # Upload dos pacotes
-gh release upload v1.3.11 \
+gh release upload v1.4.9 \
   --repo anymousdark/anymous \
   packages/desktop/dist/anymous-desktop-linux-x64.deb \
   packages/desktop/dist/anymous-desktop-linux-x64.AppImage \
@@ -152,7 +152,7 @@ cd packages/anymous/dist/anymous-linux-x64
 bun pm pack
 
 # Publicar
-npm publish ./anymous-linux-x64-1.3.11.tgz --access public --tag latest
+npm publish ./anymous-linux-x64-1.4.9.tgz --access public --tag latest
 
 cd ../../..
 ```
@@ -208,7 +208,7 @@ Categories=Development;
 ### Variáveis de ambiente do build
 | Variável | Valor | Descrição |
 |----------|-------|-----------|
-| `ANYMOUS_VERSION` | `1.3.11` | Versão do build |
+| `ANYMOUS_VERSION` | `1.4.9` | Versão do build |
 | `ANYMOUS_CHANNEL` | `prod` | Canal (dev/beta/prod) |
 | `GH_REPO` | `anymousdark/anymous` | Repo para upload de release |
 

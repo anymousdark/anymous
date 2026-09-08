@@ -1,10 +1,9 @@
 [Desktop Entry]
-Name=OpenCode
-Exec=/opt/OpenCode/ai.opencode.desktop %U
+Name=Anymous
+Exec=/opt/anymous/ai.anymous.desktop %U
 Terminal=false
 Type=Application
-Icon=ai.opencode.desktop
-StartupWMClass=ai.opencode.desktop
-NoDisplay=true
-Comment=Open source AI coding agent
+Icon=ai.anymous.desktop
+StartupWMClass=ai.anymous.desktop
+Comment=Anymous - AI Reverse Engineering & Pentest Platform
 Categories=Development;

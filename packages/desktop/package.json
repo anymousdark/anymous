@@ -1,7 +1,7 @@
 {
   "name": "@anymous-ai/desktop",
   "private": true,
-  "version": "1.18.5",
+  "version": "1.4.9",
   "type": "module",
   "license": "MIT",
   "homepage": "https://anymous-cli.vercel.app",
