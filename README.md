@@ -1,8 +1,7 @@
 # anymous — AI-Powered Reverse Engineering & Pentest Platform
 
 **44 AI agents** for reverse engineering, penetration testing, SOC operations, and software
-engineering — with offline pt-BR voice and an Iron-Man style HUD.
-Free models with no API key. Unrestricted mode for professionals. Fork of opencode (upstream
+engineering — with Free models with no API key. Unrestricted mode for professionals. Fork of opencode (upstream
 1.18.27 backported), fully rebranded.
 
 ```
@@ -88,28 +87,6 @@ anymous run --agent forensics "analisa este dump"
 architect, backend, frontend, database, devops, docs, refactor, performance,
 security, code-reviewer, debug, test-writer, explore, general, web-designer + system.
 
-## 🔊 Voice (pt-BR, 100% offline)
-
-```bash
-anymous voice "Olá, esta é a voz do Any"  # speak — Piper TTS, voz faber
-anymous voice --listen 5                   # mic 5s + transcribe — faster-whisper
-anymous voice --loop                       # loop: listen → answer → speak
-```
-
-Scripts in `packages/anymous/voice/`. Needs: Piper binary + `pt_BR-faber-medium`
-voice, Python venv with `faster-whisper`, mic via PipeWire. No API, no cloud.
-
-## 🖥️ HUD Web Interface
-
-Iron-Man style HUD (MIT skin) + Bun/Hono backend bridging the CLI:
-
-```bash
-cd hud/backend && bun install && bun run src/index.ts
-# → http://127.0.0.1:4123/hud/   (chat, voice, agents, real CPU/RAM metrics)
-```
-
-Endpoints: `/api/ask`, `/api/agents`, `/api/speak`, `/api/listen`, `/api/system`.
-
 ## 🧠 Providers & Free Models
 
 - **64 free `opencode/*` models, no key required** — `anymous models opencode`
@@ -121,9 +98,8 @@ Endpoints: `/api/ask`, `/api/agents`, `/api/speak`, `/api/listen`, `/api/system`
 
 ```
 anymous-ia/
-  hud/                # HUD backend (Hono) + frontend
   packages/
-    anymous/          # CLI (entry point) + voice/ scripts
+    anymous/          # CLI (entry point)
     core/             # Runtime, Effect services, SQLite
     server/           # HTTP API server
     tui/              # Terminal UI

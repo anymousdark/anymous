@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.9] - 2026-09-05
+
+### Removed
+- Recurso de voz (`anymous voice`, scripts, wake, daemon) — CLI/TUI puros
+- Interface web HUD (`hud/`) — só CLI/TUI
+- Agente any e referências (foco total no CLI)
+
 ## [1.4.8] - 2026-09-05
 
 ### Added
