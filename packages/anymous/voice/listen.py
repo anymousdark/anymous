@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Any voice - listen (STT via faster-whisper, tiny model, pt)."""
+"""Voice - listen (STT via faster-whisper, tiny model, pt)."""
 import os
 import sys
 
-audio = sys.argv[1] if len(sys.argv) > 1 else "/tmp/any-listen.wav"
+audio = sys.argv[1] if len(sys.argv) > 1 else "/tmp/hud-listen.wav"
 if not os.path.isfile(audio) or os.path.getsize(audio) < 4096:
     print("audio invalido", file=sys.stderr)
     sys.exit(2)

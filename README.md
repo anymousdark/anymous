@@ -104,7 +104,7 @@ voice, Python venv with `faster-whisper`, mic via PipeWire. No API, no cloud.
 Iron-Man style HUD (MIT skin) + Bun/Hono backend bridging the CLI:
 
 ```bash
-cd any-interface/backend && bun install && bun run src/index.ts
+cd hud/backend && bun install && bun run src/index.ts
 # → http://127.0.0.1:4123/hud/   (chat, voice, agents, real CPU/RAM metrics)
 ```
 
@@ -121,7 +121,7 @@ Endpoints: `/api/ask`, `/api/agents`, `/api/speak`, `/api/listen`, `/api/system`
 
 ```
 anymous-ia/
-  any-interface/      # HUD backend (Hono) + frontend
+  hud/                # HUD backend (Hono) + frontend
   packages/
     anymous/          # CLI (entry point) + voice/ scripts
     core/             # Runtime, Effect services, SQLite

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Any voice - speak (TTS pt-BR via Piper)
+# Voice - speak (TTS pt-BR via Piper)
 # Uso: speak.sh [--no-play] "texto para falar"
 # Env: ANY_VOICE_RATE (default 1.25, maior = mais lento)
 set -u
@@ -12,13 +12,13 @@ TEXT="$*"
 [ -z "$TEXT" ] && exit 0
 [ -x "$VOICE_DIR/bin/piper" ] || { echo "piper em falta" >&2; exit 1; }
 [ -f "$VOICE_DIR/pt_BR-faber-medium.onnx" ] || { echo "voz em falta" >&2; exit 1; }
-rm -f /tmp/any-speak.wav
-printf '%s' "$TEXT" | "$VOICE_DIR/bin/piper" --model "$VOICE_DIR/pt_BR-faber-medium.onnx" --length-scale "$RATE" --output_file /tmp/any-speak.wav 2>/dev/null || { echo "piper falhou" >&2; exit 1; }
-[ -s /tmp/any-speak.wav ] || { echo "wav vazio" >&2; exit 1; }
+rm -f /tmp/hud-speak.wav
+printf '%s' "$TEXT" | "$VOICE_DIR/bin/piper" --model "$VOICE_DIR/pt_BR-faber-medium.onnx" --length-scale "$RATE" --output_file /tmp/hud-speak.wav 2>/dev/null || { echo "piper falhou" >&2; exit 1; }
+[ -s /tmp/hud-speak.wav ] || { echo "wav vazio" >&2; exit 1; }
 if [ -z "$NO_PLAY" ]; then
   if command -v pw-play >/dev/null 2>&1; then
-    pw-play /tmp/any-speak.wav 2>/dev/null
+    pw-play /tmp/hud-speak.wav 2>/dev/null
   else
-    aplay /tmp/any-speak.wav 2>/dev/null
+    aplay /tmp/hud-speak.wav 2>/dev/null
   fi
 fi

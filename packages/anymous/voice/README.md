@@ -25,7 +25,7 @@ voice/
 
 ```bash
 # Falar
-~/.local/share/anymous/voice/speak.sh "Olá, eu sou o Any."
+~/.local/share/anymous/voice/speak.sh "Olá."
 
 # Ouvir (grava 5s do mic e transcreve)
 ~/.local/share/anymous/voice/listen.sh 5

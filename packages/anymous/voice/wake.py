@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Any wake word — ouve 'hey jarvis' (openwakeword) e dispara comando.
+"""anymous wake word — ouve 'hey jarvis' (openwakeword) e dispara comando.
 Uso: wake.py [comando...]  (default: imprime WAKE e sai)
 Para 'hey any' personalizado é preciso treinar modelo próprio (ver README).
 """

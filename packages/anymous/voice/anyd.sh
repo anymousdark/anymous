@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Any daemon — sempre ligado: espera "hey jarvis" -> 1 turno de voz -> volta a ouvir
-# Uso: anyd.sh [start|stop|status]
+# Uso: hudd.sh [start|stop|status]
 # Requer: venv (openwakeword+faster-whisper), piper, mic
 set -u
 VOICE_DIR="$HOME/.local/share/anymous/voice"
-PIDFILE="/tmp/anyd.pid"
+PIDFILE="/tmp/hudd.pid"
 ANYMOUS_BIN="$HOME/.bun/bin/anymous"
 
 wake_once() {
@@ -14,11 +14,11 @@ wake_once() {
 case "${1:-start}" in
   start)
     if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
-      echo "anyd já corre (pid $(cat "$PIDFILE"))"
+      echo "hudd já corre (pid $(cat "$PIDFILE"))"
       exit 0
     fi
     echo $$ > "$PIDFILE"
-    echo "anyd ligado — diz 'hey jarvis'. Ctrl+C para parar."
+    echo "hudd ligado — diz 'hey jarvis'. Ctrl+C para parar."
     while true; do
       wake_once 2>/dev/null || break
       echo "🔔 acordou! fala agora"
@@ -31,13 +31,13 @@ case "${1:-start}" in
     [ -f "$PIDFILE" ] && kill "$(cat "$PIDFILE")" 2>/dev/null
     pkill -f "voice/wake.py" 2>/dev/null
     rm -f "$PIDFILE"
-    echo "anyd parado"
+    echo "hudd parado"
     ;;
   status)
     if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
-      echo "anyd a correr (pid $(cat "$PIDFILE"))"
+      echo "hudd a correr (pid $(cat "$PIDFILE"))"
     else
-      echo "anyd parado"
+      echo "hudd parado"
     fi
     ;;
 esac

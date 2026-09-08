@@ -1,4 +1,4 @@
-/* Any HUD — liga o HUD ao backend anymous (/api/ask, /api/listen, /api/speak).
+/* anymous HUD — liga o HUD ao backend anymous (/api/ask, /api/listen, /api/speak).
    Reusa setState/addLog/displayResponse de app.js via eventos. */
 (function () {
   const voiceBtn = document.getElementById("voiceBtn");
@@ -63,7 +63,7 @@
   }
 
   async function ask(text) {
-    window.__anySetState && window.__anySetState("processing");
+    window.__hudSetState && window.__hudSetState("processing");
     const r = await fetch("/api/ask", {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -76,7 +76,7 @@
   }
 
   // expõe hook usado pelo app.js adaptado
-  window.AnyBackend = { ask, speak, loadAgents };
+  window.HudBackend = { ask, speak, loadAgents };
 
   async function toggleMic() {
     if (recorder && recorder.state !== "inactive") {
@@ -89,23 +89,23 @@
     recorder.ondataavailable = (e) => chunks.push(e.data);
     recorder.onstop = async () => {
       stream.getTracks().forEach((t) => t.stop());
-      window.__anySetState && window.__anySetState("processing");
+      window.__hudSetState && window.__hudSetState("processing");
       const fd = new FormData();
       fd.append("audio", new Blob(chunks, { type: "audio/webm" }));
       try {
         const r = await fetch("/api/listen", { method: "POST", body: fd });
         const { text } = await r.json();
         if (text) {
-          window.__anyOnUserText && window.__anyOnUserText(text);
+          window.__hudOnUserText && window.__hudOnUserText(text);
         } else {
-          window.__anySetState && window.__anySetState("idle");
+          window.__hudSetState && window.__hudSetState("idle");
         }
       } catch {
-        window.__anySetState && window.__anySetState("idle");
+        window.__hudSetState && window.__hudSetState("idle");
       }
     };
     recorder.start();
-    window.__anySetState && window.__anySetState("listening");
+    window.__hudSetState && window.__hudSetState("listening");
   }
 
   voiceBtn.addEventListener("click", toggleMic);
@@ -119,7 +119,7 @@
   sendBtn.addEventListener("click", () => {
     const t = textInput.value.trim();
     if (t) {
-      window.__anyOnUserText && window.__anyOnUserText(t);
+      window.__hudOnUserText && window.__hudOnUserText(t);
       textInput.value = "";
     }
   });

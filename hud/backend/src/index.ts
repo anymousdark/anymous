@@ -26,7 +26,7 @@ async function api(path: string, init?: RequestInit) {
 async function sessionFor(agent: string): Promise<string> {
   const hit = sessions.get(agent)
   if (hit) return hit
-  const s = (await api(`/session`, { method: "POST", body: JSON.stringify({ title: `Any HUD (${agent})` }) })) as {
+  const s = (await api(`/session`, { method: "POST", body: JSON.stringify({ title: `anymous HUD (${agent})` }) })) as {
     id: string
   }
   sessions.set(agent, s.id)
@@ -59,7 +59,7 @@ app.get("/api/models", async (c) => {
   return c.json({ models: modelsCache.models, default: DEFAULT_MODEL })
 })
 
-// --- pergunta ao Any (sessão reutilizada, rápido) ---
+// --- pergunta (sessão reutilizada, rápido) ---
 app.post("/api/ask", async (c) => {
   const { text, agent, model } = await c.req.json<{ text: string; agent?: string; model?: string }>()
   if (!text?.trim()) return c.json({ error: "empty" }, 400)
@@ -108,7 +108,7 @@ app.get("/api/agents", async (c) => {
 app.post("/api/speak", async (c) => {
   const { text } = await c.req.json<{ text: string }>()
   await $`bash ${path.join(VOICE, "speak.sh")} ${text ?? ""}`.quiet().nothrow()
-  const wav = Bun.file("/tmp/any-speak.wav")
+  const wav = Bun.file("/tmp/hud-speak.wav")
   return new Response(wav, { headers: { "content-type": "audio/wav" } })
 })
 
@@ -117,12 +117,12 @@ app.post("/api/listen", async (c) => {
   const body = await c.req.parseBody()
   const audio = body["audio"]
   if (!(audio instanceof File)) return c.json({ error: "no audio" }, 400)
-  await Bun.write("/tmp/any-ui-listen.webm", audio)
-  await $`ffmpeg -y -i /tmp/any-ui-listen.webm -ar 16000 -ac 1 /tmp/any-ui-listen.wav`
+  await Bun.write("/tmp/hud-ui-listen.webm", audio)
+  await $`ffmpeg -y -i /tmp/hud-ui-listen.webm -ar 16000 -ac 1 /tmp/hud-ui-listen.wav`
     .quiet()
     .nothrow()
   const out =
-    await $`${path.join(VOICE, "venv", "bin", "python")} ${path.join(VOICE, "listen.py")} /tmp/any-ui-listen.wav`
+    await $`${path.join(VOICE, "venv", "bin", "python")} ${path.join(VOICE, "listen.py")} /tmp/hud-ui-listen.wav`
       .quiet()
       .nothrow()
   return c.json({ text: out.text().trim() })
@@ -178,5 +178,5 @@ app.get("/api/health", async (c) => {
 app.use("/*", serveStatic({ root: "../frontend" }))
 
 const port = Number(process.env.PORT ?? 4123)
-console.log(`Any interface em http://127.0.0.1:${port}`)
+console.log(`HUD em http://127.0.0.1:${port}`)
 export default { port, fetch: app.fetch }

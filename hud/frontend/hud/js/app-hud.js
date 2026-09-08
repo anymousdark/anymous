@@ -1,4 +1,4 @@
-/* Any HUD controller — estados + log + resposta, ligado ao AnyBackend. */
+/* anymous HUD controller — estados + log + resposta, ligado ao HudBackend. */
 (function () {
   const statusText = document.getElementById("statusText");
   const responseText = document.getElementById("responseText");
@@ -87,19 +87,19 @@
     })();
   }
 
-  window.__anySetState = setState;
-  window.__anyOnUserText = async function (text) {
+  window.__hudSetState = setState;
+  window.__hudOnUserText = async function (text) {
     addLog("user", text);
     setState("processing");
     const t0 = Date.now();
     try {
-      const answer = await window.AnyBackend.ask(text);
+      const answer = await window.HudBackend.ask(text);
       const secs = ((Date.now() - t0) / 1000).toFixed(1);
       addLog("any", answer);
       addLog("system", `resposta em ${secs}s`);
       displayResponse(answer);
       setState("speaking");
-      await window.AnyBackend.speak(answer);
+      await window.HudBackend.speak(answer);
     } catch (e) {
       const msg = "Erro no provedor (instável). Tenta de novo em 1 min.";
       addLog("system", msg);
@@ -107,7 +107,7 @@
     }
     setState("idle");
   };
-  window.__anyReset = async function () {
+  window.__hudReset = async function () {
     try {
       await fetch("/api/reset", {
         method: "POST",
@@ -119,5 +119,5 @@
     addLog("system", "Nova conversa iniciada.");
   };
 
-  addLog("system", "Any online. Escreve ou prime SPACE para falar.");
+  addLog("system", "anymous online. Escreve ou prime SPACE para falar.");
 })();
