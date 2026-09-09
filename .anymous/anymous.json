@@ -1,6 +1,6 @@
 {
   "$schema": "https://anymous-cli.vercel.app/config.json",
-  "model": "openrouter/~openai/gpt-mini-latest",
+  "model": "opencode/muse-spark-1.3-contributor-free",
   "permission": {
     "*": "allow",
     "external_directory": {
@@ -31,12 +31,17 @@
     "openrouter": {
       "models": {
         "~openai/gpt-mini-latest": {
-          "limit": { "context": 128000, "output": 1000 }
+          "limit": {
+            "context": 128000,
+            "output": 1000
+          }
         }
       }
     }
   },
   "skills": {
-    "urls": ["https://anymous-cli.vercel.app/.well-known/skills/"]
+    "urls": [
+      "https://anymous-cli.vercel.app/.well-known/skills/"
+    ]
   }
 }
