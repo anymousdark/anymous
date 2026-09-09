@@ -7,7 +7,7 @@ description: Perform pre-execution security audits of untrusted codebases throug
 
 ## Overview
 
-This skill enables OpenCode to perform a comprehensive pre-execution security audit of a given codebase and produce a structured, high-signal risk report. It analyzes the entire project including source code, dependency manifests, build scripts, and configuration files from a security-first perspective.
+This skill enables Anymous to perform a comprehensive pre-execution security audit of a given codebase and produce a structured, high-signal risk report. It analyzes the entire project including source code, dependency manifests, build scripts, and configuration files from a security-first perspective.
 
 ## When to Use This Skill
 

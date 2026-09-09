@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-09-09
+
+### Added
+- Rebrand total: títulos Anymous, theme-preload anymous-*, metainfo, emails
+- Guard layer-node contra dependência undefined (bug a.name)
+- Fixes GUI: versão About, release-notes vazio, placeholder, validação server
+
+### Fixed
+- Skills SKILL.md sem refs opencode + web Lander + FAQ 45 agentes
+
 ## [1.4.9] - 2026-09-05
 
 ### Removed

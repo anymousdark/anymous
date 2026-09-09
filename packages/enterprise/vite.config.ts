@@ -3,6 +3,9 @@ import { defineConfig } from "vite"
 import { solidStart } from "@solidjs/start/config"
 import { nitro } from "nitro/vite"
 import tailwindcss from "@tailwindcss/vite"
+import solidPlugin from "vite-plugin-solid"
+import { compression } from "vite-plugin-compression"
+import { tanstackVirtual } from "@tanstack/virtual-plugin"
 
 const nitroConfig: any = (() => {
   const target = process.env.ANYMOUS_DEPLOYMENT_TARGET
@@ -21,12 +24,23 @@ const nitroConfig: any = (() => {
 export default defineConfig({
   plugins: [
     tailwindcss(),
-    solidStart() as PluginOption,
-    nitro({
-      ...nitroConfig,
-      baseURL: process.env.ANYMOUS_BASE_URL,
+    solidPlugin({
+      reactivity: "fine-grained",
+    }),
+    tanstackVirtual(),
+    compression({
+      algorithm: "gzip",
+      threshold: 1024,
     }),
   ],
+  build: {
+    target: "esnext",
+    minify: "esbuild",
+    esbuild: {
+      drop: ["console", "debugger"],
+    },
+    sourcemap: "hidden",
+  },
   server: {
     host: "0.0.0.0",
     allowedHosts: true,

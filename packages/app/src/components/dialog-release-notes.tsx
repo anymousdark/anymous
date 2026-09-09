@@ -16,6 +16,7 @@ export type Highlight = {
 }
 
 export function DialogReleaseNotes(props: { highlights: Highlight[] }) {
+  if (props.highlights.length === 0) return null
   const dialog = useDialog()
   const language = useLanguage()
   const settings = useSettings()

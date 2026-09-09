@@ -61,7 +61,7 @@ Navigate to your messy invoice folder:
 cd ~/Desktop/receipts-to-sort
 ```
 
-Then ask OpenCode:
+Then ask Anymous:
 ```
 Organize these invoices for taxes
 ```

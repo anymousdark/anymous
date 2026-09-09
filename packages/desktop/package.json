@@ -6,8 +6,8 @@
   "license": "MIT",
   "homepage": "https://anymous-cli.vercel.app",
   "author": {
-    "name": "anymous",
-    "email": "hello@anymous-cli.vercel.app"
+    "name": "anymousdark",
+    "email": "aychero56@gmail.com"
   },
   "scripts": {
     "typecheck": "tsgo -b",

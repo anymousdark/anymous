@@ -14,7 +14,7 @@ export const csp = (hash = "") =>
 export const DEFAULT_CSP = csp()
 
 export function themePreloadHash(body: string) {
-  return body.match(/<script\b(?![^>]*\bsrc\s*=)[^>]*\bid=(['"])oc-theme-preload-script\1[^>]*>([\s\S]*?)<\/script>/i)
+  return body.match(/<script\b(?![^>]*\bsrc\s*=)[^>]*\bid=(['"])anymous-theme-preload-script\1[^>]*>([\s\S]*?)<\/script>/i)
 }
 
 export function cspForHtml(body: string) {

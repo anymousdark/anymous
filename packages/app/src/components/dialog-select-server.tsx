@@ -134,7 +134,7 @@ function ServerForm(props: ServerFormProps) {
             placeholder={props.placeholder}
             value={props.value}
             autofocus
-            validationState={props.error ? "invalid" : "valid"}
+            validationState={props.error ? "invalid" : undefined}
             error={props.error}
             disabled={props.busy}
             onChange={props.onChange}
