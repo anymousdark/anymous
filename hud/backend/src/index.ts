@@ -42,7 +42,7 @@ function textOf(msg: any): string {
 }
 
 // todos os modelos do CLI (mesmo sistema: anymous models)
-const DEFAULT_MODEL = "openrouter/~openai/gpt-mini-latest"
+const DEFAULT_MODEL = "opencode/muse-spark-1.3-contributor-free"
 let modelsCache: { at: number; models: { id: string; label: string }[] } | null = null
 app.get("/api/models", async (c) => {
   if (!modelsCache || Date.now() - modelsCache.at > 300_000) {
