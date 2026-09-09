@@ -1,6 +1,6 @@
 {
   "$schema": "https://anymous-cli.vercel.app/config.json",
-  "model": "nvidia/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+  "model": "openrouter/~openai/gpt-mini-latest",
   "permission": {
     "*": "allow",
     "external_directory": {
@@ -27,6 +27,15 @@
     "todowrite": "allow"
   },
   "default_agent": "build",
+  "provider": {
+    "openrouter": {
+      "models": {
+        "~openai/gpt-mini-latest": {
+          "limit": { "context": 128000, "output": 1000 }
+        }
+      }
+    }
+  },
   "skills": {
     "urls": ["https://anymous-cli.vercel.app/.well-known/skills/"]
   }
