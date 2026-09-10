@@ -328,3 +328,13 @@
     }
   }
 }
+
+/* Anymous desktop wallpaper — replaces the default opencode flat background. */
+@layer utilities {
+  body {
+    background: #0b0d12 url("/wallpaper.jpg") center / cover no-repeat fixed;
+  }
+  .bg-v2-background-bg-base {
+    background-color: color-mix(in srgb, var(--v2-background-bg-base) 80%, transparent);
+  }
+}
