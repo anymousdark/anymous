@@ -17,7 +17,7 @@
     },
     "packages/anymous": {
       "name": "anymous",
-      "version": "1.4.9",
+      "version": "1.5.1",
       "bin": {
         "anymous": "./bin/anymous.cjs",
       },
@@ -436,6 +436,7 @@
         "@anymous-ai/llm": "workspace:*",
         "@anymous-ai/plugin": "workspace:*",
         "@anymous-ai/schema": "workspace:*",
+        "@anymous-ai/sdk": "workspace:*",
         "@aws-sdk/credential-providers": "3.1057.0",
         "@effect/opentelemetry": "catalog:",
         "@effect/platform-node": "catalog:",
@@ -489,6 +490,7 @@
         "@tsconfig/bun": "catalog:",
         "@types/bun": "catalog:",
         "@types/cross-spawn": "catalog:",
+        "@types/mime-types": "3.0.1",
         "@types/node": "catalog:",
         "@types/npm-package-arg": "6.1.4",
         "@types/npmcli__arborist": "6.3.3",
@@ -500,7 +502,7 @@
     },
     "packages/desktop": {
       "name": "@anymous-ai/desktop",
-      "version": "1.18.5",
+      "version": "1.5.1",
       "dependencies": {
         "@zip.js/zip.js": "2.7.62",
         "effect": "catalog:",

@@ -11,6 +11,27 @@ import { Effect } from "effect"
 const DEFAULT_TIMEOUT = 30_000
 const MAX_LIST_PAGES = 1_000
 
+// The MCP SDK (1.29+) types tool content items loosely (unknown). Narrow to
+// text parts defensively instead of assuming the decoded shape.
+export function toolTextParts(content: unknown): string[] {
+  if (!Array.isArray(content)) return []
+  const out: string[] = []
+  for (const item of content) {
+    if (
+      typeof item === "object" &&
+      item !== null &&
+      (item as { type?: unknown }).type === "text" &&
+      typeof (item as { text?: unknown }).text === "string"
+    )
+      out.push((item as { text: string }).text)
+  }
+  return out
+}
+
+export function toolContentLength(content: unknown): number {
+  return Array.isArray(content) ? content.length : 0
+}
+
 const TolerantListToolsResultSchema = ListToolsResultSchema.extend({
   tools: ToolSchema.omit({ outputSchema: true }).array(),
 })
@@ -67,12 +88,14 @@ export function convertTool(mcpTool: MCPToolDef, client: Client, timeout?: numbe
       )
       if (result.isError)
         throw new Error(
-          result.content
-            .flatMap((item) => (item.type === "text" ? [item.text] : []))
-            .filter((text) => text.trim())
-            .join("\n\n") || "MCP tool returned an error",
+          toolTextParts(result.content).filter((text) => text.trim()).join("\n\n") ||
+            "MCP tool returned an error",
         )
-      if (result.content.length > 0 || result.structuredContent === undefined || result.structuredContent === null)
+      if (
+        toolContentLength(result.content) > 0 ||
+        result.structuredContent === undefined ||
+        result.structuredContent === null
+      )
         return result
       return {
         ...result,

@@ -11,6 +11,23 @@ import { Plugin } from "@/plugin"
 
 export const CODE_MODE_TOOL = "execute"
 
+// The MCP SDK (1.29+) types tool content items loosely (unknown). Narrow to
+// text parts defensively instead of assuming the decoded shape.
+function toolTextParts(content: unknown): string[] {
+  if (!Array.isArray(content)) return []
+  const out: string[] = []
+  for (const item of content) {
+    if (
+      typeof item === "object" &&
+      item !== null &&
+      (item as { type?: unknown }).type === "text" &&
+      typeof (item as { text?: unknown }).text === "string"
+    )
+      out.push((item as { text: string }).text)
+  }
+  return out
+}
+
 const DESCRIPTION = "Run a confined orchestration script with access to connected MCP tools."
 
 export const Parameters = Schema.Struct({
@@ -160,12 +177,10 @@ const invokeChildTool = Effect.fn("CodeMode.invokeChildTool")(function* (input: 
       )
       if (raw.isError)
         throw new Error(
-          raw.content
-            .flatMap((item) => (item.type === "text" ? [item.text] : []))
-            .filter((text) => text.trim())
-            .join("\n\n") || "MCP tool returned an error",
+          toolTextParts(raw.content).filter((text) => text.trim()).join("\n\n") ||
+            "MCP tool returned an error",
         )
-      return raw
+      return raw as CallToolResult
     })
   }).pipe(
     Effect.withSpan("Tool.execute", {
