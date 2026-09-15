@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "version": "1.5.1",
+  "version": "1.5.3",
   "name": "anymous",
   "type": "module",
   "license": "MIT",
