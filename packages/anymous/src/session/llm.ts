@@ -235,7 +235,10 @@ const live: Layer.Layer<
           temperature: prepared.params.temperature,
           topP: prepared.params.topP,
           topK: prepared.params.topK,
-          maxOutputTokens: prepared.params.maxOutputTokens,
+          // Only forward an explicitly configured token cap. Forwarding the
+          // computed model-limit default would pin every request (e.g. Codex
+          // parity on the Responses path omits max_output_tokens entirely).
+          maxOutputTokens: flags.outputTokenMax,
           providerOptions: prepared.params.options,
           headers: prepared.headers,
           abort: input.abort,

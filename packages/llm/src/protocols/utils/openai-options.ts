@@ -30,6 +30,8 @@ const INCLUDABLES = new Set<string>(OpenAIResponseIncludables)
 const SERVICE_TIERS = new Set<string>(OpenAIServiceTiers)
 
 export const OpenAIReasoningEffort = Schema.Literals(OpenAIReasoningEfforts)
+export const OpenAIReasoningMode = Schema.Literals(["standard", "pro"])
+export type OpenAIReasoningMode = Schema.Schema.Type<typeof OpenAIReasoningMode>
 export const OpenAITextVerbosity = TextVerbosity
 export const OpenAIResponseIncludable = Schema.Literals(OpenAIResponseIncludables)
 export const OpenAIServiceTier = Schema.Literals(OpenAIServiceTiers)
@@ -57,6 +59,11 @@ export const reasoningEffort = (request: LLMRequest): ReasoningEffort | undefine
 
 export const reasoningSummary = (request: LLMRequest): "auto" | undefined =>
   options(request)?.reasoningSummary === "auto" ? "auto" : undefined
+
+export const reasoningMode = (request: LLMRequest): "standard" | "pro" | undefined => {
+  const value = options(request)?.reasoningMode
+  return value === "standard" || value === "pro" ? value : undefined
+}
 
 // Resolve the OpenAI Responses `include` field. Filters out unknown
 // includable values defensively so a typo in upstream config drops the

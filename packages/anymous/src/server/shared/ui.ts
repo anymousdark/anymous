@@ -86,6 +86,22 @@ export function serveUIEffect(
 
     if (embeddedWebUI) return yield* serveEmbeddedUIEffect(path, services.fs, embeddedWebUI)
 
+    return yield* serveUpstreamEffect(request, services).pipe(
+      // The UI fallback must never 500: when neither the embedded bundle nor
+      // the dev server is available (tests, minimal installs), fail closed
+      // with a clean 404 instead of a defect (connection errors die, so
+      // catchCause — it observes failures and defects alike).
+      Effect.catchCause(() => Effect.succeed(notFound())),
+    )
+  })
+}
+
+function serveUpstreamEffect(
+  request: HttpServerRequest.HttpServerRequest,
+  services: { fs: FSUtil.Interface; client: HttpClient.HttpClient; disableEmbeddedWebUi: boolean },
+) {
+  return Effect.gen(function* () {
+    const path = new URL(request.url, "http://localhost").pathname
     const response = yield* services.client.execute(
       HttpClientRequest.make(request.method)(upstreamURL(path), {
         headers: ProxyUtil.headers(request.headers, { host: UI_UPSTREAM.host }),

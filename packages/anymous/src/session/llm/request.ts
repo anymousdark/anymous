@@ -53,6 +53,24 @@ export type Prepared = {
 const mergeOptions = (target: Record<string, any>, source: Record<string, any> | undefined): Record<string, any> =>
   mergeDeep(target, source ?? {}) as Record<string, any>
 
+// Providers (e.g. Gemini) reject messages that map to zero content parts.
+// An assistant message with only empty text/reasoning parts would produce
+// an empty payload message, so drop it before it reaches the provider SDK.
+// Messages carrying tool calls/files are always kept.
+function isEmptyContentPart(part: unknown): boolean {
+  if (typeof part !== "object" || part === null) return true
+  const type = (part as { type?: unknown }).type
+  if (type === "text" || type === "reasoning") return (part as { text?: unknown }).text === ""
+  return false
+}
+
+function dropEmptyAssistantMessages(messages: ModelMessage[]): ModelMessage[] {
+  return messages.filter((message) => {
+    if (message.role !== "assistant" || typeof message.content === "string") return true
+    return !message.content.every(isEmptyContentPart)
+  })
+}
+
 export const prepare = Effect.fn("LLMRequestPrep.prepare")(function* (input: PrepareInput) {
   const isOpenaiOauth = input.provider.id === "openai" && input.auth?.type === "oauth"
   const system = [
@@ -98,7 +116,7 @@ export const prepare = Effect.fn("LLMRequestPrep.prepare")(function* (input: Pre
   }
   if (isOpenaiOauth) options.instructions = system.join("\n")
 
-  const messages =
+  const messages = dropEmptyAssistantMessages(
     isOpenaiOauth || input.isWorkflow
       ? input.messages
       : [
@@ -109,7 +127,8 @@ export const prepare = Effect.fn("LLMRequestPrep.prepare")(function* (input: Pre
             }),
           ),
           ...input.messages,
-        ]
+        ],
+  )
 
   const params = yield* input.plugin.trigger(
     "chat.params",
