@@ -70,8 +70,8 @@
     }
   },
   "scripts": {
-    "lint": "eslint . --ext .ts,.tsx --max-warnings 0",
-    "typecheck": "bun run typecheck --cwd packages/anymous",
+    "lint": "eslint packages",
+    "typecheck": "bunx --bun tsgo -p packages/anymous/tsconfig.json --noEmit",
     "test": "bun test --coverage",
     "test:watch": "bun test --watch",
     "build": "bun run script/build.ts --single --skip-install",

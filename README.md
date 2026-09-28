@@ -1,6 +1,6 @@
 # anymous — AI-Powered Reverse Engineering & Pentest Platform
 
-**18 specialized AI agents** for reverse engineering, penetration testing, and software analysis. Built on a fork of opencode v11, fully rebranded and enhanced with unrestricted mode.
+**39 specialized AI agents** for reverse engineering, penetration testing, and software analysis. Built on a fork of opencode v11, fully rebranded and enhanced with unrestricted mode.
 
 ```
  █████  ███   ██ ███   ██ ██████  ██████  █████   ██████

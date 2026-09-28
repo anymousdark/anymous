@@ -2,6 +2,15 @@
   "$schema": "https://json.schemastore.org/package.json",
   "version": "1.0.0",
   "name": "anymous",
+  "description": "AI-powered reverse engineering and penetration testing platform",
+  "homepage": "https://github.com/anymousdark/anymous",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anymousdark/anymous.git"
+  },
+  "bugs": {
+    "url": "https://github.com/anymousdark/anymous/issues"
+  },
   "type": "module",
   "license": "MIT",
   "private": true,

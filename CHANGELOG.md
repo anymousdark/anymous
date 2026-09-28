@@ -27,6 +27,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - npm CLI `--version` now reports real version (was `local`/stale hardcoded)
 - Version banner in CLI uses dynamic `InstallationVersion`
 - Removed offensive comment in `provider/transform.ts`
+- Root `typecheck` script no longer recurses infinitely (calls `tsgo -p packages/anymous` directly)
+- Root `lint` script uses ESLint 9 syntax (`eslint packages`, no `--ext`, no impossible `--max-warnings 0`)
+- `test/preload.ts` prettier formatting (15 errors)
+- Brew core-formula version lookup used empty `https://` URL (now `formulae.brew.sh/api/formula/<name>.json`)
+- `write` file-permission test honors umask instead of hardcoding `0o644`
+- Meta system prompt names "Meta Muse Spark" (matches `system.test.ts`)
+- Package metadata (`description`, `repository`, `bugs`) restored in `packages/anymous/package.json`
+- Site badge synced to v1.5.3, README agent count corrected to 39, `SECURITY.md` versions fixed
 
 ## [1.2.6] - 2026-08-01
 

@@ -215,7 +215,11 @@ const layer: Layer.Layer<Service, never, HttpClient.HttpClient | AppProcess.Serv
             const info = yield* Schema.decodeUnknownEffect(Schema.fromJsonString(BrewInfoV2))(infoJson)
             return info.formulae[0].versions.stable
           }
-          const response = yield* httpOk.execute(HttpClientRequest.get("https://").pipe(HttpClientRequest.acceptJson))
+          const response = yield* httpOk.execute(
+            HttpClientRequest.get(`https://formulae.brew.sh/api/formula/${formula}.json`).pipe(
+              HttpClientRequest.acceptJson,
+            ),
+          )
           const data = yield* HttpClientResponse.schemaBodyJson(BrewFormula)(response)
           return data.versions.stable
         }
