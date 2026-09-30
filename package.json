@@ -77,7 +77,7 @@
     "build": "bun run script/build.ts --single --skip-install",
     "build:all": "bun run script/build.ts --skip-install",
     "prepare-npm": "bun run script/prepare-npm.ts",
-    "dev": "bun dev",
+    "dev": "bun run --cwd packages/anymous dev",
     "dev:remote": "VITE_API_URL=https://anymous-cli.vercel.app bun dev",
     "clean": "rm -rf node_modules dist dist-npm .turbo *.tsbuildinfo packages/*/node_modules packages/*/dist packages/*/dist-npm packages/*/.turbo packages/*/*.tsbuildinfo"
   },
