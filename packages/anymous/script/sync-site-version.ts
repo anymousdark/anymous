@@ -20,8 +20,9 @@ if (!(await Bun.file(sitePath).exists())) {
 
 const html = await Bun.file(sitePath).text()
 
-// Replace any v1.x.x badge with the current version
-const updated = html.replace(/v1\.\d+\.\d+/g, `v${version}`)
+// Replace any version badge (vX.Y.Z, including preview like v0.0.0-...)
+// with the current published version.
+const updated = html.replace(/v\d+\.\d+\.\d+[^\s"<]*/g, `v${version}`)
 
 if (updated === html) {
   console.log(`No badge update needed (already v${version})`)

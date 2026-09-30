@@ -95,10 +95,11 @@ describe("HttpApi compression", () => {
     })
 
     test("when the response body is below the 1024-byte threshold", async () => {
-      // A bare config produces a tiny response (~few hundred bytes).
-      await using tmp = await tmpdir({ config: { formatter: false, lsp: false } })
-      const response = await app().request("/config", {
-        headers: { "x-anymous-directory": tmp.path, "accept-encoding": "gzip" },
+      // /config stopped being a small response once default providers started
+      // being injected into it (~1.2 KB), so use /global/health — a tiny JSON
+      // body that stays well under the threshold.
+      const response = await app().request("/global/health", {
+        headers: { "accept-encoding": "gzip" },
       })
       expect(response.status).toBe(200)
       const body = new Uint8Array(await response.arrayBuffer())

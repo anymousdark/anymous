@@ -17,7 +17,7 @@
     },
     "packages/anymous": {
       "name": "anymous",
-      "version": "1.5.1",
+      "version": "1.5.3",
       "bin": {
         "anymous": "./bin/anymous.cjs",
       },
@@ -1054,12 +1054,11 @@
     },
   },
   "trustedDependencies": [
-    "esbuild",
-    "tree-sitter-powershell",
-    "protobufjs",
     "electron",
+    "esbuild",
+    "@lydell/node-pty",
     "web-tree-sitter",
-    "tree-sitter-bash",
+    "protobufjs",
   ],
   "catalog": {
     "@cloudflare/workers-types": "4.20251008.0",

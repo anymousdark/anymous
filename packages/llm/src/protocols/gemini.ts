@@ -236,6 +236,7 @@ const lowerMessages = Effect.fn("Gemini.lowerMessages")(function* (request: LLMR
           continue
         }
         if (part.type === "reasoning") {
+          if (part.text === "") continue
           parts.push({ text: part.text, thought: true, thoughtSignature: thoughtSignature(part.providerMetadata) })
           continue
         }
@@ -244,6 +245,7 @@ const lowerMessages = Effect.fn("Gemini.lowerMessages")(function* (request: LLMR
           continue
         }
       }
+      if (parts.length === 0) continue
       contents.push({ role: "model", parts })
       continue
     }

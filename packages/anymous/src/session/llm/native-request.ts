@@ -11,6 +11,7 @@ import {
 } from "@anymous-ai/llm/providers"
 import type { ModelMessage } from "ai"
 import type { Provider } from "@/provider/provider"
+import { ProviderTransform } from "@/provider/transform"
 import { isRecord } from "@/util/record"
 
 type ToolInput = {
@@ -133,11 +134,21 @@ const tools = (input: Record<string, ToolInput> | undefined): ToolDefinition[] =
   )
 
 const generation = (input: RequestInput) => {
+  // Codex parity: the OpenAI Responses API applies its own default cap, so
+  // forward maxTokens only when explicitly configured — never the computed
+  // model-limit default (min(limit.output, OUTPUT_TOKEN_MAX)). Other
+  // providers (e.g. Anthropic, which requires max_tokens) keep the previous
+  // behavior and always receive a value.
+  const model = "model" in input ? input.model : undefined
+  const isDefaultCap =
+    model?.api.npm === "@ai-sdk/openai" &&
+    input.maxOutputTokens !== undefined &&
+    input.maxOutputTokens === ProviderTransform.maxOutputTokens(model)
   const result = {
     temperature: input.temperature,
     topP: input.topP,
     topK: input.topK,
-    maxTokens: input.maxOutputTokens,
+    maxTokens: isDefaultCap ? undefined : input.maxOutputTokens,
   }
   return Object.values(result).some((value) => value !== undefined) ? result : undefined
 }

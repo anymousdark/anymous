@@ -142,6 +142,23 @@ export const TuiThreadCommand = cmd({
         hidden: true,
       }),
   handler: async (args) => {
+    // The TUI renders Solid JSX, which requires the @opentui/solid transform
+    // registered by packages/anymous/bunfig.toml preload. Bun only loads
+    // bunfig.toml from the working directory, so starting the dev CLI from
+    // anywhere else crashes with a confusing "Cannot find package 'react'".
+    // Fail fast with actionable guidance instead.
+    const solid = (globalThis as Record<symbol, { installed?: boolean } | undefined>)[
+      Symbol.for("opentui.solid.transform")
+    ]
+    if (!solid?.installed && !args.mini) {
+      UI.error(
+        "TUI requires the Solid transform preload (packages/anymous/bunfig.toml).\n" +
+          "Start the dev CLI from packages/anymous, e.g.:\n" +
+          "  cd packages/anymous && bun dev",
+      )
+      process.exitCode = 1
+      return
+    }
     if (args.replay === true) {
       UI.error("--replay is not supported; replay is enabled by default")
       process.exitCode = 1

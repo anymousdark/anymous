@@ -9,27 +9,33 @@ import { afterAll } from "bun:test"
 // Set XDG env vars FIRST, before any src/ imports
 const dir = path.join(os.tmpdir(), "anymous-test-data-" + process.pid)
 await fs.mkdir(dir, { recursive: true })
-afterAll(async () => {
-  const { AppRuntime } = await import("../src/effect/app-runtime")
-  await AppRuntime.dispose()
+afterAll(
+  async () => {
+    const { AppRuntime } = await import("../src/effect/app-runtime")
+    await AppRuntime.dispose()
 
-  const busy = (error: unknown) =>
-    typeof error === "object" && error !== null && "code" in error && error.code === "EBUSY"
-  const rm = async (left: number): Promise<void> => {
-    Bun.gc(true)
-    await sleep(100)
-    return fs.rm(dir, { recursive: true, force: true }).catch((error) => {
-      if (!busy(error)) throw error
-      if (left <= 1 && process.platform !== "win32") throw error
-      if (left <= 1) return
-      return rm(left - 1)
-    })
-  }
+    const busy = (error: unknown) =>
+      typeof error === "object" && error !== null && "code" in error && error.code === "EBUSY"
+    const rm = async (left: number): Promise<void> => {
+      Bun.gc(true)
+      await sleep(100)
+      return fs.rm(dir, { recursive: true, force: true }).catch((error) => {
+        if (!busy(error)) throw error
+        if (left <= 1 && process.platform !== "win32") throw error
+        if (left <= 1) return
+        return rm(left - 1)
+      })
+    }
 
-  // Windows can keep SQLite WAL handles alive until GC finalizers run, so we
-  // force GC and retry teardown to avoid flaky EBUSY in test cleanup.
-  await rm(30)
-})
+    // Windows can keep SQLite WAL handles alive until GC finalizers run, so we
+    // force GC and retry teardown to avoid flaky EBUSY in test cleanup.
+    await rm(30)
+  },
+  // Teardown on Windows can legitimately take a while (AppRuntime dispose +
+  // EBUSY retries); the 5s default hook timeout turns slow-but-healthy
+  // cleanup into a spurious "(unnamed)" failure.
+  120_000,
+)
 
 process.env["XDG_DATA_HOME"] = path.join(dir, "share")
 process.env["XDG_CACHE_HOME"] = path.join(dir, "cache")
@@ -79,6 +85,18 @@ delete process.env["ANYMOUS_SERVER_PASSWORD"]
 delete process.env["ANYMOUS_SERVER_USERNAME"]
 delete process.env["ANYMOUS_EXPERIMENTAL"]
 delete process.env["ANYMOUS_ENABLE_EXPERIMENTAL_MODELS"]
+// Plugin behavior flags must not leak from the developer shell: fastBoot and
+// pure skip external plugin loading, which plugin/bootstrap tests rely on.
+delete process.env["ANYMOUS_FAST_BOOT"]
+delete process.env["ANYMOUS_PURE"]
+// Experimental/lifecycle flags change request paths (e.g. native vs AI SDK
+// runtime) and must not leak from the developer shell either.
+delete process.env["ANYMOUS_ENABLE_EXA"]
+delete process.env["ANYMOUS_ENABLE_PARALLEL"]
+delete process.env["ANYMOUS_ENABLE_QUESTION_TOOL"]
+delete process.env["ANYMOUS_EXPERIMENTAL_LSP_TY"]
+delete process.env["ANYMOUS_EXPERIMENTAL_NATIVE_LLM"]
+delete process.env["ANYMOUS_EXPERIMENTAL_WEBSOCKETS"]
 delete process.env["OTEL_EXPORTER_OTLP_ENDPOINT"]
 delete process.env["OTEL_EXPORTER_OTLP_HEADERS"]
 delete process.env["OTEL_RESOURCE_ATTRIBUTES"]

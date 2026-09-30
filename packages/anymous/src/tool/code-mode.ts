@@ -164,7 +164,8 @@ const invokeChildTool = Effect.fn("CodeMode.invokeChildTool")(function* (input: 
     yield* input.ctx.ask({ permission: input.entry.key, metadata: {}, patterns: ["*"], always: ["*"] })
     // Deliberately mirrors McpCatalog.convertTool's transport call so the MCP service stays free of tool-loop concerns.
     return yield* Effect.promise(async () => {
-      const raw = await input.entry.tool.client.callTool(
+      // SDK 1.29 returns `CallToolResult | { toolResult }` (task execution); the passed schema guarantees the former.
+      const raw = (await input.entry.tool.client.callTool(
         { name: input.entry.tool.def.name, arguments: input.args },
         CallToolResultSchema,
         {
@@ -174,7 +175,7 @@ const invokeChildTool = Effect.fn("CodeMode.invokeChildTool")(function* (input: 
           // The MCP SDK only sends a progress token when this hook is present, enabling timeout resets.
           onprogress: () => {},
         },
-      )
+      )) as CallToolResult
       if (raw.isError)
         throw new Error(
           toolTextParts(raw.content).filter((text) => text.trim()).join("\n\n") ||

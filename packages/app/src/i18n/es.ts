@@ -1105,4 +1105,10 @@ export const dict = {
   "error.childStore.persistedProjectIconCreateFailed": "Error al crear icono de proyecto persistente",
   "error.childStore.storeCreateFailed": "Error al crear almacén",
   "terminal.connectionLost.abnormalClose": "WebSocket cerrado anormalmente: {{code}}",
+  // TODO: translate (fallback to English)
+  "dialog.provider.custom.label": "Custom OpenAI-compatible provider",
+  "dialog.model.unpaid.viewMoreProviders": "See 70+ more providers",
+  "session.header.reveal.finder": "Reveal in Finder",
+  "session.header.reveal.fileExplorer": "Reveal in File Explorer",
+  "session.header.reveal.containingFolder": "Open containing folder",
 }

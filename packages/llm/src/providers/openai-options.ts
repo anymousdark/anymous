@@ -4,12 +4,15 @@ import type { OpenAIResponseIncludable, OpenAIServiceTier } from "../protocols/u
 
 export type { OpenAIResponseIncludable, OpenAIServiceTier } from "../protocols/utils/openai-options"
 
+export type OpenAIReasoningMode = "standard" | "pro"
+
 export interface OpenAIOptionsInput {
   readonly [key: string]: unknown
   readonly store?: boolean
   readonly promptCacheKey?: string
   readonly reasoningEffort?: ReasoningEffort
   readonly reasoningSummary?: "auto"
+  readonly reasoningMode?: OpenAIReasoningMode
   // OpenAI Responses `include` wire field. Mirrors the official SDK's
   // `ResponseIncludable[]` union exactly so AI SDK callers and direct
   // native-SDK callers share one shape and no translation is required.
@@ -32,6 +35,7 @@ const openAIProviderOptions = (options: OpenAIOptionsInput | undefined): Provide
       promptCacheKey: options?.promptCacheKey,
       reasoningEffort: options?.reasoningEffort,
       reasoningSummary: options?.reasoningSummary,
+      reasoningMode: options?.reasoningMode,
       include: options?.include,
       textVerbosity: options?.textVerbosity,
       serviceTier: options?.serviceTier,

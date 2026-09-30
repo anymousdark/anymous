@@ -1,5 +1,5 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js"
-import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js"
+import { StreamableHTTPClientTransport, StreamableHTTPError } from "@modelcontextprotocol/sdk/client/streamableHttp.js"
 import { LATEST_PROTOCOL_VERSION } from "@modelcontextprotocol/sdk/types.js"
 
 const posts: Array<{ method: string; session: string | null }> = []
@@ -38,11 +38,27 @@ const server = Bun.serve({
     return Response.json({ jsonrpc: "2.0", id: message.id, result: {} })
   },
 })
-const client = new Client({ name: "test", version: "1" })
 
+const url = new URL(server.url)
+const connect = async () => {
+  const client = new Client({ name: "test", version: "1" })
+  await client.connect(new StreamableHTTPClientTransport(url))
+  return client
+}
+
+// NOTE: the pinned SDK no longer re-initializes automatically when a
+// session-bound request returns 404, so recovery is explicit: drop the dead
+// session, connect a fresh one, and retry the failed call once.
+let client = await connect()
 try {
-  await client.connect(new StreamableHTTPClientTransport(server.url))
-  await client.ping()
+  try {
+    await client.ping()
+  } catch (error) {
+    if (!(error instanceof StreamableHTTPError) || error.code !== 404) throw error
+    await client.close().catch(() => {})
+    client = await connect()
+    await client.ping()
+  }
   process.stdout.write(JSON.stringify(posts))
 } finally {
   await client.close()

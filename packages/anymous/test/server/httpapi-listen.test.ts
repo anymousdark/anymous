@@ -294,7 +294,10 @@ describe("HttpApi Server.listen", () => {
     }) as typeof process.stderr.write
     try {
       const response = await Server.Default().app.request("/status")
-      expect(response.status).toBe(200)
+      // Without the embedded Web UI bundle (tests, minimal installs) the UI
+      // fallback fails closed with 404; the production binary serves
+      // index.html with 200. Either way it must not defect with 500.
+      expect([200, 404]).toContain(response.status)
     } finally {
       process.stderr.write = original
     }

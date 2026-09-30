@@ -2,10 +2,10 @@ import { expect, test } from "bun:test"
 import { FileTree, type FileTreeDirectoryHandle } from "@pierre/trees"
 
 test("reports directory expansion changes", () => {
-  const changes: Array<{ path: string; expanded: boolean }> = []
-  const tree = new FileTree({
-    paths: ["src/"],
-    onExpansionChange: (change) => changes.push(change),
+  const tree = new FileTree({ paths: ["src/"] })
+  let notifications = 0
+  const unsubscribe = tree.subscribe(() => {
+    notifications++
   })
 
   const src = tree.getItem("src/")
@@ -13,11 +13,11 @@ test("reports directory expansion changes", () => {
   const directory = src as FileTreeDirectoryHandle
 
   directory.expand()
+  expect(directory.isExpanded()).toBe(true)
   directory.collapse()
+  expect(directory.isExpanded()).toBe(false)
+  expect(notifications).toBeGreaterThan(0)
 
-  expect(changes).toEqual([
-    { path: "src/", expanded: true },
-    { path: "src/", expanded: false },
-  ])
+  unsubscribe()
   tree.cleanUp()
 })

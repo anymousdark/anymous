@@ -67,7 +67,10 @@ describe("file HttpApi", () => {
           const body = await response.json()
           return body.includes("hello.txt") ? { response, body } : undefined
         }),
+        // The search index builds asynchronously; on Windows cold starts
+        // (ripgrep setup + first instance boot) 5s is not always enough.
         "file search index was not ready",
+        "30 seconds",
       ),
     )
 

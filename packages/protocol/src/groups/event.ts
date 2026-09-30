@@ -28,12 +28,24 @@ const schema = <const Definitions extends ReadonlyArray<Definition>>(definitions
 
 const make = <const Definitions extends ReadonlyArray<Definition>>(definitions: Definitions) => {
   const EventSchema = schema(definitions)
+  // NOTE: `Schema.fromJsonString` propagates the inner identifier onto the
+  // string wrapper, so `StreamSse({ data: EventSchema })` makes the wrapper
+  // and the union both claim "V2Event" and the union gets suffixed to
+  // "V2Event1". Build the SSE envelope explicitly with the wrapper renamed
+  // to "V2EventStream" so the union keeps "V2Event".
+  // The runtime handler is `handleRaw`, so this schema is documentary only.
+  const EventStreamData = Schema.fromJsonString(EventSchema).annotate({ identifier: "V2EventStream" })
+  const EventStreamEvents = Schema.Struct({
+    id: Schema.UndefinedOr(Schema.String),
+    event: Schema.String,
+    data: EventStreamData,
+  })
   return {
     schema: EventSchema,
     group: HttpApiGroup.make("server.event")
       .add(
         HttpApiEndpoint.get("event.subscribe", "/api/event", {
-          success: HttpApiSchema.StreamSse({ data: EventSchema }),
+          success: HttpApiSchema.StreamSse({ events: EventStreamEvents }),
         }).annotateMerge(
           OpenApi.annotations({
             identifier: "v2.event.subscribe",

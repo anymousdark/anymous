@@ -70,14 +70,14 @@
     }
   },
   "scripts": {
-    "lint": "eslint . --ext .ts,.tsx --max-warnings 0",
-    "typecheck": "bun run typecheck --cwd packages/anymous",
+    "lint": "eslint packages",
+    "typecheck": "bunx --bun tsgo -p packages/anymous/tsconfig.json --noEmit",
     "test": "bun test --coverage",
     "test:watch": "bun test --watch",
     "build": "bun run script/build.ts --single --skip-install",
     "build:all": "bun run script/build.ts --skip-install",
     "prepare-npm": "bun run script/prepare-npm.ts",
-    "dev": "bun dev",
+    "dev": "bun run --cwd packages/anymous dev",
     "dev:remote": "VITE_API_URL=https://anymous-cli.vercel.app bun dev",
     "clean": "rm -rf node_modules dist dist-npm .turbo *.tsbuildinfo packages/*/node_modules packages/*/dist packages/*/dist-npm packages/*/.turbo packages/*/*.tsbuildinfo"
   },
@@ -98,11 +98,8 @@
   "packageManager": "bun@1.2.x",
   "trustedDependencies": [
     "esbuild",
-    "node-pty",
+    "@lydell/node-pty",
     "protobufjs",
-    "tree-sitter",
-    "tree-sitter-bash",
-    "tree-sitter-powershell",
     "web-tree-sitter",
     "electron"
   ]

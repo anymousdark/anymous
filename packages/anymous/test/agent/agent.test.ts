@@ -742,8 +742,16 @@ it.instance(
 )
 
 it.instance(
-  "defaultAgent throws when all primary agents are disabled",
-  () => expectDefaultAgentError("no primary visible agent found"),
+  "defaultAgent falls back to visible agents when primaries are disabled",
+  () =>
+    Effect.gen(function* () {
+      const name = yield* load((svc) => svc.defaultAgent())
+      const agents = yield* load((svc) => svc.list())
+      const info = agents.find((a) => a.name === name)
+      expect(info).toBeDefined()
+      expect(info!.mode).not.toBe("subagent")
+      expect(info!.hidden).not.toBe(true)
+    }),
   {
     config: {
       agent: {

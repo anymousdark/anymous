@@ -54,7 +54,7 @@ await Bun.file(`./dist/${pkg.name}/bin/${pkg.name}.exe`).write(
 await Bun.file(`./dist/${pkg.name}/package.json`).write(
   JSON.stringify(
     {
-      name: pkg.name + "-ai",
+      name: pkg.name,
       bin: {
         [pkg.name]: `./bin/${pkg.name}.exe`,
       },
@@ -76,7 +76,7 @@ const tasks = Object.entries(binaries).map(async ([name]) => {
   await publish(`./dist/${name}`, name, binaries[name])
 })
 await Promise.all(tasks)
-await publish(`./dist/${pkg.name}`, `${pkg.name}-ai`, version)
+await publish(`./dist/${pkg.name}`, `${pkg.name}`, version)
 
 const image = "ghcr.io/anomalyco/anymous"
 const platforms = "linux/amd64,linux/arm64"

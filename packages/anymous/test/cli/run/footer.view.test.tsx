@@ -5,7 +5,7 @@ import { testRender, useRenderer } from "@opentui/solid"
 import { createSignal } from "solid-js"
 import { createDefaultOpenTuiKeymap } from "@opentui/keymap/opentui"
 import type { QuestionRequest } from "@anymous-ai/sdk/v2"
-import { anymousKeymapProvider, registeranymousKeymap } from "@anymous-ai/tui/keymap"
+import { AnymousKeymapProvider, registeranymousKeymap } from "@anymous-ai/tui/keymap"
 import {
   RUN_COMMAND_PANEL_ROWS,
   RUN_SUBAGENT_PANEL_ROWS,
@@ -182,7 +182,7 @@ async function renderFooter(
     offKeymap = registeranymousKeymap(keymap, renderer, config)
 
     return (
-      <anymousKeymapProvider keymap={keymap}>
+      <AnymousKeymapProvider keymap={keymap}>
         <RunFooterView
           directory="/tmp"
           findFiles={async () => []}
@@ -216,7 +216,7 @@ async function renderFooter(
           onStatus={() => {}}
           onQueuedRemove={async () => true}
         />
-      </anymousKeymapProvider>
+      </AnymousKeymapProvider>
     )
   }
 
@@ -965,7 +965,7 @@ test("direct footer shows editable prompts and additional queued work while runn
     offKeymap = registeranymousKeymap(keymap, renderer, tuiConfig)
 
     return (
-      <anymousKeymapProvider keymap={keymap}>
+      <AnymousKeymapProvider keymap={keymap}>
         <RunFooterView
           directory="/tmp"
           findFiles={async () => []}
@@ -1005,7 +1005,7 @@ test("direct footer shows editable prompts and additional queued work while runn
           onStatus={() => {}}
           onQueuedRemove={async () => true}
         />
-      </anymousKeymapProvider>
+      </AnymousKeymapProvider>
     )
   }
 
@@ -1235,7 +1235,7 @@ test.skip("direct custom answer submits through keymap return binding", async ()
     off = registeranymousKeymap(keymap, renderer, tuiConfig)
 
     return (
-      <anymousKeymapProvider keymap={keymap}>
+      <AnymousKeymapProvider keymap={keymap}>
         <RunQuestionBody
           request={question}
           theme={RUN_THEME_FALLBACK.footer}
@@ -1244,7 +1244,7 @@ test.skip("direct custom answer submits through keymap return binding", async ()
           }}
           onReject={() => {}}
         />
-      </anymousKeymapProvider>
+      </AnymousKeymapProvider>
     )
   }
 
@@ -1285,7 +1285,7 @@ test("direct permission rejection submits through keymap return binding", async 
     off = registeranymousKeymap(keymap, renderer, tuiConfig)
 
     return (
-      <anymousKeymapProvider keymap={keymap}>
+      <AnymousKeymapProvider keymap={keymap}>
         <RejectField
           theme={RUN_THEME_FALLBACK.footer}
           text=""
@@ -1298,7 +1298,7 @@ test("direct permission rejection submits through keymap return binding", async 
           }}
           onCancel={() => {}}
         />
-      </anymousKeymapProvider>
+      </AnymousKeymapProvider>
     )
   }
 
