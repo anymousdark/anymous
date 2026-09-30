@@ -69,6 +69,25 @@ export function resolveThreadDirectory(project?: string, envPWD = process.env.PW
   return Filesystem.resolve(cwd)
 }
 
+// The TUI renders Solid JSX, which requires the @opentui/solid transform from
+// packages/anymous/bunfig.toml preload. Bun only loads bunfig.toml from the
+// working directory, so starting the dev CLI from anywhere else crashes with
+// "Cannot find package 'react'". (Compiled binaries already carry transformed
+// code and never hit this.)
+function isMissingSolidTransform(error: unknown) {
+  const message = error instanceof Error ? error.message : String(error)
+  return message.includes("Cannot find package 'react'") || message.includes("react/jsx-runtime")
+}
+
+function exitMissingSolidTransform() {
+  UI.error(
+    "TUI requires the Solid transform preload (packages/anymous/bunfig.toml).\n" +
+      "Start the dev CLI from packages/anymous, e.g.:\n" +
+      "  cd packages/anymous && bun dev",
+  )
+  process.exitCode = 1
+}
+
 export const TuiThreadCommand = cmd({
   command: "$0 [project]",
   describe: "start Anymous TUI",
@@ -142,23 +161,6 @@ export const TuiThreadCommand = cmd({
         hidden: true,
       }),
   handler: async (args) => {
-    // The TUI renders Solid JSX, which requires the @opentui/solid transform
-    // registered by packages/anymous/bunfig.toml preload. Bun only loads
-    // bunfig.toml from the working directory, so starting the dev CLI from
-    // anywhere else crashes with a confusing "Cannot find package 'react'".
-    // Fail fast with actionable guidance instead.
-    const solid = (globalThis as Record<symbol, { installed?: boolean } | undefined>)[
-      Symbol.for("opentui.solid.transform")
-    ]
-    if (!solid?.installed && !args.mini) {
-      UI.error(
-        "TUI requires the Solid transform preload (packages/anymous/bunfig.toml).\n" +
-          "Start the dev CLI from packages/anymous, e.g.:\n" +
-          "  cd packages/anymous && bun dev",
-      )
-      process.exitCode = 1
-      return
-    }
     if (args.replay === true) {
       UI.error("--replay is not supported; replay is enabled by default")
       process.exitCode = 1
@@ -205,7 +207,14 @@ export const TuiThreadCommand = cmd({
 
     const unguard = win32InstallCtrlCGuard()
     try {
-      const { TuiConfig } = await import("@/config/tui")
+      let TuiConfig: typeof import("@/config/tui").TuiConfig
+      try {
+        ;({ TuiConfig } = await import("@/config/tui"))
+      } catch (error) {
+        if (!isMissingSolidTransform(error)) throw error
+        exitMissingSolidTransform()
+        return
+      }
       if (args.fork && !args.continue && !args.session) {
         UI.error("--fork requires --continue or --session")
         process.exitCode = 1
@@ -285,8 +294,18 @@ export const TuiThreadCommand = cmd({
 
       try {
         const { Effect } = await import("effect")
-        const { run } = await import("../tui/layer")
-        const { createLegacyTuiPluginHost } = await import("@/plugin/tui/runtime")
+        let layer: typeof import("../tui/layer")
+        let tuiRuntime: typeof import("@/plugin/tui/runtime")
+        try {
+          layer = await import("../tui/layer")
+          tuiRuntime = await import("@/plugin/tui/runtime")
+        } catch (error) {
+          if (!isMissingSolidTransform(error)) throw error
+          exitMissingSolidTransform()
+          return
+        }
+        const { run } = layer
+        const { createLegacyTuiPluginHost } = tuiRuntime
         await Effect.runPromise(
           run({
             url: transport.url,
