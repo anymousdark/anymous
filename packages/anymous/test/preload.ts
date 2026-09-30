@@ -85,6 +85,18 @@ delete process.env["ANYMOUS_SERVER_PASSWORD"]
 delete process.env["ANYMOUS_SERVER_USERNAME"]
 delete process.env["ANYMOUS_EXPERIMENTAL"]
 delete process.env["ANYMOUS_ENABLE_EXPERIMENTAL_MODELS"]
+// Plugin behavior flags must not leak from the developer shell: fastBoot and
+// pure skip external plugin loading, which plugin/bootstrap tests rely on.
+delete process.env["ANYMOUS_FAST_BOOT"]
+delete process.env["ANYMOUS_PURE"]
+// Experimental/lifecycle flags change request paths (e.g. native vs AI SDK
+// runtime) and must not leak from the developer shell either.
+delete process.env["ANYMOUS_ENABLE_EXA"]
+delete process.env["ANYMOUS_ENABLE_PARALLEL"]
+delete process.env["ANYMOUS_ENABLE_QUESTION_TOOL"]
+delete process.env["ANYMOUS_EXPERIMENTAL_LSP_TY"]
+delete process.env["ANYMOUS_EXPERIMENTAL_NATIVE_LLM"]
+delete process.env["ANYMOUS_EXPERIMENTAL_WEBSOCKETS"]
 delete process.env["OTEL_EXPORTER_OTLP_ENDPOINT"]
 delete process.env["OTEL_EXPORTER_OTLP_HEADERS"]
 delete process.env["OTEL_RESOURCE_ATTRIBUTES"]
