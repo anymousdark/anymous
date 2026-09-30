@@ -5,7 +5,7 @@ import { testRender, useRenderer } from "@opentui/solid"
 import { expect, test } from "bun:test"
 import { onCleanup } from "solid-js"
 import { TuiKeybind } from "../src/config/keybind"
-import { getanymousModeStack, ANYMOUS_BASE_MODE, anymousKeymapProvider, registeranymousKeymap } from "../src/keymap"
+import { getanymousModeStack, ANYMOUS_BASE_MODE, AnymousKeymapProvider, registeranymousKeymap } from "../src/keymap"
 
 function createResolvedKeymapConfig(input: TuiKeybind.KeybindOverrides = {}) {
   const keybinds = TuiKeybind.parse(input)
@@ -46,9 +46,9 @@ test("legacy page key aliases compile as page keys", async () => {
     })
 
     return (
-      <anymousKeymapProvider keymap={keymap}>
+      <AnymousKeymapProvider keymap={keymap}>
         <box />
-      </anymousKeymapProvider>
+      </AnymousKeymapProvider>
     )
   }
 
@@ -116,9 +116,9 @@ test("mode-less bindings stay active when anymous mode changes", async () => {
     })
 
     return (
-      <anymousKeymapProvider keymap={keymap}>
+      <AnymousKeymapProvider keymap={keymap}>
         <box />
-      </anymousKeymapProvider>
+      </AnymousKeymapProvider>
     )
   }
 

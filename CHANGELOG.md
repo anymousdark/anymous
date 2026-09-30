@@ -35,7 +35,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Meta system prompt names "Meta Muse Spark" (matches `system.test.ts`)
 - Package metadata (`description`, `repository`, `bugs`) restored in `packages/anymous/package.json`
 - Site badge synced to v1.5.3, README agent count corrected to 39, `SECURITY.md` versions fixed
-
+- OpenAPI: SSE envelope named `V2EventStream` (fixes `V2Event1` collision from `fromJsonString` identifier propagation)
+- MCP session-recovery fixture: explicit 404 re-init (SDK 1.29 no longer auto-recovers)
+- LLM: drop fully-empty assistant messages (Gemini rejects `parts:[]`); skip empty reasoning parts
+- LLM OpenAI Responses: wire `reasoningMode` → `reasoning.mode`; send `max_output_tokens` only when explicitly configured (codex parity)
+- `defaultModel`: credential tiers (real > placeholder `public`/`ollama` > dev fallback) — fixes whole session loop suite calling production instead of mock
+- Server UI fallback fails closed with 404 instead of defect 500 (Effect v4: `catchCause`, `catchAllCause` removed)
+- SSE `chunkTimeout`: cancel rejection handled (no more unhandled rejection)
+- CI build: `NODE_OPTIONS=--max-old-space-size=6144` for embedded Web UI vite build
 ## [1.2.6] - 2026-08-01
 
 ### Added
