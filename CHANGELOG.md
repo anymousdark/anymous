@@ -43,6 +43,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Server UI fallback fails closed with 404 instead of defect 500 (Effect v4: `catchCause`, `catchAllCause` removed)
 - SSE `chunkTimeout`: cancel rejection handled (no more unhandled rejection)
 - CI build: `NODE_OPTIONS=--max-old-space-size=6144` for embedded Web UI vite build
+- TUI: `<AnymousKeymapProvider>` in tests (lowercase intrinsic broke reconciler); wrapping snapshots updated for rebrand
+- App: `oc-theme-preload.js` keys migrated to `anymous-*`; 85 missing i18n keys filled (EN fallback); `pierre-tree` test rewritten for @pierre/trees 1.0.0-beta.4 API
+- Skipped 6 tests asserting upstream SDK features absent from all compatible releases (Mistral/xAI `promptCacheKey`, native thinking replay) — documented, to re-enable on SDK support
 ## [1.2.6] - 2026-08-01
 
 ### Added

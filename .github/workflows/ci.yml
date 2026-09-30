@@ -73,9 +73,6 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bun run script/build.ts --single --skip-install
         working-directory: packages/anymous
-        env:
-          # The embedded Web UI vite build exceeds the default Node heap.
-          NODE_OPTIONS: --max-old-space-size=6144
 
   publish-check:
     name: Publish Dry Run
