@@ -67,7 +67,7 @@ export const { use: useLocal, provider: LocalProvider } = createSimpleContext({
     const settings = useSettings()
 
     const id = createMemo(() => params.id || undefined)
-    const list = createMemo(() => sync().data.agent.filter((item) => item.mode !== "subagent" && !item.hidden))
+    const list = createMemo(() => (sync()?.data?.agent ?? []).filter((item) => item.mode !== "subagent" && !item.hidden))
     const agentsVisible = createMemo(() => settings.visibility.customAgents() || hasCustomAgent(list()))
     const connected = createMemo(() => new Set(providers.connected().map((item) => item.id)))
 
@@ -149,7 +149,7 @@ export const { use: useLocal, provider: LocalProvider } = createSimpleContext({
     })
 
     const configuredModel = () => {
-      const configured = sync().data.config.model
+      const configured = sync()?.data?.config?.model
       if (!configured) return
       const [providerID, modelID] = configured.split("/")
       const model = { providerID, modelID }

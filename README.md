@@ -1,6 +1,8 @@
 # anymous — AI-Powered Reverse Engineering & Pentest Platform
 
-**39 specialized AI agents** for reverse engineering, penetration testing, and software analysis. Built on a fork of opencode v11, fully rebranded and enhanced with unrestricted mode.
+**44 AI agents** for reverse engineering, penetration testing, SOC operations, and software
+engineering — with Free models with no API key. Unrestricted mode for professionals. Fork of opencode (upstream
+1.18.27 backported), fully rebranded.
 
 ```
  █████  ███   ██ ███   ██ ██████  ██████  █████   ██████
@@ -13,134 +15,136 @@
 ## 🚀 Quick Install
 
 ```bash
-# Via npm (requires Bun runtime)
-npm install -g anymous
-
-# Via bun
-bun install -g anymous
-
-# Run
-anymous
+npm install -g anymous     # Linux / Windows / macOS binaries
+anymous                    # TUI
 ```
 
-## 🤖 AI Agents
+No API key needed to start: 64 free `opencode/*` models work out of the box
+(`apiKey: "public"`). For TUI/GUI model picker, export once:
+
+```bash
+export OPENCODE_API_KEY="sua-key"   # opcional, libera tudo
+```
+
+## 🗣️ Quick Tasks
+
+```bash
+anymous run --agent soc "analisa este alerta"
+anymous run --agent redteam "alvo 10.10.10.0/24, escopo lab"
+anymous run --agent blueteam "hardening deste servidor"
+anymous run --agent forensics "analisa este dump"
+```
+
+## 🤖 AI Agents (45)
+
+### Orchestrators (6 primary)
+
+| Agent | Role |
+|-------|------|
+| **any** | Always-on orchestrator — talk to Any, it splits the task and dispatches specialists via Task, validates and delivers |
+| **soc** | SOC incident commander — triage, cyber-analytic + memory-dump, contain/escalate/close |
+| **forensics** | Digital forensics lead — memory, binaries, timelines, chain of custody |
+| **redteam** | Offensive lead for authorized engagements — recon to CVSS report via the pentest chain |
+| **blueteam** | Defensive lead — hardening, detections, security review, patch priority |
+| **build** / **plan** | Default coding agents (build + read-only planner) |
 
 ### Reverse Engineering (8 agents)
 
 | Agent | Role |
 |-------|------|
-| **reverser-static** | Disassembly, decompilation (IDA/Ghidra), control flow analysis, algorithm identification, YARA signature generation |
-| **reverser-dynamic** | Runtime analysis (Frida), debuggers (x64dbg/GDB/WinDbg), API monitoring, anti-debug bypass |
-| **reverser-binary** | PE/ELF/Mach-O format analysis, packer identification (UPX, Themida, VMProtect), shellcode analysis |
-| **reverser-source** | Source code reconstruction, deobfuscation, CFG reversal, algorithm recovery |
-| **reverser-automator** | Automation with YARA, IDAPython, Frida, binary patching, analysis pipelines |
-| **memory-dump** | Memory forensics (Volatility), process dumping, heap analysis, rootkit detection |
-| **exe-extractor** | Executable unpacking, installer extraction, .NET dumping, resource carving |
-| **debug-tools** | Debugger creation, hooks (Detours/MinHook), DLL injection, ETW tracing, kernel drivers |
+| **reverser-static** | Disassembly, decompilation (IDA/Ghidra), control flow, algorithms, YARA |
+| **reverser-dynamic** | Runtime analysis (Frida), debuggers, API monitoring, anti-debug bypass |
+| **reverser-binary** | PE/ELF/Mach-O, packers (UPX, Themida, VMProtect), shellcode |
+| **reverser-source** | Source reconstruction, deobfuscation, CFG reversal |
+| **reverser-automator** | YARA, IDAPython, Frida, binary patching, pipelines |
+| **memory-dump** | Memory forensics (Volatility), heap, rootkits |
+| **exe-extractor** | Unpacking, installers, .NET dumping, resource carving |
+| **debug-tools** | Debuggers, hooks (Detours/MinHook), DLL injection, ETW, drivers |
 
 ### Penetration Testing (10 agents)
 
 | Agent | Role |
 |-------|------|
-| **pentest-lead** | Strategy coordinator — divides target into phases, dispatches specialists, tracks progress |
-| **pentest-recon** | Passive OSINT — subdomain discovery, technology fingerprinting, email harvesting, attack surface mapping |
-| **pentest-scanner** | Network scanning — live hosts, open ports, service versions, OS fingerprinting |
-| **pentest-enumerator** | Deep enumeration of SMB, LDAP, DNS, SNMP, HTTP, databases |
-| **pentest-exploiter** | Vulnerability exploitation — web, network, AD. Credential brute-force, Kerberos attacks |
-| **pentest-identity** | Active Directory & identity — domain enumeration, trusts, AS-REP/Kerberoasting/DCSync, Azure AD |
-| **pentest-webapp** | Web application security — OWASP Top 10: SQLi, XSS, SSRF, IDOR, injection, auth bypass |
-| **pentest-postexploit** | Post-exploitation & lateral movement — privilege escalation, credential dumping, persistence |
-| **pentest-critic** | False positive validator — verifies every finding, exploit, and credential before reporting |
-| **pentest-reporter** | Professional report generation — CVSS scoring, executive summary, risk analysis, remediation plan |
+| **pentest-lead** | Strategy coordinator — phases, dispatch, progress tracking |
+| **pentest-recon** | Passive OSINT — subdomains, tech fingerprinting, emails |
+| **pentest-scanner** | Network scanning — hosts, ports, services, OS |
+| **pentest-enumerator** | Deep enum of SMB, LDAP, DNS, SNMP, HTTP, DBs |
+| **pentest-exploiter** | Exploitation — web, network, AD, brute-force, Kerberos |
+| **pentest-identity** | AD & identity — trusts, AS-REP/Kerberoasting/DCSync, Azure AD |
+| **pentest-webapp** | OWASP Top 10 — SQLi, XSS, SSRF, IDOR, auth bypass |
+| **pentest-postexploit** | Privesc, credential dumping, lateral movement, persistence |
+| **pentest-critic** | False-positive validator |
+| **pentest-reporter** | Professional reports — CVSS, executive summary, remediation |
 
-## 🧠 System Prompts
+### Cyber/SOC (1 agent)
 
-All agent prompts are plain-text files under `src/agent/prompt/` and `src/session/prompt/`. They define the complete persona, tools, and constraints for each AI agent. The system prompts are designed to be:
+| Agent | Role |
+|-------|------|
+| **cyber-analytic** | SOC analyst — triage, IOCs, MITRE ATT&CK, Sigma/YARA, CVSS/EPSS |
 
-- **Modular** — each agent has its own prompt file
-- **Editable** — modify any prompt to customize agent behavior
-- **Extensible** — add new agents by creating new prompt files
-- **Unrestricted** — no content filtering, no refusal patterns, full tool access
+### Engineering (20 agents)
+
+architect, backend, frontend, database, devops, docs, refactor, performance,
+security, code-reviewer, debug, test-writer, explore, general, web-designer + system.
+
+## 🧠 Providers & Free Models
+
+- **64 free `opencode/*` models, no key required** — `anymous models opencode`
+- Any opencode-compatible provider (OpenAI, Anthropic, Google, OpenRouter…)
+- Upstream opencode 1.18.27 backported: 5-min provider timeouts, Anthropic
+  blockBinding, Bedrock reasoning, session headers, Home/archive fixes
 
 ## 🏗️ Architecture
 
 ```
-packages/
-  anymous/          # Main CLI application (entry point)
-  core/             # Core runtime, database schema, Effect services
-  cli/              # CLI command handlers
-  server/           # HTTP API server
-  tui/              # Terminal UI (Ink/React-based)
-  schema/           # Wire and storage contracts
-  protocol/         # Client-server protocol definitions
-  script/           # Build and release scripts
-  sdk/              # TypeScript SDK
-  sdk-next/         # Next-gen SDK
-  plugin/           # Plugin system
-  llm/              # LLM provider integrations
-  codemode/         # Code mode handler
-  ui/               # Shared UI components
-  app/              # Web application
-  web/              # Landing page
+anymous-ia/
+  packages/
+    anymous/          # CLI (entry point)
+    core/             # Runtime, Effect services, SQLite
+    server/           # HTTP API server
+    tui/              # Terminal UI
+    app/              # Web application
+    llm/              # LLM providers
+    plugin/           # Plugin system
+    ...               # 30+ packages total
+  site/               # Landing page (Vercel)
 ```
 
 ## 🔧 Development
 
 ```bash
-# Clone
-git clone https://github.com/anymousdark/anymous-ai.git
-cd anymous-ai
-
-# Install dependencies (Bun required)
+git clone https://github.com/anymousdark/anymous.git
+cd anymous
 bun install
-
-# Run in development mode
-cd packages/anymous
-bun dev
-
-# Run tests
+cd packages/anymous && bun dev
 bun test
 ```
 
-### Documentation
-
-- **[CONTRIBUTING.md](CONTRIBUTING.md)** — contribution guide, code conventions, and release process
-- **[CHANGELOG.md](CHANGELOG.md)** — release history
-- **[V2_MIGRATION_TODOS.md](V2_MIGRATION_TODOS.md)** — tracker for the V2 architecture migration
+Docs: [CONTRIBUTING.md](CONTRIBUTING.md) · [CHANGELOG.md](CHANGELOG.md) ·
+[INSTRUCOES-LINUX.md](INSTRUCOES-LINUX.md) (desktop `.deb` build)
 
 ## 📦 Published Packages
 
 | Package | Description |
 |---------|-------------|
-| [anymous](https://www.npmjs.com/package/anymous) | CLI — install globally via npm |
+| [anymous](https://www.npmjs.com/package/anymous) | CLI + platform binaries (linux-x64, windows-x64…) |
 | @anymous-ai/core | Core runtime and services |
-| @anymous-ai/server | HTTP API server |
-| @anymous-ai/tui | Terminal UI |
-| @anymous-ai/schema | Data contracts |
-| @anymous-ai/protocol | Protocol definitions |
-| @anymous-ai/script | Build scripts |
 
 ## 🌐 Deployment
 
-- **npm**: `npm publish` from `packages/anymous/dist-npm`
-- **Vercel**: `vercel --prod` from `site/`
-- **GitHub Releases**: `bun run script/publish.ts`
+- **npm**: wrapper + per-platform binaries (`anymous-linux-x64`, `anymous-windows-x64`…)
+- **Site**: `vercel --prod` from `site/` → https://anymous-cli.vercel.app
+- **Releases**: tags `vX.Y.Z` + binaries in GitHub Releases
 
-## ⚠️ Known Risks & Operational Notes
+## ⚠️ Unrestricted by Design
 
-This project is a fork of [opencode](https://github.com/anomalyco/opencode) v11. Before using it in sensitive environments, understand these caveats:
-
-- **No automatic upstream sync.** This fork does not pull bugfixes or security patches from the opencode project. Security fixes must be backported manually (`git fetch upstream && git merge`). Track upstream releases regularly.
-- **No sandbox.** Agents execute `bash` directly on the host with the current user's privileges. There is no container, seccomp, or network isolation. Do not run untrusted prompts/agents, and review commands before approving them.
-- **Unrestricted mode is opt-in.** Agent permission defaults are per-agent and may be opened to `"*": "allow"` only through explicit config (e.g. `.anymous/anymous.json`). When running with unrestricted permissions, treat the agent as fully privileged code execution.
-- **Bun runtime required.** The CLI runs on Bun; it does not run on plain Node.
-- **Memory scoping.** The `memory` tool persists across sessions but is scoped per project (workspace). Entries without a scope remain global.
-- **Schema migration.** Agent config reading is normalized through the core V1→V2 migration path. Old `prompt`/`permission`/`disable` fields are still accepted and converted to the canonical V2 shape.
+For security professionals: no sandbox, `"*": "allow"` by default, no content
+filtering. Run in a VM/container for isolation. Bun runtime required.
 
 ## 📄 License
 
-MIT — fork of [opencode](https://github.com/anomalyco/opencode) v11.
+MIT — fork of [opencode](https://github.com/anomalyco/opencode).
 
 ---
 
-*Built for reverse engineers, penetration testers, and security researchers.*
+*Built for reverse engineers, penetration testers, and SOC analysts.*

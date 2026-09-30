@@ -1,13 +1,37 @@
-# anymous
+# anymous — AI-Powered Reverse Engineering & Pentest Platform
 
-AI-powered reverse engineering and penetration testing platform. Fork of opencode v11 with 39 specialized agents (8 reverse engineering, 10 penetration testing, plus development agents).
-
-## Quick start
+**44 AI agents** for reverse engineering, pentest, SOC and engineering.
+64 free models, no API key required. Unrestricted mode for professionals.
 
 ```bash
-bun install
-cd packages/anymous
-bun dev
+npm install -g anymous
+anymous
 ```
 
-See the root [README.md](../../README.md) and [CONTRIBUTING.md](../../CONTRIBUTING.md) for full docs.
+## Quick Tasks
+
+```bash
+anymous run --agent soc "analisa este alerta"
+anymous run --agent redteam "alvo lab 10.10.10.0/24"
+anymous run --agent blueteam "hardening deste servidor"
+anymous run --agent forensics "analisa este dump"
+```
+
+## Agents
+
+- **Leads**: soc, forensics, redteam, blueteam, build, plan
+- **RE (8)**: reverser-static, reverser-dynamic, reverser-binary, reverser-source,
+  reverser-automator, memory-dump, exe-extractor, debug-tools
+- **Pentest (10)**: pentest-lead, pentest-recon, pentest-scanner, pentest-enumerator,
+  pentest-exploiter, pentest-identity, pentest-webapp, pentest-postexploit,
+  pentest-critic, pentest-reporter
+- **cyber-analytic** (SOC), **engineering (20)**
+
+## Providers
+
+64 free `opencode/*` models out of the box, plus any opencode-compatible
+provider (OpenAI, Anthropic, Google, OpenRouter…).
+
+Docs: https://anymous-cli.vercel.app · Code: https://github.com/anymousdark/anymous
+
+MIT License.

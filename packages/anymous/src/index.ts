@@ -92,6 +92,7 @@ const cli = yargs(args)
   .command(UninstallCommand)
   .command(ServeCommand)
   .command(WebCommand)
+
   .command(ModelsCommand)
   .command(StatsCommand)
   .command(ExportCommand)

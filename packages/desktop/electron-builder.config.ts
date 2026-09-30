@@ -9,11 +9,6 @@ const execFileAsync = promisify(execFile)
 const packageDir = path.dirname(fileURLToPath(import.meta.url))
 const rootDir = path.resolve(packageDir, "../..")
 const signScript = path.join(rootDir, "script", "sign-windows.ps1")
-// The Electron 42 packaging update briefly installed Linux launchers/icons under
-// "anymous-desktop". Keep that hidden desktop entry around so existing GNOME/KDE
-// pins still resolve after the canonical app id changes back to ai.anymous.desktop.
-const legacyDesktopEntry = path.join(packageDir, "resources", "linux", "anymous-desktop.desktop")
-const legacyDesktopEntryFpm = `${legacyDesktopEntry}=/usr/share/applications/anymous-desktop.desktop`
 
 async function signWindows(configuration: { path: string }) {
   if (process.platform !== "win32") return
@@ -135,9 +130,7 @@ function getConfig() {
         appId,
         productName: "anymous",
         protocols: { name: "anymous", schemes: ["anymous"] },
-        publish: { provider: "github", owner: "anomalyco", repo: "anymous", channel: "latest" },
-        deb: { fpm: [legacyDesktopEntryFpm] },
-        rpm: { packageName: "anymous", fpm: [legacyDesktopEntryFpm] },
+        publish: { provider: "github", owner: "anymousdark", repo: "anymous", channel: "latest" },
       }
     }
   }

@@ -59,3 +59,4 @@ describe("McpOAuthProvider.clientMetadata", () => {
     expect(provider.clientMetadata.token_endpoint_auth_method).toBe("none")
   })
 })
+

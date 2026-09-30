@@ -84,6 +84,8 @@ function sdkKey(npm: string): string | undefined {
       return "gateway"
     case "@openrouter/ai-sdk-provider":
       return "openrouter"
+    case "merge-gateway-ai-sdk-provider":
+      return "mergeGateway"
     case "ai-gateway-provider":
       // ai-gateway-provider/unified wraps createOpenAICompatible({ name: "Unified" }),
       // and @ai-sdk/openai-compatible parses compatibleOptions from one of
@@ -206,11 +208,8 @@ function normalizeMessages(
             return part.text !== ""
           }
           if (part.type === "reasoning") {
-            return (
-              part.text.trim().length > 0 ||
-              part.providerOptions?.bedrock?.signature != null ||
-              part.providerOptions?.bedrock?.redactedData != null
-            )
+            const metadata = part.providerOptions?.[model.providerID] ?? part.providerOptions?.bedrock
+            return metadata?.signature != null || metadata?.redactedContent != null || metadata?.redactedData != null
           }
           return true
         })
@@ -516,41 +515,49 @@ export function message(msgs: ModelMessage[], model: Provider.Model, options: Re
   return msgs
 }
 
+const GEMINI_MODELS_WITH_SAMPLING_DEFAULTS = [
+  /gemini-2[.-]5(?:[.-]|$)/,
+  /gemini-3-(?:flash|pro)(?:[.-]|$)/,
+  /gemini-3[.-]1(?:[.-]|$)/,
+  /gemini-3[.-]5-flash(?!-lite)(?:[.-]|$)/,
+]
 export function temperature(model: Provider.Model) {
-  const id = model.id.toLowerCase()
+  const id = model.api.id.toLowerCase()
   if (id.includes("north-mini-code")) return 1.0
-  if (id.includes("qwen")) return 0.55
   if (id.includes("claude")) return undefined
-  if (id.includes("gemini")) return 1.0
+  if (id.includes("gemini")) return GEMINI_MODELS_WITH_SAMPLING_DEFAULTS.some((m) => m.test(id)) ? 1.0 : undefined
   if (id.includes("glm-4.6")) return 1.0
   if (id.includes("glm-4.7")) return 1.0
   if (id.includes("minimax-m2")) return 1.0
   if (id.includes("kimi-k2")) {
-    // kimi-k2-thinking & kimi-k2.5 && kimi-k2p5 && kimi-k2-5
-    if (["thinking", "k2.", "k2p", "k2-5"].some((s) => id.includes(s))) {
-      return 1.0
-    }
+    if (["thinking", "k2.", "k2p", "k2-5"].some((s) => id.includes(s))) return 1.0
     return 0.6
   }
   return undefined
 }
 
 export function topP(model: Provider.Model) {
-  const id = model.id.toLowerCase()
-  if (id.includes("qwen")) return 1
-  if (["minimax-m2", "gemini", "kimi-k2.5", "kimi-k2p5", "kimi-k2-5"].some((s) => id.includes(s))) {
+  const id = model.api.id.toLowerCase()
+  if (id.includes("gemini")) return GEMINI_MODELS_WITH_SAMPLING_DEFAULTS.some((m) => m.test(id)) ? 0.95 : undefined
+  if (["minimax-m2", "kimi-k2.5", "kimi-k2p5", "kimi-k2-5"].some((s) => id.includes(s))) return 0.95
+  if (
+    ["deepseek-v4-flash-0731", "deepseek-v4-flash:0731"].some((n) => id.includes(n)) ||
+    (id.includes("deepseek-v4-flash") &&
+      (model.providerID === "deepseek" ||
+        model.providerID.startsWith("anymous") ||
+        model.providerID.startsWith("opencode")))
+  )
     return 0.95
-  }
   return undefined
 }
 
 export function topK(model: Provider.Model) {
-  const id = model.id.toLowerCase()
+  const id = model.api.id.toLowerCase()
   if (id.includes("minimax-m2")) {
     if (["m2.", "m25", "m21"].some((s) => id.includes(s))) return 40
     return 20
   }
-  if (id.includes("gemini")) return 64
+  if (id.includes("gemini")) return GEMINI_MODELS_WITH_SAMPLING_DEFAULTS.some((m) => m.test(id)) ? 64 : undefined
   return undefined
 }
 
@@ -666,6 +673,43 @@ function anthropicAdaptiveEfforts(apiId: string): string[] | null {
 
 function anthropicOmitsThinking(apiId: string) {
   return anthropicUsesModernAdaptiveThinking(apiId)
+}
+
+function anthropicBindsThinking(apiId: string) {
+  const version = /claude-(?:([a-z]+)-)?(\d+)(?:[.-](\d{1,2}))?(?:-([a-z]+))?(?:[.@-]|$)/i.exec(apiId)
+  if (!version) return false
+  const major = Number(version[2])
+  const minor = Number(version[3] ?? 0)
+  if (major === 5 && minor === 1 && (version[1] ?? version[4])?.toLowerCase() === "mythos") return false
+  return major > 5 || (major === 5 && minor >= 1)
+}
+const ANTHROPIC_BLOCK_BINDING = { prefixMismatchBehavior: "drop_block" }
+function anthropicBlockBinding(model: Provider.Model, options: { [x: string]: any }) {
+  const sdk = sdkKey(model.api.npm)
+  const key = sdk === "bedrock" ? "reasoningConfig" : sdk === "anthropic" ? "thinking" : undefined
+  if (key && options[key]?.blockBinding === false) {
+    const result = { ...options, [key]: { ...options[key] } }
+    delete result[key].blockBinding
+    if (Object.keys(result[key]).length === 0) delete result[key]
+    return result
+  }
+  if (!anthropicBindsThinking(model.api.id)) return options
+  switch (model.api.npm) {
+    case "@ai-sdk/anthropic":
+    case "@ai-sdk/google-vertex/anthropic": {
+      const thinking = options.thinking ?? { type: "adaptive" }
+      if (thinking.type !== "adaptive" && thinking.type !== "enabled") return options
+      if (thinking.blockBinding !== undefined) return options
+      return { ...options, thinking: { ...thinking, blockBinding: ANTHROPIC_BLOCK_BINDING } }
+    }
+    case "@ai-sdk/amazon-bedrock": {
+      const reasoningConfig = options.reasoningConfig ?? { type: "adaptive" }
+      if (reasoningConfig.type !== "adaptive" && reasoningConfig.type !== "enabled") return options
+      if (reasoningConfig.blockBinding !== undefined) return options
+      return { ...options, reasoningConfig: { ...reasoningConfig, blockBinding: ANTHROPIC_BLOCK_BINDING } }
+    }
+  }
+  return options
 }
 
 function googleThinkingLevelEfforts(apiId: string) {
@@ -1259,8 +1303,12 @@ export function options(input: {
     result["gateway"] = { caching: "auto" }
   }
 
-  if (input.model.api.npm === "@ai-sdk/azure" && input.model.api.id.includes("gpt-5.5")) {
-    result["reasoningSummary"] = "auto"
+  const [, gptMajorVersion, gptMinorVersion] = input.model.api.id.match(/gpt-(\d+)\.(\d+)/) ?? []
+  const isGpt55OrNewer = Number(gptMajorVersion) > 5 || (Number(gptMajorVersion) === 5 && Number(gptMinorVersion) >= 5)
+  if (input.model.api.npm === "@ai-sdk/azure" && input.providerOptions?.useCompletionUrls) {
+    if (!isGpt55OrNewer) {
+      result["reasoningEffort"] = "medium"
+    }
     return result
   }
 
@@ -1286,7 +1334,7 @@ export function options(input: {
       input.model.api.id.includes("gpt-5.") &&
       !input.model.api.id.includes("codex") &&
       !input.model.api.id.includes("-chat") &&
-      input.model.providerID !== "azure"
+      (input.model.api.npm === "@ai-sdk/openai" || input.model.api.npm === "@ai-sdk/amazon-bedrock/mantle")
     ) {
       result["textVerbosity"] = "low"
     }
@@ -1341,7 +1389,7 @@ export function providerOptions(model: Provider.Model, options: { [x: string]: a
     usesOpenAIReasoningGate &&
     (model.capabilities.reasoning || options.reasoningEffort !== undefined || options.reasoningSummary !== undefined)
       ? { ...options, forceReasoning: true }
-      : options
+      : anthropicBlockBinding(model, options)
 
   if (model.api.npm === "@ai-sdk/gateway") {
     // Gateway providerOptions are split across two namespaces:
@@ -1749,6 +1797,7 @@ function reasoningEffort(model: Provider.Model, effort: string) {
     case "@ai-sdk/togetherai":
     case "venice-ai-sdk-provider":
     case "ai-gateway-provider":
+    case "merge-gateway-ai-sdk-provider":
       return { reasoningEffort: effort }
     case "@ai-sdk/cohere":
     case "@ai-sdk/perplexity":
@@ -1823,6 +1872,7 @@ function reasoningBudget(model: Provider.Model, budget: number) {
     case "@ai-sdk/vercel":
     case "@ai-sdk/xai":
     case "ai-gateway-provider":
+    case "merge-gateway-ai-sdk-provider":
     case "gitlab-ai-provider":
     case "venice-ai-sdk-provider":
       return

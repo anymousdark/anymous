@@ -48,6 +48,11 @@ import PROMPT_PENTEST_WEBAPP from "./prompt/pentest-webapp.txt"
 import PROMPT_PENTEST_POSTEXPLOIT from "./prompt/pentest-postexploit.txt"
 import PROMPT_PENTEST_CRITIC from "./prompt/pentest-critic.txt"
 import PROMPT_PENTEST_REPORTER from "./prompt/pentest-reporter.txt"
+import PROMPT_CYBER_ANALYTIC from "./prompt/cyber-analytic.txt"
+import PROMPT_SOC from "./prompt/soc.txt"
+import PROMPT_FORENSICS from "./prompt/forensics.txt"
+import PROMPT_REDTEAM from "./prompt/redteam.txt"
+import PROMPT_BLUETEAM from "./prompt/blueteam.txt"
 import { Permission } from "@/permission"
 import { mergeDeep, pipe, sortBy, values } from "remeda"
 import { Global } from "@anymous-ai/core/global"
@@ -587,6 +592,90 @@ const layer = Layer.effect(
             mode: "all",
             native: true,
             prompt: PROMPT_PENTEST_REPORTER,
+          },
+          "cyber-analytic": {
+            name: "cyber-analytic",
+            description:
+              "Senior cyber security analyst for SOC/blue team. Threat triage, IOC extraction, MITRE ATT&CK mapping, Sigma/YARA rules, vuln prioritization.",
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                todowrite: "deny",
+              }),
+              user,
+            ),
+            options: {},
+            mode: "subagent",
+            native: true,
+            prompt: PROMPT_CYBER_ANALYTIC,
+          },
+          soc: {
+            name: "soc",
+            description:
+              "SOC incident commander. Triages alerts, dispatches cyber-analytic and forensics, decides contain/escalate/close.",
+            prompt: PROMPT_SOC,
+            options: {},
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                question: "allow",
+                plan_enter: "allow",
+              }),
+              user,
+            ),
+            mode: "primary",
+            native: true,
+          },
+          forensics: {
+            name: "forensics",
+            description:
+              "Digital forensics lead. Coordinates memory, binary and timeline analysis with chain of custody.",
+            prompt: PROMPT_FORENSICS,
+            options: {},
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                question: "allow",
+                plan_enter: "allow",
+              }),
+              user,
+            ),
+            mode: "primary",
+            native: true,
+          },
+          redteam: {
+            name: "redteam",
+            description:
+              "Offensive security lead for authorized engagements. Runs recon to report via the pentest chain.",
+            prompt: PROMPT_REDTEAM,
+            options: {},
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                question: "allow",
+                plan_enter: "allow",
+              }),
+              user,
+            ),
+            mode: "primary",
+            native: true,
+          },
+          blueteam: {
+            name: "blueteam",
+            description:
+              "Defensive security lead. Hardening, detections, security code review and patch prioritization.",
+            prompt: PROMPT_BLUETEAM,
+            options: {},
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                question: "allow",
+                plan_enter: "allow",
+              }),
+              user,
+            ),
+            mode: "primary",
+            native: true,
           },
           "code-reviewer": {
             name: "code-reviewer",

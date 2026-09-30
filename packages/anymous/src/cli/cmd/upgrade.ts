@@ -4,7 +4,7 @@ import * as prompts from "@clack/prompts"
 import { Installation } from "../../installation"
 import { InstallationVersion } from "@anymous-ai/core/installation/version"
 
-const ANYMOUS_RELEASES = "https://api.github.com/repos/anymousdark/anymous-ai/releases/latest"
+const ANYMOUS_RELEASES = "https://api.github.com/repos/anymousdark/anymous/releases/latest"
 
 async function checkanymousUpdate(): Promise<string | null> {
   try {

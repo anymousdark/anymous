@@ -5,6 +5,97 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] - 2026-09-09
+
+### Added
+- Modelo padrão muse-spark-1.3 + keys no profile (desktop GUI lista modelos)
+- Hub com dropdown de todos os modelos
+
+## [1.5.0] - 2026-09-09
+
+### Added
+- Rebrand total: títulos Anymous, theme-preload anymous-*, metainfo, emails
+- Guard layer-node contra dependência undefined (bug a.name)
+- Fixes GUI: versão About, release-notes vazio, placeholder, validação server
+
+### Fixed
+- Skills SKILL.md sem refs opencode + web Lander + FAQ 45 agentes
+
+## [1.4.9] - 2026-09-05
+
+### Removed
+- Recurso de voz (`anymous voice`, scripts, wake, daemon) — CLI/TUI puros
+- Interface web HUD (`hud/`) — só CLI/TUI
+- Agente any e referências (foco total no CLI)
+
+## [1.4.8] - 2026-09-05
+
+### Added
+- Criador fixo nos prompts (anymousdark/Aycher, nunca o user do sistema)
+- 47 skills via skills.urls + wake word openwakeword + daemon anyd
+- Comando voice robusto + hub com projetos/sessões do CLI + hub mínimo novo
+
+### Fixed
+- Identidade padrão com capacidades (formato emoji) em build/general/plan/any
+- Upgrade aponta para anymousdark/anymous
+
+## [1.4.7] - 2026-09-04
+
+### Added
+- 4 agentes primários cyber com subagentes+skills: soc, forensics, redteam, blueteam (45 agentes total)
+- README novo completo (GitHub + npm)
+
+### Fixed
+- Providers opencode free sem API (loader opencode: reposto, apiKey public, 64 modelos)
+- Backport opencode 1.18.27: timeouts 5min, Anthropic blockBinding, Bedrock reasoning, temp/topP/topK, Azure, Cloudflare gateway, session headers, arquivo imediato na Home
+
+## [1.4.6] - 2026-09-04
+
+### Added
+- Comando `anymous voice` (falar/ouvir/loop pt-BR offline)
+- Gravação via PipeWire (pw-record) em vez de ALSA direto
+
+## [1.4.5] - 2026-09-04
+
+### Added
+- Voz do Any em pt-BR offline (Piper TTS + faster-whisper STT, scripts em packages/anymous/voice/)
+- Cards novos no site: Any Orquestrador, Voz em Português, Cyber Analytic
+
+## [1.4.3] - 2026-09-04
+
+### Added
+- Agente any (primary): orquestrador que atende por "any"/"anymous" e delega aos 38 especialistas
+- Registo do cyber-analytic em agent.ts (estava criado mas invisível)
+
+## [1.4.2] - 2026-09-03
+
+### Fixed
+- Modo 100% irrestrito em build/general/plan (identidade Anymous, resposta "Trabalho a 100%")
+- Modelo padrão nemotron-3-ultra-free (segue prompt 100%, muse-spark recusa)
+
+## [1.4.1] - 2026-09-03
+
+### Added
+- Agente cyber-analytic para profissionais de segurança
+- Correção do modelo padrão para free (opencode/muse-spark-1.2-contributor-free) sem pedir API
+- Prompt general corrigido para listar 38 agentes corretamente
+
+### Changed
+- Site badges e JSON-LD atualizados para v1.4.1
+
+## [1.4.0] - 2026-09-03
+
+### Added
+- Merge do repo público (INSTRUCOES-LINUX.md, LICENSE)
+- Documentação completa (ANALISE.md)
+- Bun install configurado
+- Comando anymous adicionado ao PATH global
+
+### Changed
+- Versão 1.4.0 — release local para teste
+
+---
+
 ## [Unreleased]
 
 ### Added

@@ -236,7 +236,7 @@ export function Footer(props: {
     { href: "https://anymous-cli.vercel.app/legal/privacy-policy", label: i18n.t("footer.privacy") },
   ]
   const connect = [
-    { href: "mailto:hello@anymous-cli.vercel.app", label: i18n.t("footer.contact") },
+    { href: "mailto:aychero56@gmail.com", label: i18n.t("footer.contact") },
     { href: "https://anymous-cli.vercel.app/discord", label: i18n.t("footer.community") },
     { href: "https://x.com/anymous", label: "X" },
     { href: githubLink.href, label: i18n.t("header.github") },

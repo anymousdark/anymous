@@ -5,6 +5,11 @@ import { PositiveInt } from "../../schema"
 
 export const ModelStatus = Schema.Literals(["alpha", "beta", "deprecated", "active"])
 
+const InterleavedField = Schema.Union([
+  Schema.Literals(["reasoning", "reasoning_content", "reasoning_text"]),
+  Schema.String,
+])
+
 export const Model = Schema.Struct({
   id: Schema.optional(Schema.String),
   name: Schema.optional(Schema.String),
@@ -15,12 +20,7 @@ export const Model = Schema.Struct({
   temperature: Schema.optional(Schema.Boolean),
   tool_call: Schema.optional(Schema.Boolean),
   interleaved: Schema.optional(
-    Schema.Union([
-      Schema.Literal(true),
-      Schema.Struct({
-        field: Schema.Literals(["reasoning", "reasoning_content", "reasoning_details"]),
-      }),
-    ]),
+    Schema.Union([Schema.Boolean, InterleavedField, Schema.Struct({ field: InterleavedField })]),
   ),
   cost: Schema.optional(
     Schema.Struct({
@@ -102,15 +102,15 @@ export const Info = Schema.Struct({
         headerTimeout: Schema.optional(
           Schema.Union([PositiveInt, Schema.Literal(false)]).annotate({
             description:
-              "Timeout in milliseconds to wait for response headers. Provider integrations may set defaults. Set to false to disable timeout.",
+              "Timeout in milliseconds to wait for response headers (default: 300000). Provider integrations may set defaults. Set to false to disable timeout.",
           }),
         ).annotate({
           description:
-            "Timeout in milliseconds to wait for response headers. Provider integrations may set defaults. Set to false to disable timeout.",
+            "Timeout in milliseconds to wait for response headers (default: 300000). Provider integrations may set defaults. Set to false to disable timeout.",
         }),
-        chunkTimeout: Schema.optional(PositiveInt).annotate({
+        chunkTimeout: Schema.optional(Schema.Union([PositiveInt, Schema.Literal(false)])).annotate({
           description:
-            "Timeout in milliseconds between streamed SSE chunks for this provider. If no chunk arrives within this window, the request is aborted.",
+            "Timeout in milliseconds between streamed SSE chunks for this provider (default: 300000). If no chunk arrives within this window, the request is aborted. Set to false to disable.",
         }),
       }),
       [Schema.Record(Schema.String, Schema.Any)],

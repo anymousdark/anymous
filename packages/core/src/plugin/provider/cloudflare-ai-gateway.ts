@@ -24,9 +24,10 @@ export const CloudflareAIGatewayPlugin = define({
           apiKey: config.apiKey,
           options: gatewayOptions(evt.options, metadata),
         } as any)
-        const unified = createUnified({ apiKey: config.apiKey })
         evt.sdk = {
           languageModel(modelID: string) {
+            const isWorkersAi = modelID.startsWith("workers-ai/") || modelID.startsWith("@cf/")
+            const unified = createUnified(isWorkersAi ? { apiKey: config.apiKey } : {})
             return gateway(unified(modelID))
           },
         }

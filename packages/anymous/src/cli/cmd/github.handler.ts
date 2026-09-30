@@ -82,6 +82,8 @@ type GitHubReview = {
 }
 
 type GitHubPullRequest = {
+  number: number
+  url: string
   title: string
   body: string
   author: GitHubAuthor
@@ -437,6 +439,7 @@ export const githubRun = Effect.fn("Cli.github.run")(function* (args: { event?: 
     let session: { id: SessionID; title: string; version: string }
     let shareId: string | undefined
     let exitCode = 0
+    let githubClientReady = false
     type PromptFiles = Awaited<ReturnType<typeof getUserPrompt>>["promptFiles"]
     const triggerCommentId = isCommentEvent
       ? (payload as IssueCommentEvent | PullRequestReviewCommentEvent).comment.id
@@ -485,6 +488,7 @@ export const githubRun = Effect.fn("Cli.github.run")(function* (args: { event?: 
       octoGraph = graphql.defaults({
         headers: { authorization: `token ${appToken}` },
       })
+      githubClientReady = true
 
       const { userPrompt, promptFiles } = await getUserPrompt()
       if (!useGithubToken) {
@@ -639,9 +643,13 @@ export const githubRun = Effect.fn("Cli.github.run")(function* (args: { event?: 
       } else if (e instanceof Error) {
         msg = e.message
       }
-      if (isUserEvent) {
-        await createComment(`${msg}${footer()}`)
-        await removeReaction(commentType)
+      if (isUserEvent && githubClientReady) {
+        try {
+          await createComment(`${msg}${footer()}`)
+          await removeReaction(commentType)
+        } catch (error) {
+          console.error("Failed to report error on GitHub:", error)
+        }
       }
       core.setFailed(msg)
       // Also output the clean error message for the action to capture
@@ -1004,8 +1012,7 @@ export const githubRun = Effect.fn("Cli.github.run")(function* (args: { event?: 
           })
 
       if (!response.ok) {
-        const responseJson = (await response.json()) as { error?: string }
-        throw new Error(`App token exchange failed: ${response.status} ${response.statusText} - ${responseJson.error}`)
+        throw new Error(`App token exchange failed: ${response.status} ${response.statusText} - ${await response.text()}`)
       }
 
       const responseJson = (await response.json()) as { token: string }
