@@ -2002,35 +2002,8 @@ const layer = Layer.effect(
 
       const configured = Object.keys(cfg.provider ?? {})
       const candidates = Object.values(s.providers)
-      // Prefer providers that are actually usable — stored auth, a resolvable
-      // env key, or an explicit apiKey in config. Auto-picking an
-      // unauthenticated provider turns every request into a guaranteed auth
-      // failure, so only fall back to first-match when nothing is connected.
-      // Credential tiers: a provider is only as good as its credential.
-      // - "real": stored auth, env key, or an explicit apiKey. Placeholder
-      //   keys injected by loaders ("public" for the free tier, "ollama" for
-      //   the keyless local server) do NOT count here, so they can never
-      //   outrank an explicitly configured provider (e.g. mock providers in
-      //   tests, or a user key next to a local Ollama).
-      // - "placeholder": functional without a real credential (local Ollama,
-      //   public free-tier gateway). Preferred over picking a provider that
-      //   is guaranteed to fail auth.
-      const real = new Map<string, boolean>()
-      const placeholder = new Map<string, boolean>()
-      for (const p of candidates) {
-        const stored = yield* auth.get(p.id).pipe(Effect.orDie)
-        const envKeys = yield* Effect.all(p.env.map((name) => env.get(name)))
-        const apiKey = p.options?.["apiKey"]
-        const key =
-          typeof apiKey === "string" && apiKey.trim() !== "" && !apiKey.startsWith("{env:") ? apiKey : undefined
-        real.set(p.id, Boolean(stored) || envKeys.some((value) => Boolean(value)) || (key !== undefined && key !== "public" && key !== "ollama"))
-        placeholder.set(p.id, key === "public" || key === "ollama")
-      }
       const provider =
-        candidates.find((p) => real.get(p.id)) ??
-        candidates.find((p) => placeholder.get(p.id)) ??
-        candidates.find((p) => configured.length === 0 || configured.includes(p.id)) ??
-        candidates[0]
+        candidates.find((p) => configured.length === 0 || configured.includes(p.id)) ?? candidates[0]
       if (!provider) return yield* new NoProvidersError()
       const [model] = sort(Object.values(provider.models))
       if (!model) return yield* new NoModelsError({ providerID: provider.id })
