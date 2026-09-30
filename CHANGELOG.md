@@ -98,6 +98,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-09-30
+
 ### Added
 - GitHub Actions CI/CD workflow (lint, typecheck, test, build, publish dry-run)
 - ESLint 9 + TypeScript ESLint config at monorepo root
@@ -245,6 +247,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Key Focus |
 |---------|------|-----------|
+| 1.6.0 | 2026-09-30 | CI green, 44 agents in TUI, zeroed suites, loop fix |
 | 1.2.6 | 2026-08-01 | Agent V2 schema, project memory, dynamic version |
 | 1.2.5 | 2026-07-27 | Typecheck fixes, pentest-full agent |
 | 1.2.3 | 2026-07-25 | Computer tool fix |
