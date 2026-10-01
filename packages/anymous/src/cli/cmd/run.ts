@@ -1,5 +1,4 @@
 import type { PermissionV1 } from "@anymous-ai/core/v1/permission"
-import { FSUtil } from "@anymous-ai/core/fs-util"
 // CLI entry point for `anymous run` and `anymous --mini`.
 //
 // Handles three modes:
@@ -15,16 +14,11 @@ import { FSUtil } from "@anymous-ai/core/fs-util"
 // and `--fork` for forking before continuing.
 import type { Argv } from "yargs"
 import path from "path"
-import { pathToFileURL } from "url"
-import { open } from "node:fs/promises"
 import { Effect } from "effect"
 import { UI } from "../ui"
 import { effectCmd } from "../effect-cmd"
-import { EOL } from "os"
-import { Filesystem } from "@/util/filesystem"
-import { createanymousClient, type anymousClient, type ToolPart } from "@anymous-ai/sdk/v2"
+import type { anymousClient, ToolPart } from "@anymous-ai/sdk/v2"
 import { FormatError, FormatUnknownError } from "../error"
-import { INTERACTIVE_INPUT_ERROR, resolveInteractiveStdin } from "./run/runtime.stdin"
 
 type ModelInput = Parameters<anymousClient["session"]["prompt"]>[0]["model"]
 
@@ -269,6 +263,13 @@ export const RunCommand = effectCmd({
     const flags = yield* RuntimeFlags.Service
     const localInstance = yield* InstanceRef
     yield* Effect.promise(async () => {
+      const { FSUtil } = await import("@anymous-ai/core/fs-util")
+      const { pathToFileURL } = await import("url")
+      const { open } = await import("node:fs/promises")
+      const { EOL } = await import("os")
+      const { Filesystem } = await import("@/util/filesystem")
+      const { createanymousClient } = await import("@anymous-ai/sdk/v2")
+      const { INTERACTIVE_INPUT_ERROR, resolveInteractiveStdin } = await import("./run/runtime.stdin")
       const rawMessage = [...args.message, ...(args["--"] || [])].join(" ")
       const interactive = args.mini
       const auto = args.auto || args.yolo || args["dangerously-skip-permissions"]

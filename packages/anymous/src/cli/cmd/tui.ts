@@ -1,18 +1,13 @@
 import { cmd } from "@/cli/cmd/cmd"
-import { Rpc } from "@/util/rpc"
-import { type rpc } from "../tui/worker"
+import type { rpc } from "../tui/worker"
 import path from "path"
 import { fileURLToPath } from "url"
 import { UI } from "@/cli/ui"
-import { errorMessage } from "@anymous-ai/tui/util/error"
-import { withTimeout } from "@/util/timeout"
 import { withNetworkOptions, resolveNetworkOptionsNoConfig, hasArg } from "@/cli/network"
 import { Filesystem } from "@/util/filesystem"
 import type { GlobalEvent } from "@anymous-ai/sdk/v2"
 import type { EventSource } from "@anymous-ai/tui/context/sdk"
-import { writeHeapSnapshot } from "v8"
-import { ServerAuth } from "@/server/auth"
-import { validateSession } from "../tui/validate-session"
+import type { Rpc } from "@/util/rpc"
 import { win32InstallCtrlCGuard } from "@anymous-ai/tui/terminal-win32"
 
 declare global {
@@ -207,6 +202,12 @@ export const TuiThreadCommand = cmd({
 
     const unguard = win32InstallCtrlCGuard()
     try {
+      const { Rpc } = await import("@/util/rpc")
+      const { errorMessage } = await import("@anymous-ai/tui/util/error")
+      const { withTimeout } = await import("@/util/timeout")
+      const { writeHeapSnapshot } = await import("v8")
+      const { ServerAuth } = await import("@/server/auth")
+      const { validateSession } = await import("../tui/validate-session")
       let TuiConfig: typeof import("@/config/tui").TuiConfig
       try {
         ;({ TuiConfig } = await import("@/config/tui"))

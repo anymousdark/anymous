@@ -1,9 +1,5 @@
 import { Effect } from "effect"
-import { UI } from "../ui"
 import { effectCmd, fail } from "../effect-cmd"
-import { Git } from "@/git"
-import { InstanceRef } from "@/effect/instance-ref"
-import { Process } from "@/util/process"
 
 export const PrCommand = effectCmd({
   command: "pr <number>",
@@ -15,6 +11,10 @@ export const PrCommand = effectCmd({
       demandOption: true,
     }),
   handler: Effect.fn("Cli.pr")(function* (args) {
+    const { UI } = yield* Effect.promise(() => import("../ui"))
+    const { InstanceRef } = yield* Effect.promise(() => import("@/effect/instance-ref"))
+    const { Git } = yield* Effect.promise(() => import("@/git"))
+    const { Process } = yield* Effect.promise(() => import("@/util/process"))
     const ctx = yield* InstanceRef
     if (!ctx) return yield* fail("Could not load instance context")
     if (ctx.project.vcs !== "git") {

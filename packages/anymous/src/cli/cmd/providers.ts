@@ -1,19 +1,11 @@
 import type { Argv } from "yargs"
-import { Auth } from "../../auth"
+import type { Auth } from "../../auth"
 import { cmd } from "./cmd"
 import { CliError, effectCmd, fail } from "../effect-cmd"
 import { UI } from "../ui"
-import * as Prompt from "../effect/prompt"
-import { ModelsDev } from "@anymous-ai/core/models-dev"
-
-import { map, pipe, sortBy, values } from "remeda"
 import path from "path"
 import os from "os"
-import { Config } from "@/config/config"
-import { Global } from "@anymous-ai/core/global"
-import { Plugin } from "../../plugin"
 import type { Hooks } from "@anymous-ai/plugin"
-import { Process } from "@/util/process"
 import { errorMessage } from "@/util/error"
 import { text } from "node:stream/consumers"
 import { Effect, Option } from "effect"
@@ -26,6 +18,7 @@ const promptValue = <Value>(value: Option.Option<Value>) => {
 }
 
 const put = Effect.fn("Cli.providers.put")(function* (key: string, info: Auth.Info) {
+  const { Auth } = yield* Effect.promise(() => import("../../auth"))
   const auth = yield* Auth.Service
   yield* Effect.orDie(auth.set(key, info))
 })
@@ -41,6 +34,7 @@ const handlePluginAuth = Effect.fn("Cli.providers.pluginAuth")(function* (
   provider: string,
   methodName?: string,
 ) {
+  const Prompt = yield* Effect.promise(() => import("../effect/prompt"))
   const index = yield* Effect.gen(function* () {
     if (!methodName) {
       if (plugin.auth.methods.length <= 1) return 0
@@ -252,6 +246,10 @@ export const ProvidersListCommand = effectCmd({
   // Lists global credentials + provider env vars; no project instance needed.
   instance: false,
   handler: Effect.fn("Cli.providers.list")(function* (_args) {
+    const { Auth } = yield* Effect.promise(() => import("../../auth"))
+    const { ModelsDev } = yield* Effect.promise(() => import("@anymous-ai/core/models-dev"))
+    const { Global } = yield* Effect.promise(() => import("@anymous-ai/core/global"))
+    const Prompt = yield* Effect.promise(() => import("../effect/prompt"))
     const authSvc = yield* Auth.Service
     const modelsDev = yield* ModelsDev.Service
 
@@ -318,6 +316,13 @@ export const ProvidersLoginCommand = effectCmd({
         type: "string",
       }),
   handler: Effect.fn("Cli.providers.login")(function* (args) {
+    const { Auth } = yield* Effect.promise(() => import("../../auth"))
+    const Prompt = yield* Effect.promise(() => import("../effect/prompt"))
+    const { Process } = yield* Effect.promise(() => import("@/util/process"))
+    const { Config } = yield* Effect.promise(() => import("@/config/config"))
+    const { Plugin } = yield* Effect.promise(() => import("../../plugin"))
+    const { ModelsDev } = yield* Effect.promise(() => import("@anymous-ai/core/models-dev"))
+    const { map, pipe, sortBy, values } = yield* Effect.promise(() => import("remeda"))
     const authSvc = yield* Auth.Service
 
     UI.empty()
@@ -499,6 +504,9 @@ export const ProvidersLogoutCommand = effectCmd({
   // Removes a global auth credential; no project instance needed.
   instance: false,
   handler: Effect.fn("Cli.providers.logout")(function* (args) {
+    const { Auth } = yield* Effect.promise(() => import("../../auth"))
+    const { ModelsDev } = yield* Effect.promise(() => import("@anymous-ai/core/models-dev"))
+    const Prompt = yield* Effect.promise(() => import("../effect/prompt"))
     const authSvc = yield* Auth.Service
     const modelsDev = yield* ModelsDev.Service
 

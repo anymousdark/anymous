@@ -2,14 +2,10 @@ import type { Argv } from "yargs"
 import { Effect } from "effect"
 import { cmd } from "./cmd"
 import { effectCmd, fail } from "../effect-cmd"
-import { Session } from "@/session/session"
-import { SessionID } from "../../session/schema"
-import { UI } from "../ui"
+import type { Session } from "@/session/session"
 import { Locale } from "@/util/locale"
 import { Flag } from "@anymous-ai/core/flag/flag"
 import { Filesystem } from "@/util/filesystem"
-import { Process } from "@/util/process"
-import { NotFoundError } from "@/storage/storage"
 import { EOL } from "os"
 import path from "path"
 import { which } from "@anymous-ai/core/util/which"
@@ -58,6 +54,10 @@ export const SessionDeleteCommand = effectCmd({
       demandOption: true,
     }),
   handler: Effect.fn("Cli.session.delete")(function* (args) {
+    const { Session } = yield* Effect.promise(() => import("@/session/session"))
+    const { SessionID } = yield* Effect.promise(() => import("../../session/schema"))
+    const { UI } = yield* Effect.promise(() => import("../ui"))
+    const { NotFoundError } = yield* Effect.promise(() => import("@/storage/storage"))
     const svc = yield* Session.Service
     const sessionID = SessionID.make(args.sessionID)
     yield* svc
@@ -84,6 +84,7 @@ export const SessionListCommand = effectCmd({
         default: "table",
       }),
   handler: Effect.fn("Cli.session.list")(function* (args) {
+    const { Session } = yield* Effect.promise(() => import("@/session/session"))
     const sessions = yield* Session.Service.use((svc) => svc.list({ roots: true, limit: args.maxCount }))
 
     if (sessions.length === 0) return
@@ -94,6 +95,7 @@ export const SessionListCommand = effectCmd({
 
     if (shouldPaginate) {
       yield* Effect.promise(async () => {
+        const { Process } = await import("@/util/process")
         const proc = Process.spawn(pagerCmd(), {
           stdin: "pipe",
           stdout: "inherit",

@@ -1,11 +1,7 @@
 import { cmd } from "./cmd"
-import * as prompts from "@clack/prompts"
 import { UI } from "../ui"
-import { Global } from "@anymous-ai/core/global"
 import path from "path"
 import fs from "fs/promises"
-import { Filesystem } from "@/util/filesystem"
-import matter from "gray-matter"
 import { EOL } from "os"
 import type { Argv } from "yargs"
 import { Effect } from "effect"
@@ -62,6 +58,10 @@ const AgentCreateCommand = effectCmd({
     const { InstanceRef } = yield* Effect.promise(() => import("@/effect/instance-ref"))
     const { Agent } = yield* Effect.promise(() => import("../../agent/agent"))
     const { Provider } = yield* Effect.promise(() => import("@/provider/provider"))
+    const prompts = yield* Effect.promise(() => import("@clack/prompts"))
+    const { Global } = yield* Effect.promise(() => import("@anymous-ai/core/global"))
+    const { Filesystem } = yield* Effect.promise(() => import("@/util/filesystem"))
+    const { default: matter } = yield* Effect.promise(() => import("gray-matter"))
     const maybeCtx = yield* InstanceRef
     if (!maybeCtx) return yield* Effect.die("InstanceRef not provided")
     const ctx = maybeCtx

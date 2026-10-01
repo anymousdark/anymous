@@ -1,15 +1,8 @@
 import type { Session as SDKSession, Message, Part } from "@anymous-ai/sdk/v2"
 import { SessionV1 } from "@anymous-ai/core/v1/session"
-import { Session } from "@/session/session"
-import { MessageV2 } from "../../session/message-v2"
+import type { Session } from "@/session/session"
 import { CliError, effectCmd } from "../effect-cmd"
-import { Database } from "@anymous-ai/core/database/database"
-import { SessionTable, MessageTable, PartTable } from "@anymous-ai/core/session/sql"
-import { InstanceRef } from "@/effect/instance-ref"
-import { ShareNext } from "@/share/share-next"
-import { EOL } from "os"
-import path from "path"
-import { FSUtil } from "@anymous-ai/core/fs-util"
+import type { FSUtil } from "@anymous-ai/core/fs-util"
 import { Effect, Schema } from "effect"
 import type { InstanceContext } from "@/project/instance-context"
 
@@ -101,6 +94,7 @@ export const ImportCommand = effectCmd({
       demandOption: true,
     }),
   handler: Effect.fn("Cli.import")(function* (args) {
+    const { InstanceRef } = yield* Effect.promise(() => import("@/effect/instance-ref"))
     const ctx = yield* InstanceRef
     if (!ctx) return yield* Effect.die("InstanceRef not provided")
     return yield* runImport(args.file, ctx)
@@ -108,6 +102,13 @@ export const ImportCommand = effectCmd({
 })
 
 const runImport = Effect.fn("Cli.import.body")(function* (file: string, ctx: InstanceContext) {
+  const { ShareNext } = yield* Effect.promise(() => import("@/share/share-next"))
+  const { FSUtil } = yield* Effect.promise(() => import("@anymous-ai/core/fs-util"))
+  const { Database } = yield* Effect.promise(() => import("@anymous-ai/core/database/database"))
+  const { SessionTable, MessageTable, PartTable } = yield* Effect.promise(() => import("@anymous-ai/core/session/sql"))
+  const { Session } = yield* Effect.promise(() => import("@/session/session"))
+  const { EOL } = yield* Effect.promise(() => import("os"))
+  const { default: path } = yield* Effect.promise(() => import("path"))
   const share = yield* ShareNext.Service
   const fs = yield* FSUtil.Service
   const { db } = yield* Database.Service

@@ -3,14 +3,11 @@ import { Effect } from "effect"
 
 import { ConfigPaths } from "@/config/paths"
 import { Global } from "@anymous-ai/core/global"
-import { installPlugin, patchPluginConfig, readPluginManifest } from "../../plugin/install"
 import { resolvePluginTarget } from "../../plugin/shared"
 import { errorMessage } from "../../util/error"
 import { Filesystem } from "@/util/filesystem"
-import { Process } from "@/util/process"
 import { UI } from "../ui"
 import { effectCmd } from "../effect-cmd"
-import { InstanceRef } from "@/effect/instance-ref"
 
 type Spin = {
   start: (msg: string) => void
@@ -73,6 +70,8 @@ export function createPlugTask(input: PlugInput, dep: PlugDeps = defaultPlugDeps
   const global = Boolean(input.global)
 
   return async (ctx: PlugCtx) => {
+    const { installPlugin, patchPluginConfig, readPluginManifest } = await import("../../plugin/install")
+    const { Process } = await import("@/util/process")
     const install = dep.spinner()
     install.start("Installing plugin package...")
     const target = await installPlugin(mod, dep)
@@ -198,6 +197,7 @@ export const PluginCommand = effectCmd({
         describe: "replace existing plugin version",
       }),
   handler: Effect.fn("Cli.plug")(function* (args) {
+    const { InstanceRef } = yield* Effect.promise(() => import("@/effect/instance-ref"))
     const mod = String(args.module ?? "").trim()
     if (!mod) {
       UI.error("module is required")

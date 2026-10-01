@@ -1,7 +1,3 @@
-import { Global } from "@anymous-ai/core/global"
-import { version } from "@/cli/version"
-import { Flag } from "@anymous-ai/core/flag/flag"
-import os from "os"
 import { Duration, Effect } from "effect"
 import { effectCmd } from "../../effect-cmd"
 import { cmd } from "../cmd"
@@ -50,6 +46,9 @@ const InfoCommand = effectCmd({
   command: "info",
   describe: "show debug information",
   handler: Effect.fn("Cli.debug.info")(function* () {
+    const { default: os } = yield* Effect.promise(() => import("os"))
+    const { version } = yield* Effect.promise(() => import("@/cli/version"))
+    const { Flag } = yield* Effect.promise(() => import("@anymous-ai/core/flag/flag"))
     const { Config } = yield* Effect.promise(() => import("@/config/config"))
     const { ConfigPlugin } = yield* Effect.promise(() => import("@/config/plugin"))
     const config = yield* Config.Service.use((cfg) => cfg.get())
@@ -79,7 +78,8 @@ const InfoCommand = effectCmd({
 const PathsCommand = cmd({
   command: "paths",
   describe: "show global paths (data, config, cache, state)",
-  handler() {
+  async handler() {
+    const { Global } = await import("@anymous-ai/core/global")
     for (const [key, value] of Object.entries(Global.Path)) {
       console.log(key.padEnd(10), value)
     }

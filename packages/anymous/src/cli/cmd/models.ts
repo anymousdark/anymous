@@ -1,9 +1,7 @@
 import { EOL } from "os"
 import { Effect } from "effect"
-import { ModelsDev } from "@anymous-ai/core/models-dev"
 import { effectCmd, fail } from "../effect-cmd"
 import { UI } from "../ui"
-import { ProviderV2 } from "@anymous-ai/core/provider"
 
 export const ModelsCommand = effectCmd({
   command: "models [provider]",
@@ -24,6 +22,8 @@ export const ModelsCommand = effectCmd({
         type: "boolean",
       }),
   handler: Effect.fn("Cli.models")(function* (args) {
+    const { ModelsDev } = yield* Effect.promise(() => import("@anymous-ai/core/models-dev"))
+    const { ProviderV2 } = yield* Effect.promise(() => import("@anymous-ai/core/provider"))
     const { Provider } = yield* Effect.promise(() => import("@/provider/provider"))
     if (args.refresh) {
       yield* ModelsDev.Service.use((s) => s.refresh(true))

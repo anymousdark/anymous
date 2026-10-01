@@ -1,24 +1,8 @@
 import { cmd } from "./cmd"
 import type { ConfigV1 } from "@anymous-ai/core/v1/config/config"
 import { effectCmd } from "../effect-cmd"
-import { Cause } from "effect"
-import { Client } from "@modelcontextprotocol/sdk/client/index.js"
-import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js"
-import { UnauthorizedError } from "@modelcontextprotocol/sdk/client/auth.js"
-import { LATEST_PROTOCOL_VERSION } from "@modelcontextprotocol/sdk/types.js"
-import * as prompts from "@clack/prompts"
-import { UI } from "../ui"
-import { MCP } from "../../mcp"
-import { McpAuth } from "../../mcp/auth"
-import { McpOAuthProvider } from "../../mcp/oauth-provider"
-import { Config } from "@/config/config"
+import type { MCP } from "../../mcp"
 import type { ConfigMCPV1 } from "@anymous-ai/core/v1/config/mcp"
-import { InstanceRef } from "@/effect/instance-ref"
-import { InstallationVersion } from "@anymous-ai/core/installation/version"
-import path from "path"
-import { Global } from "@anymous-ai/core/global"
-import { modify, applyEdits } from "jsonc-parser"
-import { Filesystem } from "@/util/filesystem"
 import { Effect } from "effect"
 
 function getAuthStatusIcon(status: MCP.AuthStatus): string {
@@ -67,6 +51,8 @@ function oauthServers(config: ConfigV1.Info) {
 
 function listState() {
   return Effect.gen(function* () {
+    const { Config } = yield* Effect.promise(() => import("@/config/config"))
+    const { MCP } = yield* Effect.promise(() => import("../../mcp"))
     const cfg = yield* Config.Service
     const mcp = yield* MCP.Service
     const config = yield* cfg.get()
@@ -81,6 +67,8 @@ function listState() {
 
 function authState() {
   return Effect.gen(function* () {
+    const { Config } = yield* Effect.promise(() => import("@/config/config"))
+    const { MCP } = yield* Effect.promise(() => import("../../mcp"))
     const cfg = yield* Config.Service
     const mcp = yield* MCP.Service
     const config = yield* cfg.get()
@@ -111,6 +99,8 @@ export const McpListCommand = effectCmd({
   aliases: ["ls"],
   describe: "list MCP servers and their status",
   handler: Effect.fn("Cli.mcp.list")(function* () {
+    const { UI } = yield* Effect.promise(() => import("../ui"))
+    const prompts = yield* Effect.promise(() => import("@clack/prompts"))
     UI.empty()
     prompts.intro("MCP Servers")
 
@@ -178,6 +168,10 @@ export const McpAuthCommand = effectCmd({
       })
       .command(McpAuthListCommand),
   handler: Effect.fn("Cli.mcp.auth")(function* (args) {
+    const { UI } = yield* Effect.promise(() => import("../ui"))
+    const prompts = yield* Effect.promise(() => import("@clack/prompts"))
+    const { MCP } = yield* Effect.promise(() => import("../../mcp"))
+    const { Cause } = yield* Effect.promise(() => import("effect"))
     UI.empty()
     prompts.intro("MCP OAuth Authentication")
 
@@ -308,6 +302,8 @@ export const McpAuthListCommand = effectCmd({
   aliases: ["ls"],
   describe: "list OAuth-capable MCP servers and their auth status",
   handler: Effect.fn("Cli.mcp.auth.list")(function* () {
+    const { UI } = yield* Effect.promise(() => import("../ui"))
+    const prompts = yield* Effect.promise(() => import("@clack/prompts"))
     UI.empty()
     prompts.intro("MCP OAuth Status")
 
@@ -342,6 +338,10 @@ export const McpLogoutCommand = effectCmd({
       type: "string",
     }),
   handler: Effect.fn("Cli.mcp.logout")(function* (args) {
+    const { UI } = yield* Effect.promise(() => import("../ui"))
+    const prompts = yield* Effect.promise(() => import("@clack/prompts"))
+    const { McpAuth } = yield* Effect.promise(() => import("../../mcp/auth"))
+    const { MCP } = yield* Effect.promise(() => import("../../mcp"))
     UI.empty()
     prompts.intro("MCP OAuth Logout")
 
@@ -392,6 +392,8 @@ export const McpLogoutCommand = effectCmd({
 })
 
 async function resolveConfigPath(baseDir: string, global = false) {
+  const { default: path } = await import("path")
+  const { Filesystem } = await import("@/util/filesystem")
   // Check for existing config files (prefer .jsonc over .json, check .anymous/ subdirectory too)
   const candidates = [path.join(baseDir, "anymous.json"), path.join(baseDir, "anymous.jsonc")]
 
@@ -410,6 +412,8 @@ async function resolveConfigPath(baseDir: string, global = false) {
 }
 
 async function addMcpToConfig(name: string, mcpConfig: ConfigMCPV1.Info, configPath: string) {
+  const { Filesystem } = await import("@/util/filesystem")
+  const { modify, applyEdits } = await import("jsonc-parser")
   let text = "{}"
   if (await Filesystem.exists(configPath)) {
     text = await Filesystem.readText(configPath)
@@ -450,6 +454,10 @@ export const McpAddCommand = effectCmd({
         array: true,
       }),
   handler: Effect.fn("Cli.mcp.add")(function* (args) {
+    const { InstanceRef } = yield* Effect.promise(() => import("@/effect/instance-ref"))
+    const { Global } = yield* Effect.promise(() => import("@anymous-ai/core/global"))
+    const { UI } = yield* Effect.promise(() => import("../ui"))
+    const prompts = yield* Effect.promise(() => import("@clack/prompts"))
     const maybeCtx = yield* InstanceRef
     if (!maybeCtx) return yield* Effect.die("InstanceRef not provided")
     const ctx = maybeCtx
@@ -666,6 +674,11 @@ export const McpDebugCommand = effectCmd({
       demandOption: true,
     }),
   handler: Effect.fn("Cli.mcp.debug")(function* (args) {
+    const { Config } = yield* Effect.promise(() => import("@/config/config"))
+    const { MCP } = yield* Effect.promise(() => import("../../mcp"))
+    const { McpAuth } = yield* Effect.promise(() => import("../../mcp/auth"))
+    const { UI } = yield* Effect.promise(() => import("../ui"))
+    const prompts = yield* Effect.promise(() => import("@clack/prompts"))
     const config = yield* Config.Service.use((cfg) => cfg.get())
     const mcp = yield* MCP.Service
     const auth = yield* McpAuth.Service
@@ -678,6 +691,12 @@ export const McpDebugCommand = effectCmd({
           })
         : undefined
     yield* Effect.promise(async () => {
+      const { LATEST_PROTOCOL_VERSION } = await import("@modelcontextprotocol/sdk/types.js")
+      const { InstallationVersion } = await import("@anymous-ai/core/installation/version")
+      const { McpOAuthProvider } = await import("../../mcp/oauth-provider")
+      const { StreamableHTTPClientTransport } = await import("@modelcontextprotocol/sdk/client/streamableHttp.js")
+      const { Client } = await import("@modelcontextprotocol/sdk/client/index.js")
+      const { UnauthorizedError } = await import("@modelcontextprotocol/sdk/client/auth.js")
       UI.empty()
       prompts.intro("MCP OAuth Debug")
 

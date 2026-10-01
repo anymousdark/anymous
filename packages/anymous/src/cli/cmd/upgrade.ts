@@ -1,8 +1,6 @@
 import type { Argv } from "yargs"
 import { UI } from "../ui"
-import * as prompts from "@clack/prompts"
-import { Installation } from "../../installation"
-import { InstallationVersion } from "@anymous-ai/core/installation/version"
+import type { Installation } from "../../installation"
 
 const ANYMOUS_RELEASES = "https://api.github.com/repos/anymousdark/anymous/releases/latest"
 
@@ -40,6 +38,9 @@ export const UpgradeCommand = {
       })
   },
   handler: async (args: { target?: string; method?: string; sync?: boolean }) => {
+    const prompts = await import("@clack/prompts")
+    const { Installation } = await import("../../installation")
+    const { InstallationVersion } = await import("@anymous-ai/core/installation/version")
     UI.empty()
     UI.println(UI.logo("  "))
     UI.empty()
