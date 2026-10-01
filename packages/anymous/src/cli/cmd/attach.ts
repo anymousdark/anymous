@@ -1,8 +1,6 @@
 import { cmd } from "./cmd"
 import { UI } from "@/cli/ui"
 import { errorMessage } from "@anymous-ai/tui/util/error"
-import { validateSession } from "../tui/validate-session"
-import { ServerAuth } from "@/server/auth"
 
 export const AttachCommand = cmd({
   command: "attach <url>",
@@ -111,10 +109,12 @@ export const AttachCommand = cmd({
       return
     }
 
+    const { ServerAuth } = await import("@/server/auth")
     const headers = ServerAuth.headers({ password: args.password, username: args.username })
     const config = await TuiConfig.get()
 
     try {
+      const { validateSession } = await import("../tui/validate-session")
       await validateSession({
         url: args.url,
         sessionID: args.session,
