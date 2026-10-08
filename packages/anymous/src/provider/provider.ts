@@ -1976,9 +1976,10 @@ const layer = Layer.effect(
       //   outrank an explicitly configured provider (e.g. mock providers in
       //   tests, or a user key next to a local Ollama).
       // - "placeholder": functional without a real credential (local Ollama,
-      //   the anymous free-tier gateway). Preferred over picking a provider
-      //   that is guaranteed to fail auth. The anymous gateway is preferred
-      //   over other placeholders so free models work out of the box.
+      //   the anymous free-tier gateway when present in the catalog).
+      //   Preferred over picking a provider that is guaranteed to fail auth.
+      //   The anymous gateway is preferred over other placeholders so the
+      //   fork's own free models win out of the box.
       const real = new Map<string, boolean>()
       const placeholder = new Map<string, boolean>()
       for (const p of candidates) {
