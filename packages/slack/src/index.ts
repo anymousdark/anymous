@@ -1,5 +1,5 @@
 import { App } from "@slack/bolt"
-import { createanymous, type ToolPart } from "@anymous-ai/sdk"
+import { createanymous, type TextPart, type ToolPart } from "@anymous-ai/sdk"
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
@@ -19,7 +19,13 @@ const anymous = await createanymous({
 })
 console.log("✅ anymous server ready")
 
-const sessions = new Map<string, { client: any; server: any; sessionId: string; channel: string; thread: string }>()
+type anymousClient = Awaited<ReturnType<typeof createanymous>>["client"]
+type anymousServer = Awaited<ReturnType<typeof createanymous>>["server"]
+
+const sessions = new Map<
+  string,
+  { client: anymousClient; server: anymousServer; sessionId: string; channel: string; thread: string }
+>()
 void (async () => {
   const events = await anymous.client.event.subscribe()
   for await (const event of events.stream) {
@@ -66,7 +72,7 @@ app.message(async ({ message, say }) => {
   console.log("✅ Processing message:", message.text)
 
   const channel = message.channel
-  const thread = (message as any).thread_ts || message.ts
+  const thread = (message as { thread_ts?: string }).thread_ts || message.ts
   const sessionKey = `${channel}-${thread}`
 
   let session = sessions.get(sessionKey)
@@ -120,14 +126,13 @@ app.message(async ({ message, say }) => {
 
   const response = result.data
 
-  // Build response text
+  // Build response text (assistant content lives in text parts —
+  // AssistantMessage carries metadata only, it has no `content` field).
   const responseText =
-    response.info?.content ||
     response.parts
-      ?.filter((p: any) => p.type === "text")
-      .map((p: any) => p.text)
-      .join("\n") ||
-    "I received your message but didn't have a response."
+      ?.filter((p): p is TextPart => p.type === "text")
+      .map((p) => p.text)
+      .join("\n") || "I received your message but didn't have a response."
 
   console.log("💬 Sending response:", responseText)
 

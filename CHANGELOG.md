@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.1] - 2026-10-08
+
+### Added
+- Lint guardrails: `complexity` (15), `max-lines` (500) and `no-warning-comments` as warnings; documented `no-console: off` for Slack/Workers runtimes
+- God-file split pilot: `wrapSSE` + `OPENAI_HEADER_TIMEOUT_DEFAULT` extracted from `provider.ts` to `provider/sse.ts`
+- Docs sync: site/README agent count corrected to 43, versions synced to 1.6.1, `V2_MIGRATION_TODOS.md` reviewed with commit links
+
+### Fixed
+- Slack bot: removed dead `response.info.content` access (field does not exist on `AssistantMessage`) and 5 `any` occurrences with real SDK types
+- Windows bin launcher forwards caller PWD so `[project]` resolves from invocation dir (`f415edd`)
+
+## [1.5.3] - 2026-09-09
+
+### Added
+- Site badge synced to v1.5.3, help snapshots updated (`27fa347`)
+- Desktop downloads (`.deb` / `.AppImage`) linked from landing page
+
+### Fixed
+- CLI typecheck zero errors — missing `sdk` dep in `core`, `@types/mime-types`, obsolete `determineScope` test, MCP SDK 1.29 guards (`bc44efd`)
+- App startup guards against `child-store`/`sync` undefined + docs background (`c2d7c3b`, `3dfbe0f`)
+- Desktop Monterey wallpaper as default background (`3de551e`)
+
+## [1.5.2] - 2026-09-09
+
+### Added
+- GitHub button in site hero + desktop download links v1.5.1 (`50d83df`)
+- Site links desktop v1.5.1 → v1.5.2 (`0e734e4`)
+
+### Fixed
+- Removed legacy duplicated `.desktop` file + fixed GitHub owner to `anymousdark` (`bdec899`)
+- Synthetic concatenated key in test (false-positive secret scanning) (`277a080`)
+
 ## [1.5.1] - 2026-09-09
 
 ### Added

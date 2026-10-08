@@ -1,6 +1,6 @@
 # anymous — AI-Powered Reverse Engineering & Pentest Platform
 
-**44 AI agents** for reverse engineering, penetration testing, SOC operations, and software
+**43 AI agents** for reverse engineering, penetration testing, SOC operations, and software
 engineering — with Free models with no API key. Unrestricted mode for professionals. Fork of opencode (upstream
 1.18.27 backported), fully rebranded.
 
@@ -35,7 +35,7 @@ anymous run --agent blueteam "hardening deste servidor"
 anymous run --agent forensics "analisa este dump"
 ```
 
-## 🤖 AI Agents (45)
+## 🤖 AI Agents (43)
 
 ### Orchestrators (6 primary)
 

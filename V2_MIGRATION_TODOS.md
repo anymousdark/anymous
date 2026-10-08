@@ -3,6 +3,10 @@
 Tracking of deferred V2 migration work identified as TODO comments in the codebase.
 This document consolidates the work so it can be prioritized and tracked.
 
+> Last updated: 2026-10-08 (branch `test-tiny`, v1.5.3).
+> Completed items link to the fixing commit. When completing an item,
+> remove it from this list and update the code comment.
+
 ## Immediate Priority (blocks other work)
 
 | Area | Location | What |
@@ -36,16 +40,17 @@ This document consolidates the work so it can be prioritized and tracked.
 ## Other tracked TODOs
 
 - `packages/anymous/src/tool/tool.ts:15` — remove the "hack" in tool module
-- ~~`packages/anymous/src/provider/transform.ts:98` — optimize `normalizeMessages` (multiple passes)~~ (done: `.map().filter()` collapsed to single `.flatMap()` passes)
+- ~~`packages/anymous/src/provider/transform.ts:98` — optimize `normalizeMessages` (multiple passes)~~ (done in `4bc3d15`: `.map().filter()` collapsed to single `.flatMap()` passes + `normalizeUnicode` tests)
 - `packages/anymous/src/session/session.ts:400` — update models.dev pricing model
 - `packages/anymous/src/agent/agent.ts:904` — clean up provider-specific logic bleed
 - `packages/anymous/src/account/account.ts:435` — multi-org selection
 - `packages/server/src/handlers/pty.ts:178` — graceful-shutdown socket tracking
 - `packages/tui/src/parsers-config.ts:153` — tree-sitter injections; `:287` — official tree-sitter-nix WASM
-- ~~`packages/core/src/github-copilot/chat/openai-compatible-chat-language-model.ts:386` — lost type safety on Chunk (MUST FIX)~~ (done: `chunkSchema` field now has an explicit precise schema type)
+- ~~`packages/core/src/github-copilot/chat/openai-compatible-chat-language-model.ts:386` — lost type safety on Chunk (MUST FIX)~~ (done in `4bc3d15`: `chunkSchema` field now has an explicit precise schema type)
 
 ## Notes
 
-- This list was compiled on 2026-08-01 from a repo-wide TODO scan.
+- This list was compiled on 2026-08-01 from a repo-wide TODO scan, last reviewed 2026-10-08.
+- `4bc3d15` also fixed repo-wide type errors, lint errors and unicode-normalization mojibake; `f415edd` fixed Windows bin launcher PWD forwarding.
 - Items marked "after V2 X exists" depend on infrastructure that does not exist yet.
 - When completing an item, remove it from this list and update the code comment.
