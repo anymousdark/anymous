@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.7] - 2026-10-08
+
+### Fixed
+- TUI in compiled binaries: `@opentui/solid/preload` now imported explicitly at startup (`index.ts`, `temporary.ts`) instead of relying on `bunfig.toml`, which binaries never load
+- postinstall fallback uses `npm.cmd` on Windows
+- Correct repo/package refs: GitHub releases (`anymousdark/anymous`), npm upgrade/uninstall commands (`anymous`), brew tap (`anymousdark/tap`), GHCR image
+- Root `build`/`build:all` scripts pointed at a nonexistent path
+
+### Added
+- GitHub Actions release workflow (per-OS native builds + npm publish + GitHub release)
+- CI version-drift check (`package.json` vs CHANGELOG vs `bun.lock`)
+- Install docs: `--allow-scripts=anymous` for npm 11+
+
 ## [1.6.6] - 2026-10-08
 
 ### Fixed
