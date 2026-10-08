@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.8] - 2026-10-08
+
+### Fixed
+- Bundled binaries: `/api/provider` and `/api/agent` returned 500 (`LayerNode: undefined dependency`) — broken import cycle `filesystem.ts ↔ filesystem/search.ts` resolved via `import type`; layer errors now include the dependency chain
+- Startup: skill files that 404 upstream are remembered (negative cache, weekly revalidation) instead of refetched every launch
+- Test isolation: root `bunfig.toml` applies the test preload, so `bun test` from anywhere uses temp dirs (previously polluted the real user DB with fake accounts, costing seconds on every dev startup)
+
 ## [1.6.7] - 2026-10-08
 
 ### Fixed
