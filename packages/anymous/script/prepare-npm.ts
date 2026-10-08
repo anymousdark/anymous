@@ -69,7 +69,7 @@ if (result.error) {
 process.exit(result.status ?? 0)
 `
 await fs.mkdirSync(path.join(dist, "bin"), { recursive: true })
-await Bun.write(path.join(dist, "bin", "anymous.js"), shim)
+await Bun.write(path.join(dist, "bin", "anymous.mjs"), shim)
 
 // Optional platform binary packages, matching the targets in script/build.ts
 const platformPackages: Record<string, string> = {
@@ -97,7 +97,7 @@ module.exports = {
   name: "anymous",
   version: ${JSON.stringify(version)},
   description: "AI-powered reverse engineering platform",
-  bin: "bin/anymous.js",
+  bin: "bin/anymous.mjs",
 };
 `
 await Bun.write(path.join(dist, "index.js"), indexJs)
@@ -106,7 +106,7 @@ const npmPkg = {
   name: "anymous",
   main: "index.js",
   type: "commonjs",
-  bin: { anymous: "./bin/anymous.js" },
+  bin: { anymous: "./bin/anymous.mjs" },
   scripts: { postinstall: "node ./postinstall.mjs" },
   version,
   description: "AI-powered reverse engineering platform",
