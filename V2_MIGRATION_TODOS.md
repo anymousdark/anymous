@@ -3,7 +3,7 @@
 Tracking of deferred V2 migration work identified as TODO comments in the codebase.
 This document consolidates the work so it can be prioritized and tracked.
 
-> Last updated: 2026-10-08 (branch `test-tiny`, v1.5.3).
+> Last updated: 2026-10-08 (branch `test-tiny`, v1.6.5).
 > Completed items link to the fixing commit. When completing an item,
 > remove it from this list and update the code comment.
 
