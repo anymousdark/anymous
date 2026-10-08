@@ -1249,7 +1249,11 @@ function fromModelsDevModel(provider: ModelsDev.Provider, model: ModelsDev.Model
     api: {
       id: model.id,
       url: model.provider?.api ?? provider.api ?? "",
-      npm: cloudflareGatewayNpm(provider.id, model.id) ?? model.provider?.npm ?? provider.npm ?? "@ai-sdk/openai-compatible",
+      npm:
+        cloudflareGatewayNpm(provider.id, model.id) ??
+        model.provider?.npm ??
+        provider.npm ??
+        "@ai-sdk/openai-compatible",
     },
     status: model.status ?? "active",
     headers: {},
@@ -2023,7 +2027,12 @@ const layer = Layer.effect(
         const apiKey = p.options?.["apiKey"]
         const key =
           typeof apiKey === "string" && apiKey.trim() !== "" && !apiKey.startsWith("{env:") ? apiKey : undefined
-        real.set(p.id, Boolean(stored) || envKeys.some((value) => Boolean(value)) || (key !== undefined && key !== "public" && key !== "ollama"))
+        real.set(
+          p.id,
+          Boolean(stored) ||
+            envKeys.some((value) => Boolean(value)) ||
+            (key !== undefined && key !== "public" && key !== "ollama"),
+        )
         placeholder.set(p.id, key === "public" || key === "ollama")
       }
       const provider =

@@ -97,7 +97,6 @@ function sdkKey(npm: string): string | undefined {
   return undefined
 }
 
-// TODO: optimize this function - currently iterates multiple times over messages
 function normalizeMessages(
   msgs: ModelMessage[],
   model: Provider.Model,
@@ -168,55 +167,51 @@ function normalizeMessages(
   // Anthropic rejects messages with empty content - filter out empty string messages
   // and remove empty text/reasoning parts from array content
   if (model.api.npm === "@ai-sdk/anthropic") {
-    msgs = msgs
-      .map((msg) => {
-        if (typeof msg.content === "string") {
-          if (msg.content === "") return undefined
-          return msg
+    msgs = msgs.flatMap((msg) => {
+      if (typeof msg.content === "string") {
+        if (msg.content === "") return []
+        return [msg]
+      }
+      if (!Array.isArray(msg.content)) return [msg]
+      const filtered = msg.content.filter((part) => {
+        if (part.type === "text") {
+          return part.text !== ""
         }
-        if (!Array.isArray(msg.content)) return msg
-        const filtered = msg.content.filter((part) => {
-          if (part.type === "text") {
-            return part.text !== ""
-          }
-          if (part.type === "reasoning") {
-            return (
-              part.text.trim().length > 0 ||
-              part.providerOptions?.anthropic?.signature != null ||
-              part.providerOptions?.anthropic?.redactedData != null
-            )
-          }
-          return true
-        })
-        if (filtered.length === 0) return undefined
-        return { ...msg, content: filtered }
+        if (part.type === "reasoning") {
+          return (
+            part.text.trim().length > 0 ||
+            part.providerOptions?.anthropic?.signature != null ||
+            part.providerOptions?.anthropic?.redactedData != null
+          )
+        }
+        return true
       })
-      .filter((msg): msg is ModelMessage => msg !== undefined && msg.content !== "")
+      if (filtered.length === 0) return []
+      return [{ ...msg, content: filtered } as ModelMessage]
+    })
   }
 
   // Bedrock specific transforms
   if (model.api.npm === "@ai-sdk/amazon-bedrock") {
-    msgs = msgs
-      .map((msg) => {
-        if (typeof msg.content === "string") {
-          if (msg.content === "") return undefined
-          return msg
+    msgs = msgs.flatMap((msg) => {
+      if (typeof msg.content === "string") {
+        if (msg.content === "") return []
+        return [msg]
+      }
+      if (!Array.isArray(msg.content)) return [msg]
+      const filtered = msg.content.filter((part) => {
+        if (part.type === "text") {
+          return part.text !== ""
         }
-        if (!Array.isArray(msg.content)) return msg
-        const filtered = msg.content.filter((part) => {
-          if (part.type === "text") {
-            return part.text !== ""
-          }
-          if (part.type === "reasoning") {
-            const metadata = part.providerOptions?.[model.providerID] ?? part.providerOptions?.bedrock
-            return metadata?.signature != null || metadata?.redactedContent != null || metadata?.redactedData != null
-          }
-          return true
-        })
-        if (filtered.length === 0) return undefined
-        return { ...msg, content: filtered }
+        if (part.type === "reasoning") {
+          const metadata = part.providerOptions?.[model.providerID] ?? part.providerOptions?.bedrock
+          return metadata?.signature != null || metadata?.redactedContent != null || metadata?.redactedData != null
+        }
+        return true
       })
-      .filter((msg): msg is ModelMessage => msg !== undefined && msg.content !== "")
+      if (filtered.length === 0) return []
+      return [{ ...msg, content: filtered } as ModelMessage]
+    })
   }
 
   if (model.api.id.includes("claude")) {
@@ -945,16 +940,13 @@ export function variants(model: Provider.Model): Record<string, Record<string, a
         ]),
       )
 
+    // Cerebras, TogetherAI, xAI, DeepInfra and Venice all use OpenAI-compatible
+    // reasoning options (see their provider docs for details).
     case "@ai-sdk/cerebras":
-    // https://v5.ai-sdk.dev/providers/ai-sdk-providers/cerebras
     case "@ai-sdk/togetherai":
-    // https://v5.ai-sdk.dev/providers/ai-sdk-providers/togetherai
     case "@ai-sdk/xai":
-    // https://v5.ai-sdk.dev/providers/ai-sdk-providers/xai
     case "@ai-sdk/deepinfra":
-    // https://v5.ai-sdk.dev/providers/ai-sdk-providers/deepinfra
     case "venice-ai-sdk-provider":
-    // https://docs.venice.ai/overview/guides/reasoning-models#reasoning-effort
     case "@ai-sdk/openai-compatible":
       if (model.api.id.toLowerCase().includes("north-mini-code")) {
         return Object.fromEntries(["none", "high"].map((effort) => [effort, { reasoningEffort: effort }]))
@@ -1007,9 +999,8 @@ export function variants(model: Provider.Model): Record<string, Record<string, a
     }
 
     case "@ai-sdk/anthropic":
-    // https://v5.ai-sdk.dev/providers/ai-sdk-providers/anthropic
     case "@ai-sdk/google-vertex/anthropic":
-      // https://v5.ai-sdk.dev/providers/ai-sdk-providers/google-vertex#anthropic-provider
+      // see https://v5.ai-sdk.dev/providers/ai-sdk-providers/google-vertex#anthropic-provider
       if (adaptiveEfforts) {
         let efforts = [...adaptiveEfforts]
         if (model.providerID === "github-copilot") {
@@ -1101,8 +1092,8 @@ export function variants(model: Provider.Model): Record<string, Record<string, a
         ]),
       )
 
-    case "@ai-sdk/google-vertex":
     // https://v5.ai-sdk.dev/providers/ai-sdk-providers/google-vertex
+    case "@ai-sdk/google-vertex":
     case "@ai-sdk/google":
       // https://v5.ai-sdk.dev/providers/ai-sdk-providers/google-generative-ai
       return googleThinkingVariants(model)

@@ -66,9 +66,7 @@ export function createRefreshQueue(input: QueueInput) {
       }
     } finally {
       running = false
-      // oxlint-disable-next-line no-unsafe-finally -- intentional: early return skips schedule() when paused
-      if (input.paused()) return
-      if (root || queued.size) schedule()
+      if (!input.paused() && (root || queued.size)) schedule()
     }
   }
 

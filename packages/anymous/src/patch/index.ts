@@ -415,13 +415,13 @@ function applyReplacements(lines: string[], replacements: Array<[number, number,
 }
 
 // Normalize Unicode punctuation to ASCII equivalents (like Rust's normalize_unicode)
-function normalizeUnicode(str: string): string {
+export function normalizeUnicode(str: string): string {
   return str
-    .replace(/[‘’‚‛]/g, "'") // single quotes
-    .replace(/[“”„‟]/g, '"') // double quotes
-    .replace(/[‐‑‒–—―]/g, "-") // dashes
-    .replace(/…/g, "...") // ellipsis
-    .replace(/ /g, " ") // non-breaking space
+    .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'") // single quotes
+    .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"') // double quotes
+    .replace(/[\u2013\u2014\u2015\u2012\u2212]/g, "-") // dashes
+    .replace(/\u2026/g, "...") // ellipsis
+    .replace(/\u00A0/g, " ") // non-breaking space
 }
 
 type Comparator = (a: string, b: string) => boolean

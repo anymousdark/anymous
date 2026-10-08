@@ -28,7 +28,7 @@ export { AbsolutePath, DateTimeUtcFromMillis, NonNegativeInt, optional, Positive
  * `readonly [string, Options]`); the general array branch would otherwise
  * widen them to unbounded arrays.
  */
-// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+
 export type DeepMutable<T> = T extends string | number | boolean | bigint | symbol | Function
   ? T
   : T extends readonly [unknown, ...unknown[]]

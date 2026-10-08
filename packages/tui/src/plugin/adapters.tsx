@@ -110,7 +110,7 @@ function stateApi(sync: ReturnType<typeof useSync>): TuiPluginApi["state"] {
       return sync.path
     },
     get vcs() {
-      if (!sync.data.vcs) return
+      if (!sync.data.vcs) return undefined
       return {
         branch: sync.data.vcs.branch,
         default_branch: sync.data.vcs.default_branch,

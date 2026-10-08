@@ -178,8 +178,9 @@ const invokeChildTool = Effect.fn("CodeMode.invokeChildTool")(function* (input: 
       )) as CallToolResult
       if (raw.isError)
         throw new Error(
-          toolTextParts(raw.content).filter((text) => text.trim()).join("\n\n") ||
-            "MCP tool returned an error",
+          toolTextParts(raw.content)
+            .filter((text) => text.trim())
+            .join("\n\n") || "MCP tool returned an error",
         )
       return raw as CallToolResult
     })

@@ -257,7 +257,8 @@ function buildHomeSessionRecords(input: {
 }) {
   const directories = new Set(input.projectDirectories().map(pathKey))
   const sessions = input.sessions().filter((session) => directories.has(pathKey(session.directory)))
-  return [...new Map(sessions.map((session) => [session.id, session] as const)).values()].sort(compareSessionTime)
+  return [...new Map(sessions.map((session) => [session.id, session] as const)).values()]
+    .sort(compareSessionTime)
     .flatMap((session) => {
       const directory = pathKey(session.directory)
       const project =

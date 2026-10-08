@@ -15,7 +15,7 @@ export type PerformancePageDiagnostics = {
 const pages = new WeakMap<Page, PerformancePageDiagnostics>()
 
 export const benchmark = base.extend<BenchmarkFixtures>({
-  reportState: async ({}, use) => use({}),
+  reportState: async (_, use) => use({}),
   report: async ({ reportState }, use) => {
     await use((metrics, context = {}) => {
       if (reportState.payload) throw new Error("Benchmark reported metrics more than once")

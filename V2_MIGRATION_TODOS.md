@@ -36,13 +36,13 @@ This document consolidates the work so it can be prioritized and tracked.
 ## Other tracked TODOs
 
 - `packages/anymous/src/tool/tool.ts:15` — remove the "hack" in tool module
-- `packages/anymous/src/provider/transform.ts:98` — optimize `normalizeMessages` (multiple passes)
+- ~~`packages/anymous/src/provider/transform.ts:98` — optimize `normalizeMessages` (multiple passes)~~ (done: `.map().filter()` collapsed to single `.flatMap()` passes)
 - `packages/anymous/src/session/session.ts:400` — update models.dev pricing model
 - `packages/anymous/src/agent/agent.ts:904` — clean up provider-specific logic bleed
 - `packages/anymous/src/account/account.ts:435` — multi-org selection
 - `packages/server/src/handlers/pty.ts:178` — graceful-shutdown socket tracking
 - `packages/tui/src/parsers-config.ts:153` — tree-sitter injections; `:287` — official tree-sitter-nix WASM
-- `packages/core/src/github-copilot/chat/openai-compatible-chat-language-model.ts:386` — lost type safety on Chunk (MUST FIX)
+- ~~`packages/core/src/github-copilot/chat/openai-compatible-chat-language-model.ts:386` — lost type safety on Chunk (MUST FIX)~~ (done: `chunkSchema` field now has an explicit precise schema type)
 
 ## Notes
 

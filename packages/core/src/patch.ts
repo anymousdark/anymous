@@ -186,11 +186,11 @@ const trim = (left: string, right: string) => left.trim() === right.trim()
 const normalized = (left: string, right: string) => normalize(left.trim()) === normalize(right.trim())
 const normalize = (value: string) =>
   value
-    .replace(/[‘’‚‛]/g, "'")
-    .replace(/[“”„‟]/g, '"')
-    .replace(/[‐‑‒–—―]/g, "-")
-    .replace(/…/g, "...")
-    .replace(/ /g, " ")
+    .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'")
+    .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"')
+    .replace(/[\u2013\u2014\u2015\u2012\u2212]/g, "-")
+    .replace(/\u2026/g, "...")
+    .replace(/\u00A0/g, " ")
 const splitBom = (text: string) =>
   text.startsWith("\uFEFF") ? { bom: true, text: text.slice(1) } : { bom: false, text }
 const stripHeredoc = (input: string) =>

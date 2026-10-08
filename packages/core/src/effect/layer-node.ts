@@ -239,10 +239,12 @@ export function hoist<A, E, T extends Tag, const Items extends Replacements = re
       }
       return { ...node, dependencies: node.dependencies.map(context.visit) }
     },
-    { resolve: (node: AnyNode) => {
+    {
+      resolve: (node: AnyNode) => {
         if (!node) throw new Error("LayerNode: undefined dependency (circular import or undefined dep)")
         return replacementMap.get(node.name) ?? node
-      } },
+      },
+    },
   )
 
   return {
@@ -268,10 +270,13 @@ export function compile<A, E, const Items extends Replacements = readonly []>(
           ? implementation
           : implementation.pipe(Layer.provide(dependencies as [RuntimeLayer, ...RuntimeLayer[]]))
       },
-      { cache, resolve: (node: AnyNode) => {
-        if (!node) throw new Error("LayerNode: undefined dependency (circular import or undefined dep)")
-        return replacementMap.get(node.name) ?? node
-      } },
+      {
+        cache,
+        resolve: (node: AnyNode) => {
+          if (!node) throw new Error("LayerNode: undefined dependency (circular import or undefined dep)")
+          return replacementMap.get(node.name) ?? node
+        },
+      },
     )
   const layers = flatten(root).map((node) => compileNode(node))
   const layer = layers.reduce<RuntimeLayer>((result, layer) => layer.pipe(Layer.provideMerge(result)), Layer.empty)
