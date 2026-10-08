@@ -1,3 +1,6 @@
+// See src/index.ts: the Solid runtime transform must be registered
+// explicitly because compiled binaries never load bunfig.toml preloads.
+import "@opentui/solid/preload"
 import yargs from "yargs"
 import { TuiThreadCommand } from "./cli/cmd/tui"
 import { InstallationVersion } from "@anymous-ai/core/installation/version"

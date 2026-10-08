@@ -15,16 +15,13 @@ engineering — with Free models with no API key. Unrestricted mode for professi
 ## 🚀 Quick Install
 
 ```bash
-npm install -g anymous     # Linux / Windows / macOS binaries
-anymous                    # TUI
+npm install -g anymous --allow-scripts=anymous   # binaries por plataforma (npm 11+ exige --allow-scripts)
+anymous                                          # TUI
 ```
 
-No API key needed to start: 64 free `opencode/*` models work out of the box
-(`apiKey: "public"`). For TUI/GUI model picker, export once:
-
-```bash
-export OPENCODE_API_KEY="sua-key"   # opcional, libera tudo
-```
+Sem API key, use um modelo local via Ollama (`ollama pull qwen3`) ou
+conecte um provider (`anymous auth login`). Os modelos gratuitos
+`opencode/*` só funcionam dentro do app oficial OpenCode.
 
 ## 🗣️ Quick Tasks
 

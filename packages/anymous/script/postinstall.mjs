@@ -127,10 +127,12 @@ function installPackage(name) {
   const version = packageJson.optionalDependencies?.[name]
   if (!version) return
 
+  // On Windows, bare "npm" is not an executable (npm.cmd is).
+  const npmBin = process.platform === "win32" ? "npm.cmd" : "npm"
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), "anymous-install-"))
   try {
     const result = childProcess.spawnSync(
-      "npm",
+      npmBin,
       ["install", "--ignore-scripts", "--no-save", "--loglevel=error", "--prefix", temp, `${name}@${version}`],
       { stdio: "inherit", windowsHide: true },
     )

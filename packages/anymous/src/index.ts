@@ -1,3 +1,10 @@
+// The TUI renders Solid JSX through a Bun runtime transform registered by
+// `@opentui/solid/preload` (see packages/anymous/bunfig.toml). Bun only loads
+// bunfig.toml when the working directory contains the project, and compiled
+// binaries never load it — so register explicitly here. This runs before any
+// .tsx is loaded and is a no-op when the preload already ran
+// (ensureSolidTransformPlugin short-circuits on `installed`).
+import "@opentui/solid/preload"
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
 import { RunCommand } from "./cli/cmd/run"

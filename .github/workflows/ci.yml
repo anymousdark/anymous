@@ -77,6 +77,22 @@ jobs:
           # The embedded Web UI vite build exceeds the default Node heap.
           NODE_OPTIONS: --max-old-space-size=6144
 
+  version-check:
+    name: Version sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: package.json vs CHANGELOG vs bun.lock
+        run: |
+          pkg=$(node -p "require('./packages/anymous/package.json').version")
+          log=$(grep -m1 -oP '^## \[\K[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md)
+          lock=$(node -p "require('./bun.lock').packages['packages/anymous'].version")
+          echo "package.json=$pkg CHANGELOG=$log bun.lock=$lock"
+          if [ "$pkg" != "$log" ] || [ "$pkg" != "$lock" ]; then
+            echo "::error::version drift: package.json=$pkg CHANGELOG=$log bun.lock=$lock"
+            exit 1
+          fi
+
   publish-check:
     name: Publish Dry Run
     runs-on: ubuntu-latest

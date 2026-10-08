@@ -1,0 +1,155 @@
+name: Release
+
+# Native per-OS builds: each runner compiles --single for its own platform
+# (cross-compiling from one machine is not supported by Bun).
+# Trigger with a version tag: git tag v1.6.7 && git push origin v1.6.7
+# Or manually via workflow_dispatch.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (e.g. 1.6.7, without leading v)"
+        required: true
+      npm_tag:
+        description: "npm dist-tag"
+        default: "latest"
+
+env:
+  BUN_VERSION: 1.2.x
+
+jobs:
+  build:
+    name: Build (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - run: bun install --frozen-lockfile
+      - name: Resolve version
+        id: version
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ inputs.version }}"
+          else
+            VERSION="${GITHUB_REF_NAME#v}"
+          fi
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Invalid version: $VERSION"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+      - name: Build CLI (native platform)
+        run: bun run script/build.ts --single --skip-install
+        working-directory: packages/anymous
+        env:
+          ANYMOUS_VERSION: ${{ steps.version.outputs.version }}
+          ANYMOUS_CHANNEL: latest
+          # The embedded Web UI vite build exceeds the default Node heap.
+          NODE_OPTIONS: --max-old-space-size=6144
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.os }}
+          path: packages/anymous/dist
+          retention-days: 7
+
+  publish:
+    name: Publish npm + GitHub release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - run: bun install --frozen-lockfile
+      - name: Resolve version
+        id: version
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ inputs.version }}"
+            TAG="${{ inputs.npm_tag }}"
+          else
+            VERSION="${GITHUB_REF_NAME#v}"
+            TAG="latest"
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: dist-*
+          merge-multiple: true
+          path: packages/anymous/dist
+      - name: Prepare npm wrapper
+        run: bun run script/prepare-npm.ts
+        working-directory: packages/anymous
+        env:
+          ANYMOUS_VERSION: ${{ steps.version.outputs.version }}
+          ANYMOUS_CHANNEL: latest
+      - name: Narrow optionalDependencies to built platforms
+        # prepare-npm.ts lists every known platform package, but only the
+        # binaries compiled by the build matrix exist. Referencing missing
+        # packages would break installs, so keep just what was built.
+        run: |
+          bun -e '
+            import fs from "fs"
+            const dist = "packages/anymous/dist"
+            const built = Object.fromEntries(
+              fs.readdirSync(dist, { withFileTypes: true })
+                .filter((e) => e.isDirectory() && e.name.startsWith("anymous-"))
+                .map((e) => [e.name, process.env.ANYMOUS_VERSION]),
+            )
+            const f = "packages/anymous/dist-npm/package.json"
+            const pkg = JSON.parse(fs.readFileSync(f, "utf8"))
+            pkg.optionalDependencies = built
+            fs.writeFileSync(f, JSON.stringify(pkg, null, 2))
+            console.log("publishing binaries:", Object.keys(built).join(", "))
+          '
+        env:
+          ANYMOUS_VERSION: ${{ steps.version.outputs.version }}
+      - name: Create GitHub release with binaries
+        shell: bash
+        run: |
+          shopt -s nullglob
+          archives=()
+          for dir in packages/anymous/dist/anymous-*/; do
+            name="$(basename "$dir")"
+            if [[ "$name" == linux* ]]; then
+              tar -czf "packages/anymous/dist/${name}.tar.gz" -C "${dir}bin" .
+              archives+=("packages/anymous/dist/${name}.tar.gz")
+            else
+              (cd "${dir}bin" && zip -qr "../../${name}.zip" .)
+              archives+=("packages/anymous/dist/${name}.zip")
+            fi
+          done
+          gh release create "v${{ steps.version.outputs.version }}" \
+            --title "v${{ steps.version.outputs.version }}" \
+            --generate-notes \
+            "${archives[@]}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish binaries to npm
+        shell: bash
+        run: |
+          for dir in packages/anymous/dist/anymous-*/; do
+            npm publish "$dir" --access public --tag "${{ steps.version.outputs.tag }}"
+          done
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish wrapper to npm
+        run: npm publish --access public --tag "${{ steps.version.outputs.tag }}"
+        working-directory: packages/anymous/dist-npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
