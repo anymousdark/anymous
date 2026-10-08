@@ -7,3 +7,4 @@ script/build-*.ts
 temporary-*.md
 .artifacts
 opentui-tree-sitter-worker.js
+.bun-cache/
