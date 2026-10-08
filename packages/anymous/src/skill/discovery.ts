@@ -1,7 +1,7 @@
 import { LayerNode } from "@anymous-ai/core/effect/layer-node"
 import { httpClient, path } from "@anymous-ai/core/effect/app-node-platform"
 import { NodePath } from "@effect/platform-node"
-import { Effect, Layer, Path, Schema, Context } from "effect"
+import { Effect, Layer, Path, Schema, Context, Duration, Option } from "effect"
 import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "effect/unstable/http"
 import { withTransientReadRetry } from "@/util/effect-http-client"
 import { FSUtil } from "@anymous-ai/core/fs-util"
@@ -32,18 +32,52 @@ const layer: Layer.Layer<Service, never, FSUtil.Service | Path.Path | HttpClient
     const fs = yield* FSUtil.Service
     const path = yield* Path.Path
     const http = HttpClient.filterStatusOk(withTransientReadRetry(yield* HttpClient.HttpClient))
+    // Raw client (no status filter): downloads inspect res.status directly
+    // so 404s can be remembered instead of throwing.
+    const client = yield* HttpClient.HttpClient
     const cache = path.join(Global.Path.cache, "skills")
+
+    // Files that 404 upstream would otherwise be re-requested on every
+    // startup (a failed download leaves nothing on disk to skip next time).
+    // Remember them with a marker file and revalidate weekly.
+    const MISSING_TTL = Duration.days(7)
+    const missingMarker = (dest: string) => `${dest}.anymous-missing`
 
     const download = Effect.fn("Discovery.download")(function* (url: string, dest: string) {
       if (yield* fs.exists(dest).pipe(Effect.orDie)) return true
 
-      return yield* HttpClientRequest.get(url).pipe(
-        http.execute,
-        Effect.flatMap((res) => res.arrayBuffer),
-        Effect.flatMap((body) => fs.writeWithDirs(dest, new Uint8Array(body))),
+      const marker = missingMarker(dest)
+      if (yield* fs.exists(marker).pipe(Effect.orDie)) {
+        const stat = yield* fs.stat(marker).pipe(Effect.catch(() => Effect.succeed(undefined)))
+        const mtime = stat ? Option.getOrElse(stat.mtime, () => new Date(0)).getTime() : 0
+        if (Date.now() - mtime < Duration.toMillis(MISSING_TTL)) return false
+        yield* fs.remove(marker, { force: true }).pipe(Effect.ignore)
+      }
+
+      const res = yield* HttpClientRequest.get(url).pipe(
+        client.execute,
+        Effect.catch((err) => Effect.logError("failed to download", { url: url, error: err }).pipe(Effect.as(null))),
+      )
+      if (!res) return false
+      if (res.status === 404) {
+        yield* Effect.logDebug("skill file missing upstream, remembering", { url: url })
+        yield* fs.writeWithDirs(marker, String(Date.now())).pipe(Effect.ignore)
+        return false
+      }
+      if (res.status < 200 || res.status >= 300) {
+        yield* Effect.logError("failed to download", { url: url, error: `HTTP ${res.status}` })
+        return false
+      }
+      const body = yield* res.arrayBuffer.pipe(
+        Effect.catch((err) => Effect.logError("failed to download", { url: url, error: err }).pipe(Effect.as(null))),
+      )
+      if (!body) return false
+      const wrote = yield* fs.writeWithDirs(dest, new Uint8Array(body)).pipe(
         Effect.as(true),
         Effect.catch((err) => Effect.logError("failed to download", { url: url, error: err }).pipe(Effect.as(false))),
       )
+      if (wrote) yield* fs.remove(marker, { force: true }).pipe(Effect.ignore)
+      return wrote
     })
 
     const pull = Effect.fn("Discovery.pull")(function* (url: string) {
