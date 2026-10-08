@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "version": "1.6.8",
+  "version": "1.6.9",
   "name": "anymous",
   "description": "AI-powered reverse engineering and penetration testing platform",
   "homepage": "https://github.com/anymousdark/anymous",
