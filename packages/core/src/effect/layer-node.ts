@@ -183,6 +183,10 @@ function walk<Result>(
   const stack: AnyNode[] = []
 
   const recur = (node: AnyNode): Result => {
+    if (!node) {
+      const chain = [...stack.map((item) => item.name), "<undefined>"].join(" -> ")
+      throw new Error(`LayerNode: undefined dependency (circular import or undefined dep), chain: ${chain}`)
+    }
     const target = options.resolve?.(node) ?? node
     const cached = cache.get(target)
     if (cached !== undefined || cache.has(target)) return cached!
