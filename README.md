@@ -113,15 +113,6 @@ security, code-reviewer, debug, test-writer, explore, general, web-designer + sy
 - Upstream opencode backports: provider timeouts, Anthropic blockBinding,
   Bedrock reasoning, session headers, Home/archive fixes
 
-Set the default in `anymous.json`:
-
-```json
-{
-  "$schema": "https://anymous-cli.vercel.app/config.json",
-  "model": "opencode/muse-spark-1.3-contributor-free"
-}
-```
-
 ## Architecture
 
 ```
