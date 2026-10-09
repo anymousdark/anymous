@@ -35,6 +35,7 @@ import { SessionCommand } from "./cli/cmd/session"
 import { DbCommand } from "./cli/cmd/db"
 import { errorMessage } from "./util/error"
 import { PluginCommand } from "./cli/cmd/plug"
+import { SandboxCommand } from "./cli/cmd/sandbox"
 import { Heap } from "./cli/heap"
 
 const args = hideBin(process.argv)
@@ -108,6 +109,7 @@ const cli = yargs(args)
   .command(PrCommand)
   .command(SessionCommand)
   .command(PluginCommand)
+  .command(SandboxCommand)
   .command(DbCommand)
   .fail((msg, err) => {
     if (
