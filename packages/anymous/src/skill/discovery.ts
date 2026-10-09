@@ -6,6 +6,8 @@ import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } fr
 import { withTransientReadRetry } from "@/util/effect-http-client"
 import { FSUtil } from "@anymous-ai/core/fs-util"
 import { Global } from "@anymous-ai/core/global"
+import { Hash } from "@anymous-ai/core/util/hash"
+import { Glob } from "@anymous-ai/core/util/glob"
 
 const skillConcurrency = 4
 const fileConcurrency = 8
@@ -98,6 +100,20 @@ const layer: Layer.Layer<Service, never, FSUtil.Service | Path.Path | HttpClient
 
       if (!data) return []
 
+      // Fast path: when the index is byte-identical to the last pull, the
+      // cache already holds every file — re-scan local dirs instead of
+      // re-checking hundreds of files over the network and disk.
+      const hash = Hash.fast(JSON.stringify(data))
+      const hashFile = path.join(cache, `.anymous-index-${Hash.fast(host)}`)
+      const stored = yield* fs.readFileStringSafe(hashFile).pipe(Effect.catch(() => Effect.succeed(undefined)))
+      if (stored === hash) {
+        const cached = yield* Effect.tryPromise({
+          try: () => Glob.scan("*/SKILL.md", { cwd: cache, absolute: true }),
+          catch: () => [] as string[],
+        })
+        return cached.map((file) => path.dirname(file))
+      }
+
       const missing = data.skills.filter((skill) => !skill.files.includes("SKILL.md"))
       yield* Effect.forEach(
         missing,
@@ -162,7 +178,11 @@ const layer: Layer.Layer<Service, never, FSUtil.Service | Path.Path | HttpClient
         { concurrency: skillConcurrency },
       )
 
-      return dirs.filter((dir): dir is string => dir !== null)
+      const result = dirs.filter((dir): dir is string => dir !== null)
+      // Only trust the cache fast-path when every skill resolved; partial
+      // pulls retry fully next boot instead of going stale forever.
+      if (result.length === list.length) yield* fs.writeWithDirs(hashFile, hash).pipe(Effect.ignore)
+      return result
     })
 
     return Service.of({ pull })
