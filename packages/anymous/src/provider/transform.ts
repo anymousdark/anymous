@@ -517,7 +517,7 @@ const GEMINI_MODELS_WITH_SAMPLING_DEFAULTS = [
   /gemini-3[.-]5-flash(?!-lite)(?:[.-]|$)/,
 ]
 export function temperature(model: Provider.Model) {
-  const id = model.api.id.toLowerCase()
+  const id = (model.api?.id ?? model.id ?? "").toLowerCase()
   if (id.includes("north-mini-code")) return 1.0
   if (id.includes("claude")) return undefined
   if (id.includes("gemini")) return GEMINI_MODELS_WITH_SAMPLING_DEFAULTS.some((m) => m.test(id)) ? 1.0 : undefined
@@ -532,7 +532,7 @@ export function temperature(model: Provider.Model) {
 }
 
 export function topP(model: Provider.Model) {
-  const id = model.api.id.toLowerCase()
+  const id = (model.api?.id ?? model.id ?? "").toLowerCase()
   if (id.includes("gemini")) return GEMINI_MODELS_WITH_SAMPLING_DEFAULTS.some((m) => m.test(id)) ? 0.95 : undefined
   if (["minimax-m2", "kimi-k2.5", "kimi-k2p5", "kimi-k2-5"].some((s) => id.includes(s))) return 0.95
   if (
@@ -547,7 +547,7 @@ export function topP(model: Provider.Model) {
 }
 
 export function topK(model: Provider.Model) {
-  const id = model.api.id.toLowerCase()
+  const id = (model.api?.id ?? model.id ?? "").toLowerCase()
   if (id.includes("minimax-m2")) {
     if (["m2.", "m25", "m21"].some((s) => id.includes(s))) return 40
     return 20
@@ -1305,7 +1305,12 @@ export function options(input: {
 
   if (input.model.api.id.includes("gpt-5") && !input.model.api.id.includes("gpt-5-chat")) {
     if (!input.model.api.id.includes("gpt-5-pro")) {
-      result["reasoningEffort"] = "medium"
+      // Azure gpt-5.5+ deployments don't accept reasoningEffort (same rule
+      // as the useCompletionUrls early return above), but keep the rest of
+      // the Responses defaults like reasoningSummary.
+      if (!(isGpt55OrNewer && input.model.api.npm === "@ai-sdk/azure")) {
+        result["reasoningEffort"] = "medium"
+      }
       if (
         input.model.api.npm === "@ai-sdk/openai" ||
         input.model.api.npm === "@ai-sdk/azure" ||
