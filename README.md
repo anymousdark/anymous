@@ -1,8 +1,25 @@
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:1e3a8a,100:06b6d4&height=200&section=header&text=ANYMOUS&fontSize=64&fontColor=ffffff&animation=fadeIn" alt="anymous" />
+</p>
+
+<p align="center">
+  <a href="https://github.com/anymousdark/anymous"><img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&size=22&pause=1000&color=58A6FF&center=true&vCenter=true&width=700&lines=43+AI+agents+for+offensive+security;Reverse+engineering+%2B+pentest+%2B+SOC;Free+models+%2B+local+Ollama+%2B+your+keys;Unrestricted+mode+for+professionals" alt="typing" /></a>
+</p>
+
 # anymous — AI-Powered Reverse Engineering & Pentest Platform
 
 [![Release](https://img.shields.io/github/v/release/anymousdark/anymous)](https://github.com/anymousdark/anymous/releases)
 [![CI](https://github.com/anymousdark/anymous/actions/workflows/ci.yml/badge.svg)](https://github.com/anymousdark/anymous/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+<p>
+  <img src="https://img.shields.io/badge/Bun-000000?style=for-the-badge&logo=bun&logoColor=white" alt="Bun" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/SolidJS-2C4F7C?style=for-the-badge&logo=solid&logoColor=white" alt="SolidJS" />
+  <img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite" />
+  <img src="https://img.shields.io/badge/Ollama-000000?style=for-the-badge&logo=ollama&logoColor=white" alt="Ollama" />
+  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
+</p>
 
 **43 AI agents** for reverse engineering, penetration testing, SOC operations and software
 engineering. Unrestricted mode for professionals. Fork of opencode, fully rebranded.
@@ -21,6 +38,10 @@ a provider (`anymous providers login`). The `opencode/*` free models require you
 own key — they only work keyless inside the official OpenCode app.
 
 ## Quick Tasks
+
+<p>
+  <img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&size=18&pause=800&color=34D399&width=700&lines=%24+anymous+run+--agent+soc+%22analisa+este+alerta%22;%24+anymous+run+--agent+redteam+%22alvo+10.10.10.0%2F24%2C+escopo+lab%22;%24+anymous+%23+TUI" alt="demo" />
+</p>
 
 ```bash
 anymous run --agent soc "analisa este alerta"
@@ -155,3 +176,7 @@ MIT — fork of [opencode](https://github.com/sst/opencode).
 ---
 
 *Built for reverse engineers, penetration testers, and SOC analysts.*
+
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:06b6d4,100:1e3a8a&height=120&section=footer&animation=fadeIn" alt="footer" />
+</p>
