@@ -109,8 +109,8 @@ const layer: Layer.Layer<Service, never, FSUtil.Service | Path.Path | HttpClient
       if (stored === hash) {
         const cached = yield* Effect.tryPromise({
           try: () => Glob.scan("*/SKILL.md", { cwd: cache, absolute: true }),
-          catch: () => [] as string[],
-        })
+          catch: (error) => error,
+        }).pipe(Effect.orElseSucceed(() => [] as string[]))
         return cached.map((file) => path.dirname(file))
       }
 

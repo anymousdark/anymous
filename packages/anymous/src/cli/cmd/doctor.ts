@@ -88,10 +88,18 @@ export const DoctorCommand = effectCmd({
     })
 
     // Models catalog reachable (short probe, warn-only).
-    const probe = yield* Effect.promise(async () => {
-      const res = await fetch("https://models.dev/api.json", { method: "HEAD", signal: AbortSignal.timeout(8000) })
-      return res.ok ? ({ ok: true as const }) : ({ ok: false as const, message: `HTTP ${res.status}` })
-    }).pipe(Effect.catch((error) => Effect.succeed({ ok: false as const, message: error instanceof Error ? error.message : String(error) })))
+    const probe = yield* Effect.tryPromise({
+      try: async () => {
+        const res = await fetch("https://models.dev/api.json", { method: "HEAD", signal: AbortSignal.timeout(8000) })
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      },
+      catch: (error) => error,
+    }).pipe(
+      Effect.as({ ok: true as const, message: "ok" }),
+      Effect.catch((error: unknown) =>
+        Effect.succeed({ ok: false as const, message: error instanceof Error ? error.message : String(error) }),
+      ),
+    )
     checks.push({
       id: "models-catalog",
       label: "models.dev reachable",

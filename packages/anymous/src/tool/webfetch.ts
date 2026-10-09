@@ -65,9 +65,10 @@ export const WebFetchTool = Tool.define(
           }
 
           // SSRF gate before any permission prompt or network I/O.
-          yield* Effect.promise(() => assertPublicUrl(params.url)).pipe(
-            Effect.mapError((err) => new Error(err instanceof Error ? err.message : String(err))),
-          )
+          yield* Effect.tryPromise({
+            try: () => assertPublicUrl(params.url),
+            catch: (err) => new Error(err instanceof Error ? err.message : String(err)),
+          })
 
           yield* ctx.ask({
             permission: "webfetch",

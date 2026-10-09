@@ -2,11 +2,16 @@ import type { Argv } from "yargs"
 import { Effect } from "effect"
 import { SandboxGrants } from "@anymous-ai/core/sandbox-grants"
 import { cmd } from "./cmd"
-import { effectCmd, fail } from "../effect-cmd"
+import { CliError, effectCmd, fail } from "../effect-cmd"
 import { UI } from "../ui"
 
 const prettyScope = (scope?: string, kind?: string) =>
   !scope ? "(global)" : kind ? `${kind}:${scope}` : scope
+
+// SandboxGrants methods fail with plain Errors; CLI handlers must surface
+// CliError so the top-level formatter prints them cleanly.
+const cliError = <A>(effect: Effect.Effect<A, unknown>) =>
+  effect.pipe(Effect.mapError((err) => new CliError({ message: err instanceof Error ? err.message : String(err) })))
 
 const SandboxListCommand = effectCmd({
   command: "list",
@@ -15,8 +20,8 @@ const SandboxListCommand = effectCmd({
   instance: false,
   handler: Effect.fn("Cli.sandbox.list")(function* (_args) {
     const svc = yield* SandboxGrants.Service
-    const grants = yield* svc.list()
-    const prefixes = yield* svc.prefixes()
+    const grants = yield* cliError(svc.list())
+    const prefixes = yield* cliError(svc.prefixes())
 
     UI.empty()
     for (const grant of grants) {
@@ -63,14 +68,16 @@ const SandboxAllowCommand = effectCmd({
   instance: false,
   handler: Effect.fn("Cli.sandbox.allow")(function* (args) {
     const svc = yield* SandboxGrants.Service
-    yield* svc.grant({
-      toolName: args.tool,
-      decision: "allow",
-      scope: args.scope,
-      scopeKind: args.kind as "file" | "dir" | "host" | "" | undefined,
-      reason: args.reason,
-      session: args.session || undefined,
-    })
+    yield* cliError(
+      svc.grant({
+        toolName: args.tool,
+        decision: "allow",
+        scope: args.scope,
+        scopeKind: args.kind as "file" | "dir" | "host" | "" | undefined,
+        reason: args.reason,
+        session: args.session || undefined,
+      }),
+    )
     UI.println(`${UI.Style.TEXT_SUCCESS_BOLD}allowed${UI.Style.TEXT_NORMAL} ${args.tool} ${prettyScope(args.scope, args.kind)}`)
   }),
 })
@@ -82,14 +89,16 @@ const SandboxDenyCommand = effectCmd({
   instance: false,
   handler: Effect.fn("Cli.sandbox.deny")(function* (args) {
     const svc = yield* SandboxGrants.Service
-    yield* svc.grant({
-      toolName: args.tool,
-      decision: "deny",
-      scope: args.scope,
-      scopeKind: args.kind as "file" | "dir" | "host" | "" | undefined,
-      reason: args.reason,
-      session: args.session || undefined,
-    })
+    yield* cliError(
+      svc.grant({
+        toolName: args.tool,
+        decision: "deny",
+        scope: args.scope,
+        scopeKind: args.kind as "file" | "dir" | "host" | "" | undefined,
+        reason: args.reason,
+        session: args.session || undefined,
+      }),
+    )
     UI.println(`${UI.Style.TEXT_DANGER_BOLD}denied${UI.Style.TEXT_NORMAL} ${args.tool} ${prettyScope(args.scope, args.kind)}`)
   }),
 })
@@ -107,7 +116,9 @@ const SandboxAllowPrefixCommand = effectCmd({
     const svc = yield* SandboxGrants.Service
     const prefix = (args.command ?? []).filter((word): word is string => typeof word === "string")
     if (prefix.length === 0) return yield* fail("command prefix must not be empty")
-    yield* svc.grantPrefix({ toolName: args.tool, decision: "allow", prefix, session: args.session || undefined })
+    yield* cliError(
+      svc.grantPrefix({ toolName: args.tool, decision: "allow", prefix, session: args.session || undefined }),
+    )
     UI.println(
       `${UI.Style.TEXT_SUCCESS_BOLD}allowed${UI.Style.TEXT_NORMAL} ${args.tool} [${prefix.join(" ")}]`,
     )
@@ -124,7 +135,7 @@ const SandboxRevokeCommand = effectCmd({
   instance: false,
   handler: Effect.fn("Cli.sandbox.revoke")(function* (args) {
     const svc = yield* SandboxGrants.Service
-    const removed = yield* svc.revoke(args.tool, args.scope)
+    const removed = yield* cliError(svc.revoke(args.tool, args.scope))
     UI.println(removed ? `revoked ${args.tool}${args.scope ? ` (${args.scope})` : ""}` : "nothing to revoke")
   }),
 })
@@ -135,7 +146,7 @@ const SandboxClearCommand = effectCmd({
   instance: false,
   handler: Effect.fn("Cli.sandbox.clear")(function* (_args) {
     const svc = yield* SandboxGrants.Service
-    yield* svc.clear()
+    yield* cliError(svc.clear())
     UI.println("cleared all grants")
   }),
 })

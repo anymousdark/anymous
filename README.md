@@ -15,8 +15,8 @@ engineering — with Free models with no API key. Unrestricted mode for professi
 ## 🚀 Quick Install
 
 ```bash
-npm install -g anymous --allow-scripts=anymous   # binaries por plataforma (npm 11+ exige --allow-scripts)
-anymous                                          # TUI
+npm install -g anymous   # binaries por plataforma, sem scripts de instalação
+anymous                  # TUI
 ```
 
 Sem API key, use um modelo local via Ollama (`ollama pull qwen3`) ou

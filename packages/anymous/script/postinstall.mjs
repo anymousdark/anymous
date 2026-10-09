@@ -127,14 +127,15 @@ function installPackage(name) {
   const version = packageJson.optionalDependencies?.[name]
   if (!version) return
 
-  // On Windows, bare "npm" is not an executable (npm.cmd is).
+  // NOTE: .cmd launchers require shell:true on Windows (spawnSync fails with
+  // EINVAL otherwise); windowsHide keeps the popup console away.
   const npmBin = process.platform === "win32" ? "npm.cmd" : "npm"
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), "anymous-install-"))
   try {
     const result = childProcess.spawnSync(
       npmBin,
       ["install", "--ignore-scripts", "--no-save", "--loglevel=error", "--prefix", temp, `${name}@${version}`],
-      { stdio: "inherit", windowsHide: true },
+      { stdio: "inherit", windowsHide: true, shell: process.platform === "win32" },
     )
     if (result.status !== 0) return
     const packageDir = path.join(temp, "node_modules", name)
@@ -183,7 +184,19 @@ function copySkills() {
   return true
 }
 
-function main() {
+import { pathToFileURL } from "url"
+
+/**
+ * Ensures a verified platform binary exists at bin/anymous.exe and returns
+ * its path, or undefined when no binary could be obtained.
+ *
+ * Resolution order (no install scripts involved, so npm allow-scripts gating,
+ * pnpm strict mode and --omit=optional all keep working):
+ *  1. optionalDependency installed alongside the wrapper,
+ *  2. previously fetched copy,
+ *  3. on-demand fetch from the npm registry (retried every run until present).
+ */
+export function ensureBinary() {
   for (const name of packageNames()) {
     try {
       copyBinary(resolveBinary(name), targetBinary)
@@ -193,24 +206,40 @@ function main() {
     }
   }
 
-  if (!fs.existsSync(targetBinary)) {
-    throw new Error(
-      `It seems your package manager failed to install the right anymous CLI package. Try manually installing ${packageNames()
-        .map((name) => JSON.stringify(name))
-        .join(" or ")}.`,
-    )
-  }
+  if (!fs.existsSync(targetBinary)) return undefined
 
   try {
     copySkills()
   } catch (error) {
     console.error("anymous: could not install bundled skills:", error.message)
   }
+  return targetBinary
 }
 
-try {
-  main()
-} catch (error) {
-  console.error(error.message)
-  process.exit(1)
+function main() {
+  const binary = ensureBinary()
+  if (!binary) {
+    throw new Error(
+      `It seems your package manager failed to install the right anymous CLI package. Try manually installing ${packageNames()
+        .map((name) => JSON.stringify(name))
+        .join(" or ")}.`,
+    )
+  }
+}
+
+const invokedDirectly = (() => {
+  try {
+    return !!process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href
+  } catch {
+    return false
+  }
+})()
+
+if (invokedDirectly) {
+  try {
+    main()
+  } catch (error) {
+    console.error(error.message)
+    process.exit(1)
+  }
 }

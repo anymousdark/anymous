@@ -1,8 +1,11 @@
 #!/usr/bin/env bun
 // Prepares the anymous npm wrapper package.
 // The CLI is distributed as native binaries per platform (anymous-<os>-<arch>),
-// each built by script/build.ts. This script creates the wrapper package that
-// selects and copies the right binary via postinstall.mjs.
+// each built by script/build.ts. This script creates a wrapper package with NO
+// install scripts (so npm allow-scripts gating, pnpn strict mode, Bun and
+// --omit=optional installs all work): the bin shim resolves the platform
+// binary at first run via postinstall.mjs (optional dep, cached copy, or
+// on-demand registry fetch).
 
 import { $ } from "bun"
 import path from "path"
@@ -28,35 +31,27 @@ for (const file of ["LICENSE", "README.md"]) {
   }
 }
 
-// Copy postinstall script (copies the platform binary into bin/anymous.exe)
+// Copy the binary resolver (used by the bin shim at first run; never hooked
+// as an install script).
 const postinstallSrc = path.join(root, "script", "postinstall.mjs")
 await fs.copyFileSync(postinstallSrc, path.join(dist, "postinstall.mjs"))
 
-// Create bin/ with a node shim that runs the real binary (bin/anymous.exe).
-// The postinstall script overwrites the binary with the real platform binary.
-// If postinstall did not run (e.g. --ignore-scripts), the shim prints a
-// helpful error instead of a cryptic "command not found".
+// Create bin/ with a node shim that ensures a verified platform binary and
+// execs it. Failures print build-from-source guidance instead of a cryptic
+// "command not found".
 const shim = `#!/usr/bin/env node
 
 import { spawnSync } from "child_process"
-import fs from "fs"
-import path from "path"
-import { fileURLToPath } from "url"
+import { ensureBinary } from "../postinstall.mjs"
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const binaryPath = path.join(__dirname, "anymous.exe")
-
-if (!fs.existsSync(binaryPath)) {
-  console.error(
-    "Error: anymous binary not found at",
-    binaryPath,
-    "\\n\\nThis occurs when using --ignore-scripts during installation, or when using a",
-    "\\npackage manager like pnpm that does not run postinstall scripts by default.",
-  )
+const binary = ensureBinary()
+if (!binary) {
+  console.error("Error: no anymous binary is available for this platform.")
+  console.error("Install a supported platform or build from source: https://github.com/anymousdark/anymous")
   process.exit(1)
 }
 
-const result = spawnSync(binaryPath, process.argv.slice(2), {
+const result = spawnSync(binary, process.argv.slice(2), {
   stdio: "inherit",
   windowsHide: true,
 })
@@ -90,9 +85,9 @@ const platformPackages: Record<string, string> = {
 // Provide a valid CommonJS entry point so analyzers (npmjs/BundlePhobia)
 // can resolve the package even though this is a binary-distribution wrapper.
 const indexJs = `"use strict";
-// anymous is distributed as native platform binaries selected at install time
-// via optionalDependencies + postinstall. This entry point exists so package
-// analyzers can resolve the module; consumers should use the "anymous" bin.
+// anymous is distributed as native platform binaries resolved at first run
+// via optionalDependencies (no install scripts). This entry point exists so
+// package analyzers can resolve the module; consumers should use the "anymous" bin.
 module.exports = {
   name: "anymous",
   version: ${JSON.stringify(version)},
@@ -107,7 +102,6 @@ const npmPkg = {
   main: "index.js",
   type: "commonjs",
   bin: { anymous: "./bin/anymous.mjs" },
-  scripts: { postinstall: "node ./postinstall.mjs" },
   version,
   description: "AI-powered reverse engineering platform",
   license: "MIT",
