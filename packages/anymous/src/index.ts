@@ -36,6 +36,8 @@ import { DbCommand } from "./cli/cmd/db"
 import { errorMessage } from "./util/error"
 import { PluginCommand } from "./cli/cmd/plug"
 import { SandboxCommand } from "./cli/cmd/sandbox"
+import { DoctorCommand } from "./cli/cmd/doctor"
+import { RepoMapCommand } from "./cli/cmd/repo-map"
 import { Heap } from "./cli/heap"
 
 const args = hideBin(process.argv)
@@ -110,6 +112,8 @@ const cli = yargs(args)
   .command(SessionCommand)
   .command(PluginCommand)
   .command(SandboxCommand)
+  .command(DoctorCommand)
+  .command(RepoMapCommand)
   .command(DbCommand)
   .fail((msg, err) => {
     if (

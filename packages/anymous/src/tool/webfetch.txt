@@ -11,3 +11,4 @@ Usage notes:
   - Format options: "markdown" (default), "text", or "html"
   - This tool is read-only and does not modify any files
   - Results may be summarized if the content is very large
+  - Only public remote URLs are fetched; localhost, private networks and special-use addresses are refused (use bash with curl for those)
