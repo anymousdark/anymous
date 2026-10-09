@@ -1,29 +1,26 @@
 # anymous — AI-Powered Reverse Engineering & Pentest Platform
 
-**43 AI agents** for reverse engineering, penetration testing, SOC operations, and software
-engineering — with Free models with no API key. Unrestricted mode for professionals. Fork of opencode (upstream
-1.18.27 backported), fully rebranded.
+[![Release](https://img.shields.io/github/v/release/anymousdark/anymous)](https://github.com/anymousdark/anymous/releases)
+[![CI](https://github.com/anymousdark/anymous/actions/workflows/ci.yml/badge.svg)](https://github.com/anymousdark/anymous/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-```
- █████  ███   ██ ███   ██ ██████  ██████  █████   ██████
-██   ██ ████  ██ ████  ██ ██   ██ ██   ██ ██  ██ ██
-███████ ██ ██ ██ ██ ██ ██ ██   ██ ██   ██ █████   ██████
-██   ██ ██  ████ ██  ████ ██   ██ ██   ██ ██  ██      ██
-██   ██ ██   ███ ██   ███ ██████  ██████  ██   ██ ██████
-```
+**43 AI agents** for reverse engineering, penetration testing, SOC operations and software
+engineering. Unrestricted mode for professionals. Fork of opencode, fully rebranded.
 
-## 🚀 Quick Install
+> Current version: **v1.7.0** — see [CHANGELOG.md](CHANGELOG.md).
+
+## Quick Install
 
 ```bash
-npm install -g anymous   # binaries por plataforma, sem scripts de instalação
+npm install -g anymous   # platform binaries, no install scripts
 anymous                  # TUI
 ```
 
-Sem API key, use um modelo local via Ollama (`ollama pull qwen3`) ou
-conecte um provider (`anymous auth login`). Os modelos gratuitos
-`opencode/*` só funcionam dentro do app oficial OpenCode.
+Without any key, use a local model via Ollama (`ollama pull qwen3`) or connect
+a provider (`anymous providers login`). The `opencode/*` free models require your
+own key — they only work keyless inside the official OpenCode app.
 
-## 🗣️ Quick Tasks
+## Quick Tasks
 
 ```bash
 anymous run --agent soc "analisa este alerta"
@@ -32,7 +29,7 @@ anymous run --agent blueteam "hardening deste servidor"
 anymous run --agent forensics "analisa este dump"
 ```
 
-## 🤖 AI Agents (43)
+## AI Agents (43)
 
 ### Orchestrators (6 primary)
 
@@ -84,17 +81,30 @@ anymous run --agent forensics "analisa este dump"
 architect, backend, frontend, database, devops, docs, refactor, performance,
 security, code-reviewer, debug, test-writer, explore, general, web-designer + system.
 
-## 🧠 Providers & Free Models
+## Providers & Models
 
-- **64 free `opencode/*` models, no key required** — `anymous models opencode`
-- Any opencode-compatible provider (OpenAI, Anthropic, Google, OpenRouter…)
-- Upstream opencode 1.18.27 backported: 5-min provider timeouts, Anthropic
-  blockBinding, Bedrock reasoning, session headers, Home/archive fixes
+- **`opencode` via `OPENCODE_API_KEY`** — 80+ models including free ones such as
+  `opencode/muse-spark-1.3-contributor-free` and `opencode/big-pickle`.
+  `anymous models opencode`
+- **`opencode-go` / `anyapi`** via stored key (`anymous providers login`)
+- **Local Ollama** — no key, no account (`ollama pull qwen3`)
+- Any OpenAI-compatible provider (OpenAI, Anthropic, Google, OpenRouter...)
+- Upstream opencode backports: provider timeouts, Anthropic blockBinding,
+  Bedrock reasoning, session headers, Home/archive fixes
 
-## 🏗️ Architecture
+Set the default in `anymous.json`:
+
+```json
+{
+  "$schema": "https://anymous-cli.vercel.app/config.json",
+  "model": "opencode/muse-spark-1.3-contributor-free"
+}
+```
+
+## Architecture
 
 ```
-anymous-ia/
+anymous/
   packages/
     anymous/          # CLI (entry point)
     core/             # Runtime, Effect services, SQLite
@@ -107,7 +117,7 @@ anymous-ia/
   site/               # Landing page (Vercel)
 ```
 
-## 🔧 Development
+## Development
 
 ```bash
 git clone https://github.com/anymousdark/anymous.git
@@ -120,27 +130,27 @@ bun test
 Docs: [CONTRIBUTING.md](CONTRIBUTING.md) · [CHANGELOG.md](CHANGELOG.md) ·
 [INSTRUCOES-LINUX.md](INSTRUCOES-LINUX.md) (desktop `.deb` build)
 
-## 📦 Published Packages
+## Published Packages
 
 | Package | Description |
 |---------|-------------|
-| [anymous](https://www.npmjs.com/package/anymous) | CLI + platform binaries (linux-x64, windows-x64…) |
+| [anymous](https://www.npmjs.com/package/anymous) | CLI + platform binaries (linux-x64, windows-x64...) |
 | @anymous-ai/core | Core runtime and services |
 
-## 🌐 Deployment
+## Deployment
 
-- **npm**: wrapper + per-platform binaries (`anymous-linux-x64`, `anymous-windows-x64`…)
+- **npm**: wrapper + per-platform binaries (`anymous-linux-x64`, `anymous-windows-x64`...)
 - **Site**: `vercel --prod` from `site/` → https://anymous-cli.vercel.app
 - **Releases**: tags `vX.Y.Z` + binaries in GitHub Releases
 
-## ⚠️ Unrestricted by Design
+## Unrestricted by Design
 
 For security professionals: no sandbox, `"*": "allow"` by default, no content
 filtering. Run in a VM/container for isolation. Bun runtime required.
 
-## 📄 License
+## License
 
-MIT — fork of [opencode](https://github.com/anomalyco/opencode).
+MIT — fork of [opencode](https://github.com/sst/opencode).
 
 ---
 
