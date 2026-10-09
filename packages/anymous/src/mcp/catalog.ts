@@ -90,8 +90,9 @@ export function convertTool(mcpTool: MCPToolDef, client: Client, timeout?: numbe
       )) as CallToolResult
       if (result.isError)
         throw new Error(
-          toolTextParts(result.content).filter((text) => text.trim()).join("\n\n") ||
-            "MCP tool returned an error",
+          toolTextParts(result.content)
+            .filter((text) => text.trim())
+            .join("\n\n") || "MCP tool returned an error",
         )
       if (
         toolContentLength(result.content) > 0 ||

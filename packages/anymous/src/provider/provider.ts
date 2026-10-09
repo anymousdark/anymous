@@ -32,59 +32,7 @@ import { ModelV2 } from "@anymous-ai/core/model"
 import { ModelStatus } from "./model-status"
 import { RuntimeFlags } from "@/effect/runtime-flags"
 import { ProviderError } from "./error"
-
-const OPENAI_HEADER_TIMEOUT_DEFAULT = 300_000
-
-function wrapSSE(res: Response, ms: number, ctl: AbortController) {
-  if (typeof ms !== "number" || ms <= 0) return res
-  if (!res.body) return res
-  if (!res.headers.get("content-type")?.includes("text/event-stream")) return res
-
-  const reader = res.body.getReader()
-  const body = new ReadableStream<Uint8Array>({
-    async pull(ctrl) {
-      const part = await new Promise<Awaited<ReturnType<typeof reader.read>>>((resolve, reject) => {
-        const id = setTimeout(() => {
-          const err = new ProviderError.ResponseStreamError("SSE read timed out")
-          ctl.abort(err)
-          // Swallow cancellation rejections: the timeout error itself is
-          // already delivered via reject(err) below; a rejecting cancel
-          // would otherwise surface as an unhandled rejection.
-          void reader.cancel(err).catch(() => {})
-          reject(err)
-        }, ms)
-
-        reader.read().then(
-          (part) => {
-            clearTimeout(id)
-            resolve(part)
-          },
-          (err) => {
-            clearTimeout(id)
-            reject(err)
-          },
-        )
-      })
-
-      if (part.done) {
-        ctrl.close()
-        return
-      }
-
-      ctrl.enqueue(part.value)
-    },
-    async cancel(reason) {
-      ctl.abort(reason)
-      await reader.cancel(reason)
-    },
-  })
-
-  return new Response(body, {
-    headers: new Headers(res.headers),
-    status: res.status,
-    statusText: res.statusText,
-  })
-}
+import { OPENAI_HEADER_TIMEOUT_DEFAULT, wrapSSE } from "./sse"
 
 function timeoutController(ms: number) {
   const ctl = new AbortController()
@@ -210,7 +158,18 @@ function custom(dep: CustomDep): Record<string, CustomLoader> {
           },
         },
       }),
-    opencode: freeTier,
+    opencode: () =>
+      // The upstream "opencode" provider entry points at OpenCode's own
+      // servers, whose free tier rejects any client that is not official
+      // OpenCode ("OpenCode's free tier can only be used from within
+      // OpenCode"). Advertising its free models with the shared "public" key
+      // would only produce that guaranteed server-side failure, so unlike the
+      // "anymous" gateway below it gets no keyless path here: with a real
+      // credential (stored auth, env key, or config apiKey — merged before
+      // the custom loaders run) the provider still loads normally.
+      Effect.succeed({
+        autoload: false,
+      }),
     anymous: freeTier,
     openai: () =>
       Effect.succeed({
@@ -1249,7 +1208,11 @@ function fromModelsDevModel(provider: ModelsDev.Provider, model: ModelsDev.Model
     api: {
       id: model.id,
       url: model.provider?.api ?? provider.api ?? "",
-      npm: cloudflareGatewayNpm(provider.id, model.id) ?? model.provider?.npm ?? provider.npm ?? "@ai-sdk/openai-compatible",
+      npm:
+        cloudflareGatewayNpm(provider.id, model.id) ??
+        model.provider?.npm ??
+        provider.npm ??
+        "@ai-sdk/openai-compatible",
     },
     status: model.status ?? "active",
     headers: {},
@@ -2002,8 +1965,43 @@ const layer = Layer.effect(
 
       const configured = Object.keys(cfg.provider ?? {})
       const candidates = Object.values(s.providers)
+      // Prefer providers that are actually usable — stored auth, a resolvable
+      // env key, or an explicit apiKey in config. Auto-picking an
+      // unauthenticated provider turns every request into a guaranteed auth
+      // failure, so only fall back to first-match when nothing is connected.
+      // Credential tiers: a provider is only as good as its credential.
+      // - "real": stored auth, env key, or an explicit apiKey. Placeholder
+      //   keys injected by loaders ("public" for the free tier, "ollama" for
+      //   the keyless local server) do NOT count here, so they can never
+      //   outrank an explicitly configured provider (e.g. mock providers in
+      //   tests, or a user key next to a local Ollama).
+      // - "placeholder": functional without a real credential (local Ollama,
+      //   the anymous free-tier gateway when present in the catalog).
+      //   Preferred over picking a provider that is guaranteed to fail auth.
+      //   The anymous gateway is preferred over other placeholders so the
+      //   fork's own free models win out of the box.
+      const real = new Map<string, boolean>()
+      const placeholder = new Map<string, boolean>()
+      for (const p of candidates) {
+        const stored = yield* auth.get(p.id).pipe(Effect.orDie)
+        const envKeys = yield* Effect.all(p.env.map((name) => env.get(name)))
+        const apiKey = p.options?.["apiKey"]
+        const key =
+          typeof apiKey === "string" && apiKey.trim() !== "" && !apiKey.startsWith("{env:") ? apiKey : undefined
+        real.set(
+          p.id,
+          Boolean(stored) ||
+            envKeys.some((value) => Boolean(value)) ||
+            (key !== undefined && key !== "public" && key !== "ollama"),
+        )
+        placeholder.set(p.id, key === "public" || key === "ollama")
+      }
       const provider =
-        candidates.find((p) => configured.length === 0 || configured.includes(p.id)) ?? candidates[0]
+        candidates.find((p) => real.get(p.id)) ??
+        candidates.find((p) => p.id === ProviderV2.ID.make("anymous") && placeholder.get(p.id)) ??
+        candidates.find((p) => placeholder.get(p.id)) ??
+        candidates.find((p) => configured.length === 0 || configured.includes(p.id)) ??
+        candidates[0]
       if (!provider) return yield* new NoProvidersError()
       const [model] = sort(Object.values(provider.models))
       if (!model) return yield* new NoModelsError({ providerID: provider.id })

@@ -78,7 +78,7 @@ const tasks = Object.entries(binaries).map(async ([name]) => {
 await Promise.all(tasks)
 await publish(`./dist/${pkg.name}`, `${pkg.name}`, version)
 
-const image = "ghcr.io/anomalyco/anymous"
+const image = "ghcr.io/anymousdark/anymous"
 const platforms = "linux/amd64,linux/arm64"
 const tags = [`${image}:${version}`, `${image}:${Script.channel}`]
 const tagFlags = tags.flatMap((t) => ["-t", t])
@@ -201,7 +201,7 @@ if (!Script.preview) {
     console.error("GITHUB_TOKEN is required to update homebrew tap")
     process.exit(1)
   }
-  const tap = `https://x-access-token:${token}@github.com/anomalyco/homebrew-tap.git`
+  const tap = `https://x-access-token:${token}@github.com/anymousdark/homebrew-tap.git`
   await $`rm -rf ./dist/homebrew-tap`
   await $`git clone ${tap} ./dist/homebrew-tap`
   await Bun.file("./dist/homebrew-tap/anymous.rb").write(homebrewFormula)

@@ -1,6 +1,6 @@
 # anymous — AI-Powered Reverse Engineering & Pentest Platform
 
-**44 AI agents** for reverse engineering, penetration testing, SOC operations, and software
+**43 AI agents** for reverse engineering, penetration testing, SOC operations, and software
 engineering — with Free models with no API key. Unrestricted mode for professionals. Fork of opencode (upstream
 1.18.27 backported), fully rebranded.
 
@@ -15,16 +15,13 @@ engineering — with Free models with no API key. Unrestricted mode for professi
 ## 🚀 Quick Install
 
 ```bash
-npm install -g anymous     # Linux / Windows / macOS binaries
-anymous                    # TUI
+npm install -g anymous   # binaries por plataforma, sem scripts de instalação
+anymous                  # TUI
 ```
 
-No API key needed to start: 64 free `opencode/*` models work out of the box
-(`apiKey: "public"`). For TUI/GUI model picker, export once:
-
-```bash
-export OPENCODE_API_KEY="sua-key"   # opcional, libera tudo
-```
+Sem API key, use um modelo local via Ollama (`ollama pull qwen3`) ou
+conecte um provider (`anymous auth login`). Os modelos gratuitos
+`opencode/*` só funcionam dentro do app oficial OpenCode.
 
 ## 🗣️ Quick Tasks
 
@@ -35,7 +32,7 @@ anymous run --agent blueteam "hardening deste servidor"
 anymous run --agent forensics "analisa este dump"
 ```
 
-## 🤖 AI Agents (45)
+## 🤖 AI Agents (43)
 
 ### Orchestrators (6 primary)
 

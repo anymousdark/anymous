@@ -317,7 +317,7 @@ export const githubInstall = Effect.fn("Cli.github.install")(function* () {
 
           retries++
           await sleep(1000)
-        } while (true) // oxlint-disable-line no-constant-condition
+        } while (true) // eslint-disable-line no-constant-condition
 
         s.stop("Installed GitHub app")
 
@@ -1012,7 +1012,9 @@ export const githubRun = Effect.fn("Cli.github.run")(function* (args: { event?: 
           })
 
       if (!response.ok) {
-        throw new Error(`App token exchange failed: ${response.status} ${response.statusText} - ${await response.text()}`)
+        throw new Error(
+          `App token exchange failed: ${response.status} ${response.statusText} - ${await response.text()}`,
+        )
       }
 
       const responseJson = (await response.json()) as { token: string }

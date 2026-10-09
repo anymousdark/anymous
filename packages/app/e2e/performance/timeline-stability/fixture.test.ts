@@ -47,6 +47,7 @@ describe("timeline fixture validation", () => {
   })
 })
 
+// eslint-disable-next-line no-constant-condition
 if (false) {
   const userSeed = { id: "prt_type_user", type: "text", text: "typed" } satisfies PartSeed<"user">
   userMessage([userSeed])

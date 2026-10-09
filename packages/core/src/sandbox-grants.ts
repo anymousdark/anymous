@@ -1,6 +1,6 @@
 export * as SandboxGrants from "./sandbox-grants"
 
-import { Context, Effect, Layer, Schema } from "effect"
+import { Context, Effect, Layer, Option, Schema } from "effect"
 import { makeGlobalNode } from "./effect/app-node"
 import { FSUtil } from "./fs-util"
 import { Global } from "./global"
@@ -63,16 +63,16 @@ export interface GrantInput {
 }
 
 export interface Interface {
-  readonly list: () => Effect.Effect<Grant[]>
-  readonly prefixes: () => Effect.Effect<CommandPrefixGrant[]>
-  readonly grant: (input: GrantInput) => Effect.Effect<void>
+  readonly list: () => Effect.Effect<Grant[], Error>
+  readonly prefixes: () => Effect.Effect<CommandPrefixGrant[], Error>
+  readonly grant: (input: GrantInput) => Effect.Effect<void, Error>
   readonly grantPrefix: (
     input: Omit<GrantInput, "scope" | "scopeKind"> & { prefix: string[] },
-  ) => Effect.Effect<void>
-  readonly revoke: (toolName: string, scope?: string) => Effect.Effect<boolean>
-  readonly clear: () => Effect.Effect<void>
-  readonly lookup: (toolName: string, scope?: string) => Effect.Effect<Grant | undefined>
-  readonly lookupPrefix: (toolName: string, command: string[]) => Effect.Effect<CommandPrefixGrant | undefined>
+  ) => Effect.Effect<void, Error>
+  readonly revoke: (toolName: string, scope?: string) => Effect.Effect<boolean, Error>
+  readonly clear: () => Effect.Effect<void, Error>
+  readonly lookup: (toolName: string, scope?: string) => Effect.Effect<Grant | undefined, Error>
+  readonly lookupPrefix: (toolName: string, command: string[]) => Effect.Effect<CommandPrefixGrant | undefined, Error>
 }
 
 export class Service extends Context.Service<Service, Interface>()("@anymous/SandboxGrants") {}
@@ -84,21 +84,18 @@ const layer = Layer.effect(
   Effect.gen(function* () {
     const fs = yield* FSUtil.Service
 
-    const load = Effect.fnUntraced(function* (): Effect.Effect<StoreFile> {
+    const load = Effect.fnUntraced(function* () {
       const raw = yield* fs.readJson(storePath()).pipe(Effect.catch(() => Effect.succeed(undefined)))
       if (!raw || typeof raw !== "object") return emptyStore()
-      const parsed = yield* Schema.decodeUnknownOption(StoreFile)(raw).pipe(
-        Effect.catch(() => Effect.succeed(undefined)),
-      )
-      return parsed ?? emptyStore()
+      return Option.getOrElse(Schema.decodeUnknownOption(StoreFile)(raw), emptyStore)
     })
 
     const save = Effect.fnUntraced(function* (store: StoreFile) {
       const tmp = `${storePath()}.${process.pid}.tmp`
       yield* fs.writeWithDirs(tmp, JSON.stringify(store, null, 2))
-      yield* fs.rename(tmp, storePath()).pipe(
-        Effect.catch(() => fs.writeWithDirs(storePath(), JSON.stringify(store, null, 2)).pipe(Effect.asVoid)),
-      )
+      yield* fs
+        .rename(tmp, storePath())
+        .pipe(Effect.catch(() => fs.writeWithDirs(storePath(), JSON.stringify(store, null, 2)).pipe(Effect.asVoid)))
     })
 
     const normScope = (scope: string | undefined, kind: ScopeKind | undefined) => {
@@ -132,8 +129,7 @@ const layer = Layer.effect(
         const list = (store.grants[input.toolName] ?? []).filter(
           (g) => !(g.scope === scope && g.scopeKind === scopeKind),
         )
-        store.grants[input.toolName] = [...list, grant]
-        yield* save(store)
+        yield* save({ ...store, grants: { ...store.grants, [input.toolName]: [...list, grant] } })
       }),
       grantPrefix: Effect.fn("SandboxGrants.grantPrefix")(function* (input) {
         if (input.prefix.length === 0) return yield* Effect.die(new Error("empty command prefix"))
@@ -149,25 +145,30 @@ const layer = Layer.effect(
         const list = (store.commandPrefixes?.[key] ?? []).filter(
           (g) => JSON.stringify(g.prefix) !== JSON.stringify(grant.prefix),
         )
-        store.commandPrefixes = { ...(store.commandPrefixes ?? {}), [key]: [...list, grant] }
-        yield* save(store)
+        yield* save({
+          ...store,
+          commandPrefixes: { ...(store.commandPrefixes ?? {}), [key]: [...list, grant] },
+        })
       }),
       revoke: Effect.fn("SandboxGrants.revoke")(function* (toolName: string, scope?: string) {
         const store = yield* load()
         const before = (store.grants[toolName] ?? []).length
-        store.grants[toolName] = (store.grants[toolName] ?? []).filter((g) =>
+        const remaining = (store.grants[toolName] ?? []).filter((g) =>
           scope === undefined ? false : g.scope !== scope,
         )
-        if (scope === undefined) delete store.grants[toolName]
+        const grants = { ...store.grants }
+        if (scope === undefined) delete grants[toolName]
+        else grants[toolName] = remaining
         const prefixes = store.commandPrefixes?.[toolName] ?? []
-        if (scope !== undefined) {
-          store.commandPrefixes = {
-            ...(store.commandPrefixes ?? {}),
-            [toolName]: prefixes.filter((g) => JSON.stringify(g.prefix) !== JSON.stringify(scope.split(" "))),
-          }
-        }
-        yield* save(store)
-        return (store.grants[toolName]?.length ?? 0) < before
+        const commandPrefixes =
+          scope !== undefined
+            ? {
+                ...(store.commandPrefixes ?? {}),
+                [toolName]: prefixes.filter((g) => JSON.stringify(g.prefix) !== JSON.stringify(scope.split(" "))),
+              }
+            : store.commandPrefixes
+        yield* save({ ...store, grants, commandPrefixes })
+        return remaining.length < before
       }),
       clear: Effect.fn("SandboxGrants.clear")(function* () {
         yield* save(emptyStore())
@@ -183,7 +184,7 @@ const layer = Layer.effect(
       }),
       lookupPrefix: Effect.fn("SandboxGrants.lookupPrefix")(function* (toolName: string, command: string[]) {
         const store = yield* load()
-        return (store.commandPrefixes?.[toolName] ?? []).find((g) => hasStringPrefix(command, g.prefix))
+        return (store.commandPrefixes?.[toolName] ?? []).find((g) => hasStringPrefix(command, [...g.prefix]))
       }),
     })
   }),

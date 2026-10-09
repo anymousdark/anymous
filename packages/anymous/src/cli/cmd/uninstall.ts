@@ -129,10 +129,10 @@ async function showRemovalSummary(targets: RemovalTargets, method: Installation.
 
   if (method !== "curl" && method !== "unknown") {
     const cmds: Record<string, string> = {
-      npm: "npm uninstall -g anymous-ai",
-      pnpm: "pnpm uninstall -g anymous-ai",
-      bun: "bun remove -g anymous-ai",
-      yarn: "yarn global remove anymous-ai",
+      npm: "npm uninstall -g anymous",
+      pnpm: "pnpm uninstall -g anymous",
+      bun: "bun remove -g anymous",
+      yarn: "yarn global remove anymous",
       brew: "brew uninstall anymous",
       choco: "choco uninstall anymous",
       scoop: "scoop uninstall anymous",
@@ -182,10 +182,10 @@ async function executeUninstall(method: Installation.Method, targets: RemovalTar
 
   if (method !== "curl" && method !== "unknown") {
     const cmds: Record<string, string[]> = {
-      npm: ["npm", "uninstall", "-g", "anymous-ai"],
-      pnpm: ["pnpm", "uninstall", "-g", "anymous-ai"],
-      bun: ["bun", "remove", "-g", "anymous-ai"],
-      yarn: ["yarn", "global", "remove", "anymous-ai"],
+      npm: ["npm", "uninstall", "-g", "anymous"],
+      pnpm: ["pnpm", "uninstall", "-g", "anymous"],
+      bun: ["bun", "remove", "-g", "anymous"],
+      yarn: ["yarn", "global", "remove", "anymous"],
       brew: ["brew", "uninstall", "anymous"],
       choco: ["choco", "uninstall", "anymous"],
       scoop: ["scoop", "uninstall", "anymous"],

@@ -21,6 +21,7 @@ import { ChildProcess } from "effect/unstable/process"
 import { ChildProcessSpawner } from "effect/unstable/process/ChildProcessSpawner"
 import { ShellPrompt, type Parameters } from "./shell/prompt"
 import { BashArity } from "@/permission/arity"
+import { detectInteractiveCommand } from "./shell/interactive"
 
 export { Parameters } from "./shell/prompt"
 
@@ -608,6 +609,14 @@ export const ShellTool = Tool.define(
           parameters: prompt.parameters,
           execute: (params: Parameters, ctx: Tool.Context) =>
             Effect.gen(function* () {
+              // Refuse interactive programs before any permission prompt or
+              // execution: without a TTY they hang until timeout.
+              const interactive = detectInteractiveCommand(params.command)
+              if (interactive) {
+                throw new Error(
+                  `Refusing to run interactive command "${interactive.command}": ${interactive.reason} ${interactive.suggestion}`,
+                )
+              }
               const instanceCtx = yield* InstanceState.context
               const cwd = params.workdir
                 ? yield* resolvePath(params.workdir, instanceCtx.directory, shell)

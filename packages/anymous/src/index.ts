@@ -1,3 +1,10 @@
+// The TUI renders Solid JSX through a Bun runtime transform registered by
+// `@opentui/solid/preload` (see packages/anymous/bunfig.toml). Bun only loads
+// bunfig.toml when the working directory contains the project, and compiled
+// binaries never load it — so register explicitly here. This runs before any
+// .tsx is loaded and is a no-op when the preload already ran
+// (ensureSolidTransformPlugin short-circuits on `installed`).
+import "@opentui/solid/preload"
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
 import { RunCommand } from "./cli/cmd/run"
@@ -28,6 +35,9 @@ import { SessionCommand } from "./cli/cmd/session"
 import { DbCommand } from "./cli/cmd/db"
 import { errorMessage } from "./util/error"
 import { PluginCommand } from "./cli/cmd/plug"
+import { SandboxCommand } from "./cli/cmd/sandbox"
+import { DoctorCommand } from "./cli/cmd/doctor"
+import { RepoMapCommand } from "./cli/cmd/repo-map"
 import { Heap } from "./cli/heap"
 
 const args = hideBin(process.argv)
@@ -101,6 +111,9 @@ const cli = yargs(args)
   .command(PrCommand)
   .command(SessionCommand)
   .command(PluginCommand)
+  .command(SandboxCommand)
+  .command(DoctorCommand)
+  .command(RepoMapCommand)
   .command(DbCommand)
   .fail((msg, err) => {
     if (

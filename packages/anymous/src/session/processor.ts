@@ -206,7 +206,7 @@ const layer = Layer.effect(
 
       const finishReasoning = Effect.fn("SessionProcessor.finishReasoning")(function* (reasoningID: string) {
         if (!(reasoningID in ctx.reasoningMap)) return
-        // oxlint-disable-next-line no-self-assign -- reactivity trigger
+        // eslint-disable-next-line no-self-assign -- reactivity trigger
         ctx.reasoningMap[reasoningID].text = ctx.reasoningMap[reasoningID].text
         ctx.reasoningMap[reasoningID].time = { ...ctx.reasoningMap[reasoningID].time, end: Date.now() }
         yield* session.updatePart(ctx.reasoningMap[reasoningID])
@@ -511,7 +511,7 @@ const layer = Layer.effect(
 
           case "text-end":
             if (!ctx.currentText) return
-            // oxlint-disable-next-line no-self-assign -- reactivity trigger
+            // eslint-disable-next-line no-self-assign -- reactivity trigger
             ctx.currentText.text = ctx.currentText.text
             ctx.currentText.text = (yield* plugin.trigger(
               "experimental.text.complete",

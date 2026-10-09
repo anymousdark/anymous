@@ -123,8 +123,8 @@ const layer: Layer.Layer<Service, never, HttpClient.HttpClient | AppProcess.Serv
     )
 
     const getBrewFormula = Effect.fnUntraced(function* () {
-      const tapFormula = yield* text(["brew", "list", "--formula", "anomalyco/tap/anymous"])
-      if (tapFormula.includes("anymous")) return "anomalyco/tap/anymous"
+      const tapFormula = yield* text(["brew", "list", "--formula", "anymousdark/tap/anymous"])
+      if (tapFormula.includes("anymous")) return "anymousdark/tap/anymous"
       const coreFormula = yield* text(["brew", "list", "--formula", "anymous"])
       if (coreFormula.includes("anymous")) return "anymous"
       return "anymous"
@@ -226,7 +226,7 @@ const layer: Layer.Layer<Service, never, HttpClient.HttpClient | AppProcess.Serv
 
         if (detectedMethod === "npm" || detectedMethod === "bun" || detectedMethod === "pnpm") {
           const response = yield* httpOk.execute(
-            HttpClientRequest.get(`${yield* NpmConfig.registry(process.cwd())}/anymous-ai/${InstallationChannel}`).pipe(
+            HttpClientRequest.get(`${yield* NpmConfig.registry(process.cwd())}/anymous/${InstallationChannel}`).pipe(
               HttpClientRequest.acceptJson,
             ),
           )
@@ -255,7 +255,7 @@ const layer: Layer.Layer<Service, never, HttpClient.HttpClient | AppProcess.Serv
         }
 
         const response = yield* httpOk.execute(
-          HttpClientRequest.get("https://api.github.com/repos/anymousdark/anymous-ai/releases/latest").pipe(
+          HttpClientRequest.get("https://api.github.com/repos/anymousdark/anymous/releases/latest").pipe(
             HttpClientRequest.acceptJson,
           ),
         )
@@ -269,24 +269,24 @@ const layer: Layer.Layer<Service, never, HttpClient.HttpClient | AppProcess.Serv
             upgradeResult = yield* upgradeCurl(target)
             break
           case "npm":
-            upgradeResult = yield* run(["npm", "install", "-g", `anymous-ai@${target}`])
+            upgradeResult = yield* run(["npm", "install", "-g", `anymous@${target}`])
             break
           case "pnpm":
-            upgradeResult = yield* run(["pnpm", "install", "-g", `anymous-ai@${target}`])
+            upgradeResult = yield* run(["pnpm", "install", "-g", `anymous@${target}`])
             break
           case "bun":
-            upgradeResult = yield* run(["bun", "install", "-g", `anymous-ai@${target}`])
+            upgradeResult = yield* run(["bun", "install", "-g", `anymous@${target}`])
             break
           case "brew": {
             const formula = yield* getBrewFormula()
             const env = { HOMEBREW_NO_AUTO_UPDATE: "1" }
             if (formula.includes("/")) {
-              const tap = yield* run(["brew", "tap", "anomalyco/tap"], { env })
+              const tap = yield* run(["brew", "tap", "anymousdark/tap"], { env })
               if (tap.code !== 0) {
                 upgradeResult = tap
                 break
               }
-              const repo = yield* text(["brew", "--repo", "anomalyco/tap"])
+              const repo = yield* text(["brew", "--repo", "anymousdark/tap"])
               const dir = repo.trim()
               if (dir) {
                 const pull = yield* run(["git", "pull", "--ff-only"], { cwd: dir, env })

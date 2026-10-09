@@ -1,0 +1,7 @@
+# Root bunfig: running `bun test` from the repo root must apply the same
+# test isolation as `packages/anymous/bunfig.toml`, otherwise tests read and
+# WRITE the real user directories (~/.local/share/anymous, ~/.config, …)
+# instead of temp dirs. This previously polluted the user database with fake
+# test accounts (control.example.com), slowing down every startup.
+[test]
+preload = ["./packages/anymous/test/preload.ts"]

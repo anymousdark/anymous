@@ -5,6 +5,87 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.10] - 2026-10-09
+
+### Added
+- `sandbox` CLI (list/allow/deny/allow-prefix/revoke/clear) surfacing persistent grants
+- `doctor` CLI (pass/warn/fail setup, credential and connectivity checks)
+- `repo-map` CLI (deterministic repository map for model context)
+- Shell tool refuses interactive programs (vim/less/REPLs/...) with actionable alternatives (ported from Gitlawb/zero)
+
+### Fixed
+- webfetch SSRF gate: loopback/private/special-use addresses blocked, redirects re-validated per hop
+- Startup: skill index fast-path (unchanged index re-scans local cache instead of re-fetching)
+- npm wrapper without install scripts: clean installs, first-run binary fallback
+
+## [1.6.9] - 2026-10-08
+
+### Fixed
+- Startup: only install the `@anymous-ai/plugin` SDK when the config dir actually has local plugins (was burning ~5s + contention on a doomed registry roundtrip every launch)
+
+## [1.6.8] - 2026-10-08
+
+### Fixed
+- Bundled binaries: `/api/provider` and `/api/agent` returned 500 (`LayerNode: undefined dependency`) — broken import cycle `filesystem.ts ↔ filesystem/search.ts` resolved via `import type`; layer errors now include the dependency chain
+- Startup: skill files that 404 upstream are remembered (negative cache, weekly revalidation) instead of refetched every launch
+- Test isolation: root `bunfig.toml` applies the test preload, so `bun test` from anywhere uses temp dirs (previously polluted the real user DB with fake accounts, costing seconds on every dev startup)
+
+## [1.6.7] - 2026-10-08
+
+### Fixed
+- TUI in compiled binaries: `@opentui/solid/preload` now imported explicitly at startup (`index.ts`, `temporary.ts`) instead of relying on `bunfig.toml`, which binaries never load
+- postinstall fallback uses `npm.cmd` on Windows
+- Correct repo/package refs: GitHub releases (`anymousdark/anymous`), npm upgrade/uninstall commands (`anymous`), brew tap (`anymousdark/tap`), GHCR image
+- Root `build`/`build:all` scripts pointed at a nonexistent path
+
+### Added
+- GitHub Actions release workflow (per-OS native builds + npm publish + GitHub release)
+- CI version-drift check (`package.json` vs CHANGELOG vs `bun.lock`)
+- Install docs: `--allow-scripts=anymous` for npm 11+
+
+## [1.6.6] - 2026-10-08
+
+### Fixed
+- npm wrapper: `bin/anymous.js` usava sintaxe ESM dentro de pacote CommonJS e quebrava toda instalação global — shim agora é `bin/anymous.mjs`
+
+## [1.6.5] - 2026-10-08
+
+### Fixed
+- Providers: `opencode` no longer advertises keyless free models (its free tier is server-blocked outside the official client); auto-default prefers the fork's own `anymous` gateway among keyless options
+- Removed dead repo default model (`opencode/muse-spark-1.3-contributor-free`, no longer in catalog) so automatic model selection applies
+
+## [1.6.1] - 2026-10-08
+
+### Added
+- Lint guardrails: `complexity` (15), `max-lines` (500) and `no-warning-comments` as warnings; documented `no-console: off` for Slack/Workers runtimes
+- God-file split pilot: `wrapSSE` + `OPENAI_HEADER_TIMEOUT_DEFAULT` extracted from `provider.ts` to `provider/sse.ts`
+- Docs sync: site/README agent count corrected to 43, versions synced to 1.6.1, `V2_MIGRATION_TODOS.md` reviewed with commit links
+
+### Fixed
+- Slack bot: removed dead `response.info.content` access (field does not exist on `AssistantMessage`) and 5 `any` occurrences with real SDK types
+- Windows bin launcher forwards caller PWD so `[project]` resolves from invocation dir (`f415edd`)
+
+## [1.5.3] - 2026-09-09
+
+### Added
+- Site badge synced to v1.5.3, help snapshots updated (`27fa347`)
+- Desktop downloads (`.deb` / `.AppImage`) linked from landing page
+
+### Fixed
+- CLI typecheck zero errors — missing `sdk` dep in `core`, `@types/mime-types`, obsolete `determineScope` test, MCP SDK 1.29 guards (`bc44efd`)
+- App startup guards against `child-store`/`sync` undefined + docs background (`c2d7c3b`, `3dfbe0f`)
+- Desktop Monterey wallpaper as default background (`3de551e`)
+
+## [1.5.2] - 2026-09-09
+
+### Added
+- GitHub button in site hero + desktop download links v1.5.1 (`50d83df`)
+- Site links desktop v1.5.1 → v1.5.2 (`0e734e4`)
+
+### Fixed
+- Removed legacy duplicated `.desktop` file + fixed GitHub owner to `anymousdark` (`bdec899`)
+- Synthetic concatenated key in test (false-positive secret scanning) (`277a080`)
+
 ## [1.5.1] - 2026-09-09
 
 ### Added

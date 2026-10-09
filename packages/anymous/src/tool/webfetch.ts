@@ -5,10 +5,12 @@ import * as Tool from "./tool"
 import TurndownService from "turndown"
 import DESCRIPTION from "./webfetch.txt"
 import { isImageAttachment } from "@/util/media"
+import { assertPublicUrl, isRedirect } from "./ssrf"
 
 const MAX_RESPONSE_SIZE = 5 * 1024 * 1024 // 5MB
 const DEFAULT_TIMEOUT = 30 * 1000 // 30 seconds
 const MAX_TIMEOUT = 120 * 1000 // 2 minutes
+const MAX_REDIRECTS = 5
 
 export const Parameters = Schema.Struct({
   url: Schema.String.annotate({ description: "The URL to fetch content from" }),
@@ -25,7 +27,33 @@ export const WebFetchTool = Tool.define(
   "webfetch",
   Effect.gen(function* () {
     const http = yield* HttpClient.HttpClient
-    const httpOk = HttpClient.filterStatusOk(http)
+
+    // Follows redirects manually (max 5) so every hop is re-validated
+    // against the SSRF policy instead of trusting the final destination.
+    const fetchFollowingRedirects = Effect.fnUntraced(function* (startUrl: string, headers: Record<string, string>) {
+      const honestHeaders = { ...headers, "User-Agent": "anymous" }
+      let url = startUrl
+      for (let hop = 0; ; hop++) {
+        yield* Effect.promise(() => assertPublicUrl(url))
+        let res = yield* HttpClientRequest.get(url).pipe(
+          HttpClientRequest.setHeaders(headers),
+          http.execute,
+        )
+        // Retry once with an honest UA when blocked by Cloudflare bot
+        // detection (TLS fingerprint mismatch).
+        if (res.status === 403 && res.headers["cf-mitigated"] === "challenge") {
+          res = yield* HttpClientRequest.get(url).pipe(HttpClientRequest.setHeaders(honestHeaders), http.execute)
+        }
+        if (!isRedirect(res.status) || hop >= MAX_REDIRECTS) return res
+        const location = res.headers["location"]
+        if (!location) return res
+        try {
+          url = new URL(location, url).href
+        } catch {
+          return res
+        }
+      }
+    })
 
     return {
       description: DESCRIPTION,
@@ -35,6 +63,12 @@ export const WebFetchTool = Tool.define(
           if (!params.url.startsWith("http://") && !params.url.startsWith("https://")) {
             throw new Error("URL must start with http:// or https://")
           }
+
+          // SSRF gate before any permission prompt or network I/O.
+          yield* Effect.tryPromise({
+            try: () => assertPublicUrl(params.url),
+            catch: (err) => new Error(err instanceof Error ? err.message : String(err)),
+          })
 
           yield* ctx.ask({
             permission: "webfetch",
@@ -73,24 +107,13 @@ export const WebFetchTool = Tool.define(
             "Accept-Language": "en-US,en;q=0.9",
           }
 
-          const request = HttpClientRequest.get(params.url).pipe(HttpClientRequest.setHeaders(headers))
-
-          // Retry with honest UA if blocked by Cloudflare bot detection (TLS fingerprint mismatch)
-          const response = yield* httpOk.execute(request).pipe(
-            Effect.catchIf(
-              (err) =>
-                err.reason._tag === "StatusCodeError" &&
-                err.reason.response.status === 403 &&
-                err.reason.response.headers["cf-mitigated"] === "challenge",
-              () =>
-                httpOk.execute(
-                  HttpClientRequest.get(params.url).pipe(
-                    HttpClientRequest.setHeaders({ ...headers, "User-Agent": "anymous" }),
-                  ),
-                ),
-            ),
+          const response = yield* fetchFollowingRedirects(params.url, headers).pipe(
             Effect.timeoutOrElse({ duration: timeout, orElse: () => Effect.die(new Error("Request timed out")) }),
           )
+          if (isRedirect(response.status)) throw new Error("Too many redirects (max 5)")
+          if (response.status < 200 || response.status >= 300) {
+            throw new Error(`Request failed with HTTP ${response.status}`)
+          }
 
           // Check content length
           const contentLength = response.headers["content-length"]

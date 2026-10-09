@@ -33,7 +33,12 @@ if (!bun) {
 const child = spawn(bun, ["run", "--conditions=browser", src, ...process.argv.slice(2)], {
   stdio: "inherit",
   cwd: pkgDir,
-  env: { ...process.env, ANYMOUS: "1" },
+  // Preserve the caller's directory: Bun loads bunfig.toml from the child
+  // cwd (pkgDir), so process.cwd() inside the CLI would otherwise always be
+  // pkgDir. Forward it as PWD so `[project]` relative paths (e.g. `anymous .`)
+  // resolve against the directory the user invoked us from (matters on
+  // Windows, where PWD is normally unset).
+  env: { PWD: process.cwd(), ...process.env, ANYMOUS: "1" },
 })
 
 child.on("exit", (code, signal) => {

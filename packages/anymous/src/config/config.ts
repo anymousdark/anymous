@@ -441,27 +441,6 @@ const layer = Layer.effect(
 
           yield* ensureGitignore(dir).pipe(Effect.orDie)
 
-          const dep = yield* npmSvc
-            .install(dir, {
-              add: [
-                {
-                  name: "@anymous-ai/plugin",
-                  version: InstallationLocal ? undefined : InstallationVersion,
-                },
-              ],
-            })
-            .pipe(
-              Effect.exit,
-              Effect.tap((exit) =>
-                Exit.isFailure(exit)
-                  ? Effect.logWarning("background dependency install failed", { dir, error: String(exit.cause) })
-                  : Effect.void,
-              ),
-              Effect.asVoid,
-              Effect.forkDetach,
-            )
-          deps.push(dep)
-
           result.command = mergeDeep(result.command ?? {}, yield* Effect.promise(() => ConfigCommand.load(dir)))
           result.agent = mergeDeep(result.agent ?? {}, yield* Effect.promise(() => ConfigAgent.load(dir)))
           result.agent = mergeDeep(result.agent ?? {}, yield* Effect.promise(() => ConfigAgent.loadMode(dir)))
@@ -469,6 +448,32 @@ const layer = Layer.effect(
           // returns normalized Specs and we only need to attach origin metadata here.
           const list = yield* Effect.promise(() => ConfigPlugin.load(dir))
           yield* mergePluginOrigins(dir, list)
+
+          // Only install the plugin SDK when the dir actually has local plugins.
+          // An unconditional install burns a registry roundtrip on every startup
+          // even with zero plugins (and retries forever when it fails).
+          if (list.length > 0) {
+            const dep = yield* npmSvc
+              .install(dir, {
+                add: [
+                  {
+                    name: "@anymous-ai/plugin",
+                    version: InstallationLocal ? undefined : InstallationVersion,
+                  },
+                ],
+              })
+              .pipe(
+                Effect.exit,
+                Effect.tap((exit) =>
+                  Exit.isFailure(exit)
+                    ? Effect.logWarning("background dependency install failed", { dir, error: String(exit.cause) })
+                    : Effect.void,
+                ),
+                Effect.asVoid,
+                Effect.forkDetach,
+              )
+            deps.push(dep)
+          }
         }
 
         if (process.env.ANYMOUS_CONFIG_CONTENT) {

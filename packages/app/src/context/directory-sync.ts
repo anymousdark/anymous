@@ -87,6 +87,7 @@ export const createDirSyncContext = (
       if (!store) return
       const match = Binary.search(serverSync.data.project, store.project, (project) => project.id)
       if (match.found) return serverSync.data.project[match.index]
+      return undefined
     },
     session: {
       remember(session: Session) {

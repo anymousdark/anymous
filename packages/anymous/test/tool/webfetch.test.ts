@@ -12,6 +12,10 @@ import { SessionID, MessageID } from "../../src/session/schema"
 import type { Tool } from "@/tool/tool"
 import { testEffect } from "../lib/effect"
 
+// Private-fetch bypass for the local Bun.serve fixtures below (the SSRF gate
+// blocks loopback by design; production callers use bash + curl instead).
+process.env["ANYMOUS_ALLOW_PRIVATE_FETCH"] = "1"
+
 const it = testEffect(
   LayerNode.compile(LayerNode.group([httpClient, Truncate.node, Agent.node]), [
     [httpClient, FetchHttpClient.layer as Layer.Layer<HttpClient.HttpClient>],
