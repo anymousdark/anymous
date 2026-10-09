@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.10] - 2026-10-09
+
+### Added
+- `sandbox` CLI (list/allow/deny/allow-prefix/revoke/clear) surfacing persistent grants
+- `doctor` CLI (pass/warn/fail setup, credential and connectivity checks)
+- `repo-map` CLI (deterministic repository map for model context)
+- Shell tool refuses interactive programs (vim/less/REPLs/...) with actionable alternatives (ported from Gitlawb/zero)
+
+### Fixed
+- webfetch SSRF gate: loopback/private/special-use addresses blocked, redirects re-validated per hop
+- Startup: skill index fast-path (unchanged index re-scans local cache instead of re-fetching)
+- npm wrapper without install scripts: clean installs, first-run binary fallback
+
 ## [1.6.9] - 2026-10-08
 
 ### Fixed
