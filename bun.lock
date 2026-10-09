@@ -17,7 +17,7 @@
     },
     "packages/anymous": {
       "name": "anymous",
-      "version": "1.6.10",
+      "version": "1.7.0",
       "bin": {
         "anymous": "./bin/anymous.cjs",
       },
