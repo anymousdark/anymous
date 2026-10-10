@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.1] - 2026-10-10
+
+### Added
+- Provider `opencode` (OpenCode Zen) free models are now advertised keyless (`apiKey: "public"`): models like `big-pickle` show up without a key and win the automatic default model selection out of the box
+- Automatic default now prefers the fork's free gateway (`anymous`) or the upstream `opencode` free tier over other keyless options, landing on `big-pickle` for keyless installs
+- Caveat documented: OpenCode's API still gates its free tier to the official client (`FreeTierError`/403); use a real credential, a fork gateway, or a local provider until upstream lenience
+
 ## [1.7.0] - 2026-10-09
 
 ### Added
