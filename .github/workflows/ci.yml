@@ -7,7 +7,7 @@ on:
     branches: [dev]
 
 env:
-  BUN_VERSION: 1.2.x
+  BUN_VERSION: 1.4.x
 
 jobs:
   lint:

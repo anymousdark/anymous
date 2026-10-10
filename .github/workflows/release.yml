@@ -18,7 +18,7 @@ on:
         default: "latest"
 
 env:
-  BUN_VERSION: 1.2.x
+  BUN_VERSION: 1.4.x
 
 jobs:
   build:

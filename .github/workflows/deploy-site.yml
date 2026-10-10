@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
         with:
-          bun-version: 1.2.x
+          bun-version: 1.4.x
       - name: Deploy site to Vercel
         working-directory: site
         run: npx --yes vercel@latest deploy --prod --yes --token "$VERCEL_TOKEN"
