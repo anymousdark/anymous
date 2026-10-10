@@ -1,5 +1,6 @@
 import { EOL } from "os"
 import { Effect } from "effect"
+import type { ProviderV2 } from "@anymous-ai/core/provider"
 import { effectCmd, fail } from "../effect-cmd"
 import { UI } from "../ui"
 

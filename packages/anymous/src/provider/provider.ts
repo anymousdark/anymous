@@ -158,18 +158,16 @@ function custom(dep: CustomDep): Record<string, CustomLoader> {
           },
         },
       }),
-    opencode: () =>
-      // The upstream "opencode" provider entry points at OpenCode's own
-      // servers, whose free tier rejects any client that is not official
-      // OpenCode ("OpenCode's free tier can only be used from within
-      // OpenCode"). Advertising its free models with the shared "public" key
-      // would only produce that guaranteed server-side failure, so unlike the
-      // "anymous" gateway below it gets no keyless path here: with a real
-      // credential (stored auth, env key, or config apiKey — merged before
-      // the custom loaders run) the provider still loads normally.
-      Effect.succeed({
-        autoload: false,
-      }),
+    // The upstream "opencode" provider points at OpenCode's own Zen servers.
+    // Its free models are advertised keyless with the shared "public" key so
+    // `opencode/big-pickle` and the other free models show up out of the box
+    // and win the automatic default. Caveat: OpenCode's API still gates its
+    // free tier to clients it recognizes as the official app (FreeTierError,
+    // HTTP 403), so keyless requests may fail until a real credential, a
+    // proxying fork gateway, or upstream lenience is in place. With a real
+    // credential (stored auth, env key, or config apiKey — merged before the
+    // custom loaders run) the provider loads normally either way.
+    opencode: freeTier,
     anymous: freeTier,
     openai: () =>
       Effect.succeed({
@@ -1902,7 +1900,7 @@ const layer = Layer.effect(
         return undefined
       }
 
-      const priority = providerID.startsWith("anymous")
+      const priority = providerID.startsWith("opencode")
         ? ["gpt-nano"]
         : providerID.startsWith("github-copilot")
           ? ["gpt-mini", ...smallModelFamilyPriority]
@@ -1978,8 +1976,9 @@ const layer = Layer.effect(
       // - "placeholder": functional without a real credential (local Ollama,
       //   the anymous free-tier gateway when present in the catalog).
       //   Preferred over picking a provider that is guaranteed to fail auth.
-      //   The anymous gateway is preferred over other placeholders so the
-      //   fork's own free models win out of the box.
+      //   The fork's free gateway (`anymous`) and the upstream `opencode`
+      //   free tier are preferred over other placeholders so free models such
+      //   as big-pickle win out of the box.
       const real = new Map<string, boolean>()
       const placeholder = new Map<string, boolean>()
       for (const p of candidates) {
@@ -1998,7 +1997,11 @@ const layer = Layer.effect(
       }
       const provider =
         candidates.find((p) => real.get(p.id)) ??
-        candidates.find((p) => p.id === ProviderV2.ID.make("anymous") && placeholder.get(p.id)) ??
+        candidates.find(
+          (p) =>
+            (p.id === ProviderV2.ID.make("anymous") || p.id === ProviderV2.ID.make("opencode")) &&
+            placeholder.get(p.id),
+        ) ??
         candidates.find((p) => placeholder.get(p.id)) ??
         candidates.find((p) => configured.length === 0 || configured.includes(p.id)) ??
         candidates[0]
