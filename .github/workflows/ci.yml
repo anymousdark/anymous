@@ -86,7 +86,7 @@ jobs:
         run: |
           pkg=$(node -p "require('./packages/anymous/package.json').version")
           log=$(grep -m1 -oP '^## \[\K[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md)
-          lock=$(node -p "require('./bun.lock').packages['packages/anymous'].version")
+          lock=$(node -e "let t=require('fs').readFileSync('bun.lock','utf8');t=t.replace(/,(?=\s*[}\]])/g,'');const l=JSON.parse(t);console.log((l.workspaces&&l.workspaces['packages/anymous']&&l.workspaces['packages/anymous'].version)||'')")
           echo "package.json=$pkg CHANGELOG=$log bun.lock=$lock"
           if [ "$pkg" != "$log" ] || [ "$pkg" != "$lock" ]; then
             echo "::error::version drift: package.json=$pkg CHANGELOG=$log bun.lock=$lock"
