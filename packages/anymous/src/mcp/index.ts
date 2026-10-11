@@ -86,6 +86,9 @@ const StatusConnected = Schema.Struct({ status: Schema.Literal("connected") }).a
 const StatusDisabled = Schema.Struct({ status: Schema.Literal("disabled") }).annotate({
   identifier: "MCPStatusDisabled",
 })
+const StatusConnecting = Schema.Struct({ status: Schema.Literal("connecting") }).annotate({
+  identifier: "MCPStatusConnecting",
+})
 const StatusFailed = Schema.Struct({ status: Schema.Literal("failed"), error: Schema.String }).annotate({
   identifier: "MCPStatusFailed",
 })
@@ -100,6 +103,7 @@ const StatusNeedsClientRegistration = Schema.Struct({
 export const Status = Schema.Union([
   StatusConnected,
   StatusDisabled,
+  StatusConnecting,
   StatusFailed,
   StatusNeedsAuth,
   StatusNeedsClientRegistration,
@@ -502,6 +506,26 @@ const layer = Layer.effect(
           instructions: {},
         }
 
+        // Connect one server and merge it into the shared state, notifying
+        // listeners so the TUI refreshes. Runs in a background fiber: callers
+        // (TUI bootstrap, first LLM turn) never block on slow servers.
+        // Layered startup: TUI + model first, MCP tools merge in when ready.
+        const connectInBackground = (key: string, mcp: ConfigMCPV1.Info) =>
+          Effect.gen(function* () {
+            const result = yield* create(key, mcp)
+            s.status[key] = result.status
+            if (result.mcpClient) {
+              s.clients[key] = result.mcpClient
+              s.defs[key] = result.defs!
+              if (result.instructions) s.instructions[key] = result.instructions
+              watch(s, key, result.mcpClient, bridge, mcp.timeout)
+            }
+            yield* events.publish(ToolsChanged, { server: key }).pipe(Effect.ignore)
+          })
+
+        // Mark every configured server synchronously so status() reports
+        // "connecting" (never a stale "disabled") while fibers run.
+        const pending: Array<[string, ConfigMCPV1.Info]> = []
         yield* Effect.forEach(
           Object.entries(config),
           ([key, mcp]) =>
@@ -516,17 +540,18 @@ const layer = Layer.effect(
                 return
               }
 
-              const result = yield* create(key, mcp)
-              s.status[key] = result.status
-              if (result.mcpClient) {
-                s.clients[key] = result.mcpClient
-                s.defs[key] = result.defs!
-                if (result.instructions) s.instructions[key] = result.instructions
-                watch(s, key, result.mcpClient, bridge, mcp.timeout)
-              }
+              s.status[key] = { status: "connecting" }
+              pending.push([key, mcp])
             }),
           { concurrency: "unbounded" },
         )
+
+        // Fork per-server connects and return immediately: init no longer
+        // awaits slow servers. Fibers are scoped to the instance and merge
+        // each server (or its failure) into the shared state when done.
+        yield* Effect.forEach(pending, ([key, mcp]) => Effect.forkScoped(connectInBackground(key, mcp)), {
+          concurrency: "unbounded",
+        })
 
         yield* Effect.addFinalizer(() =>
           Effect.gen(function* () {

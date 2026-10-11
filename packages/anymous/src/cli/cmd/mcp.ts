@@ -56,7 +56,20 @@ function listState() {
     const cfg = yield* Config.Service
     const mcp = yield* MCP.Service
     const config = yield* cfg.get()
-    const statuses = yield* mcp.status()
+    // Layered startup connects servers in the background: wait until every
+    // server settles (connected/failed/...) before reporting, bounded by the
+    // slowest configured timeout plus a buffer for the tools listing.
+    const settleLimit =
+      Math.max(30_000, ...configuredServers(config).map(([, server]) => server.timeout ?? 30_000)) + 60_000
+    const settleStart = Date.now()
+    let statuses = yield* mcp.status()
+    while (
+      Object.values(statuses).some((status) => status.status === "connecting") &&
+      Date.now() - settleStart < settleLimit
+    ) {
+      yield* Effect.sleep("500 millis")
+      statuses = yield* mcp.status()
+    }
     const stored = yield* Effect.all(
       Object.fromEntries(configuredServers(config).map(([name]) => [name, mcp.hasStoredTokens(name)])),
       { concurrency: "unbounded" },
@@ -141,6 +154,9 @@ export const McpListCommand = effectCmd({
         statusIcon = "✗"
         statusText = "needs client registration"
         hint = "\n    " + status.error
+      } else if (status.status === "connecting") {
+        statusIcon = "◌"
+        statusText = "connecting"
       } else {
         statusIcon = "✗"
         statusText = "failed"
