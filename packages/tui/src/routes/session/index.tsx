@@ -2166,7 +2166,12 @@ function Read(props: ToolProps) {
         spinner={isRunning()}
         part={props.part}
       >
-        Read {pathFormatter.format(stringValue(props.input.filePath))} {input(props.input, ["filePath"])}
+        Read {pathFormatter.format(stringValue(props.input.filePath))}
+        <Show when={props.input.offset !== undefined || props.input.limit !== undefined}>
+          :{numberValue(props.input.offset) || 1}-
+          {props.input.limit ? (numberValue(props.input.offset) || 1) + (numberValue(props.input.limit) || 0) - 1 : ""}
+        </Show>{" "}
+        {input(props.input, ["filePath"])}
       </InlineTool>
       <For each={loaded()}>
         {(filepath) => (
