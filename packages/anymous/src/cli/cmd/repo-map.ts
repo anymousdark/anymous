@@ -133,7 +133,9 @@ export const RepoMapCommand = effectCmd({
     }
 
     const sortCounts = (map: Map<string, number>) =>
-      [...map.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([name, fileCount]) => ({ name, fileCount }))
+      [...map.entries()]
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .map(([name, fileCount]) => ({ name, fileCount }))
 
     const map = {
       root,

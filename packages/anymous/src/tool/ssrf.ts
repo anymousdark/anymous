@@ -94,7 +94,11 @@ function parseIPv6(text: string): bigint | undefined {
   }
   const missing = 8 - tailGroups - head.length - tailParts.length
   if (halves.length === 1 ? missing !== 0 : missing < 0) return undefined
-  const groups = [...head.map((g) => parseInt(g, 16)), ...new Array(Math.max(0, missing)).fill(0), ...tailParts.map((g) => parseInt(g, 16))]
+  const groups = [
+    ...head.map((g) => parseInt(g, 16)),
+    ...new Array(Math.max(0, missing)).fill(0),
+    ...tailParts.map((g) => parseInt(g, 16)),
+  ]
   let out = 0n
   for (const g of groups) out = (out << 16n) | BigInt(g)
   return (out << BigInt(tailGroups * 16)) | tail
@@ -102,7 +106,7 @@ function parseIPv6(text: string): bigint | undefined {
 
 function inPrefix(addr: bigint, width: number, net: bigint, length: number): boolean {
   const shift = BigInt(width - length)
-  return (addr >> shift) === (net >> shift)
+  return addr >> shift === net >> shift
 }
 
 function isBlockedIP(ip: string): boolean {
@@ -113,11 +117,11 @@ function isBlockedIP(ip: string): boolean {
   if (BLOCKED_V6.some(([net, len]) => inPrefix(v6, 128, net, len))) return true
   // IPv4-embedded forms: check the embedded address against the v4 list.
   const candidates: bigint[] = []
-  if ((v6 >> 32n) === 0n) candidates.push(v6 & 0xffffffffn) // ::/96 compat
-  if ((v6 >> 32n) === 0xffffn) candidates.push(v6 & 0xffffffffn) // ::ffff:0:0/96 mapped
-  if ((v6 >> 32n) === 0x64ff9b0000000000000000n) candidates.push(v6 & 0xffffffffn) // 64:ff9b::/96 NAT64
-  if ((v6 >> 80n) === 0x64ff9b01n) candidates.push((v6 >> 48n) & 0xffffffffn) // 64:ff9b:1::/48
-  if ((v6 >> 112n) === 0x2002n) candidates.push((v6 >> 80n) & 0xffffffffn) // 2002::/16 6to4
+  if (v6 >> 32n === 0n) candidates.push(v6 & 0xffffffffn) // ::/96 compat
+  if (v6 >> 32n === 0xffffn) candidates.push(v6 & 0xffffffffn) // ::ffff:0:0/96 mapped
+  if (v6 >> 32n === 0x64ff9b0000000000000000n) candidates.push(v6 & 0xffffffffn) // 64:ff9b::/96 NAT64
+  if (v6 >> 80n === 0x64ff9b01n) candidates.push((v6 >> 48n) & 0xffffffffn) // 64:ff9b:1::/48
+  if (v6 >> 112n === 0x2002n) candidates.push((v6 >> 80n) & 0xffffffffn) // 2002::/16 6to4
   return candidates.some((c) => BLOCKED_V4.some(([net, len]) => inPrefix(c, 32, net, len)))
 }
 

@@ -35,10 +35,7 @@ export const WebFetchTool = Tool.define(
       let url = startUrl
       for (let hop = 0; ; hop++) {
         yield* Effect.promise(() => assertPublicUrl(url))
-        let res = yield* HttpClientRequest.get(url).pipe(
-          HttpClientRequest.setHeaders(headers),
-          http.execute,
-        )
+        let res = yield* HttpClientRequest.get(url).pipe(HttpClientRequest.setHeaders(headers), http.execute)
         // Retry once with an honest UA when blocked by Cloudflare bot
         // detection (TLS fingerprint mismatch).
         if (res.status === 403 && res.headers["cf-mitigated"] === "challenge") {

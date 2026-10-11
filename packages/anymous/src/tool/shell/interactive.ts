@@ -224,7 +224,8 @@ const interactiveSegments: InteractiveSegment[] = [
     match: "git rebase -i",
     command: "git rebase -i",
     reason: "interactive rebase opens an editor for the todo list",
-    suggestion: "Use a non-interactive rebase (`git rebase <base>`) or scripted `git rebase --onto`, and resolve via `git rebase --continue`.",
+    suggestion:
+      "Use a non-interactive rebase (`git rebase <base>`) or scripted `git rebase --onto`, and resolve via `git rebase --continue`.",
   },
   {
     match: "git rebase --interactive",
@@ -292,20 +293,68 @@ const interactiveSegments: InteractiveSegment[] = [
 
 // Launcher prefixes that precede the real program.
 const wrapperPrograms = new Set([
-  "sudo", "command", "env", "nohup", "time", "exec", "doas", "nice", "timeout",
-  "stdbuf", "setsid", "ionice", "xargs",
+  "sudo",
+  "command",
+  "env",
+  "nohup",
+  "time",
+  "exec",
+  "doas",
+  "nice",
+  "timeout",
+  "stdbuf",
+  "setsid",
+  "ionice",
+  "xargs",
 ])
 
 // Per-wrapper options consuming the FOLLOWING token as value.
 const wrapperValueOptionsByProg: Record<string, Set<string>> = {
-  sudo: new Set(["-u", "--user", "-g", "--group", "-p", "--prompt", "-C", "--close-from", "-r", "--role", "-T", "--command-timeout", "-U", "--other-user", "-h", "--host", "-D", "--chdir", "-R", "--chroot"]),
+  sudo: new Set([
+    "-u",
+    "--user",
+    "-g",
+    "--group",
+    "-p",
+    "--prompt",
+    "-C",
+    "--close-from",
+    "-r",
+    "--role",
+    "-T",
+    "--command-timeout",
+    "-U",
+    "--other-user",
+    "-h",
+    "--host",
+    "-D",
+    "--chdir",
+    "-R",
+    "--chroot",
+  ]),
   doas: new Set(["-u", "-C"]),
   env: new Set(["-u", "--unset", "-S", "--split-string", "-C", "--chdir"]),
   timeout: new Set(["-s", "--signal", "-k", "--kill-after"]),
   nice: new Set(["-n", "--adjustment"]),
   ionice: new Set(["-c", "--class", "-n", "--classdata", "-p", "--pid"]),
   stdbuf: new Set(["-i", "--input", "-o", "--output", "-e", "--error"]),
-  xargs: new Set(["-a", "--arg-file", "-d", "--delimiter", "-E", "-I", "--replace", "-L", "--max-lines", "-n", "--max-args", "-P", "--max-procs", "-s", "--max-chars"]),
+  xargs: new Set([
+    "-a",
+    "--arg-file",
+    "-d",
+    "--delimiter",
+    "-E",
+    "-I",
+    "--replace",
+    "-L",
+    "--max-lines",
+    "-n",
+    "--max-args",
+    "-P",
+    "--max-procs",
+    "-s",
+    "--max-chars",
+  ]),
 }
 
 function wrapperConsumesValue(wrapper: string, option: string): boolean {

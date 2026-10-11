@@ -5,8 +5,7 @@ import { cmd } from "./cmd"
 import { CliError, effectCmd, fail } from "../effect-cmd"
 import { UI } from "../ui"
 
-const prettyScope = (scope?: string, kind?: string) =>
-  !scope ? "(global)" : kind ? `${kind}:${scope}` : scope
+const prettyScope = (scope?: string, kind?: string) => (!scope ? "(global)" : kind ? `${kind}:${scope}` : scope)
 
 // SandboxGrants methods fail with plain Errors; CLI handlers must surface
 // CliError so the top-level formatter prints them cleanly.
@@ -78,7 +77,9 @@ const SandboxAllowCommand = effectCmd({
         session: args.session || undefined,
       }),
     )
-    UI.println(`${UI.Style.TEXT_SUCCESS_BOLD}allowed${UI.Style.TEXT_NORMAL} ${args.tool} ${prettyScope(args.scope, args.kind)}`)
+    UI.println(
+      `${UI.Style.TEXT_SUCCESS_BOLD}allowed${UI.Style.TEXT_NORMAL} ${args.tool} ${prettyScope(args.scope, args.kind)}`,
+    )
   }),
 })
 
@@ -99,7 +100,9 @@ const SandboxDenyCommand = effectCmd({
         session: args.session || undefined,
       }),
     )
-    UI.println(`${UI.Style.TEXT_DANGER_BOLD}denied${UI.Style.TEXT_NORMAL} ${args.tool} ${prettyScope(args.scope, args.kind)}`)
+    UI.println(
+      `${UI.Style.TEXT_DANGER_BOLD}denied${UI.Style.TEXT_NORMAL} ${args.tool} ${prettyScope(args.scope, args.kind)}`,
+    )
   }),
 })
 
@@ -119,9 +122,7 @@ const SandboxAllowPrefixCommand = effectCmd({
     yield* cliError(
       svc.grantPrefix({ toolName: args.tool, decision: "allow", prefix, session: args.session || undefined }),
     )
-    UI.println(
-      `${UI.Style.TEXT_SUCCESS_BOLD}allowed${UI.Style.TEXT_NORMAL} ${args.tool} [${prefix.join(" ")}]`,
-    )
+    UI.println(`${UI.Style.TEXT_SUCCESS_BOLD}allowed${UI.Style.TEXT_NORMAL} ${args.tool} [${prefix.join(" ")}]`)
   }),
 })
 

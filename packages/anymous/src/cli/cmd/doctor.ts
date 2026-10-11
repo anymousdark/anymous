@@ -41,7 +41,10 @@ export const DoctorCommand = effectCmd({
         id: "runtime-node",
         label: "Node.js",
         status: node.exitCode === 0 ? "pass" : "warn",
-        message: node.exitCode === 0 ? `node ${node.stdout.toString().trim()}` : "node not on PATH (needed for npm wrapper shims)",
+        message:
+          node.exitCode === 0
+            ? `node ${node.stdout.toString().trim()}`
+            : "node not on PATH (needed for npm wrapper shims)",
       })
     } catch {
       checks.push({ id: "runtime-node", label: "Node.js", status: "warn", message: "node not on PATH" })
@@ -109,7 +112,11 @@ export const DoctorCommand = effectCmd({
 
     if (args.json) {
       process.stdout.write(
-        JSON.stringify({ generatedAt: new Date().toISOString(), ok: checks.every((c) => c.status !== "fail"), checks }, null, 2) + "\n",
+        JSON.stringify(
+          { generatedAt: new Date().toISOString(), ok: checks.every((c) => c.status !== "fail"), checks },
+          null,
+          2,
+        ) + "\n",
       )
       return
     }
@@ -122,7 +129,11 @@ export const DoctorCommand = effectCmd({
     const failed = checks.filter((c) => c.status === "fail").length
     const warned = checks.filter((c) => c.status === "warn").length
     process.stdout.write(
-      failed > 0 ? `${failed} failing, ${warned} warnings\n` : warned > 0 ? `${warned} warnings\n` : "all checks passed\n",
+      failed > 0
+        ? `${failed} failing, ${warned} warnings\n`
+        : warned > 0
+          ? `${warned} warnings\n`
+          : "all checks passed\n",
     )
   }),
 })
