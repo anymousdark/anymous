@@ -140,6 +140,11 @@ jobs:
             "${archives[@]}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Configure npm auth
+        shell: bash
+        run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Publish binaries to npm
         shell: bash
         run: |
